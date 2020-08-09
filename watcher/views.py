@@ -3,5 +3,6 @@ from watcher.models import *
 # Create your views here.
 
 
-def Camera_list(request) :
-	return render(request, 'watcher/Camera_list.html')
+def Get_Camera_list(request) :
+	camera_list = Camera.objects.all()
+	return render(request, 'watcher/Camera_list.html',{'camera_list' : camera_list})

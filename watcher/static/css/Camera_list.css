@@ -5,6 +5,9 @@ html, body {
   padding: 0;
 }
 
+.wrap {
+	margin : 0 auto;
+}
 .navbar-default {
 	border : 1px solid black;
 	background-color : black;
@@ -15,6 +18,12 @@ html, body {
 	padding : 1%;
 }
 
+/*테이블 내 검색창 */
+
+
+.table-responsive {
+	background-color : red
+}
 /* 테이블 부분 */
 table {
 	width: 100%;

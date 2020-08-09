@@ -7,7 +7,7 @@ from . import views
 app_name ='watcher'
 
 urlpatterns = [
- 	path('',views.Camera_list, name='Camera_list'),
+ 	path('',views.Get_Camera_list, name='Camera_list'),
  ]
 
 
