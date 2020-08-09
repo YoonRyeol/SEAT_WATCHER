@@ -37,7 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+<<<<<<< HEAD
     'watcher', #minho 2020.08.05
+=======
+    'watcher'
+>>>>>>> 525618d5d26e89d9511d3f792dea0ac481f6980c
 ]
 
 MIDDLEWARE = [
