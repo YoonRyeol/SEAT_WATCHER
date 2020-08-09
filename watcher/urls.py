@@ -8,6 +8,7 @@ app_name ='watcher'
 
 urlpatterns = [
  	path('',views.Get_Camera_list, name='Camera_list'),
+ 	path('guest_page/',views.Guest_page, name ='Guest_page'),
  ]
 
 
