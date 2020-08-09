@@ -5,3 +5,7 @@ from watcher.models import *
 
 def Camera_list(request) :
 	return render(request, 'watcher/Camera_list.html')
+
+
+def table_set(request):
+	return render(request, 'watcher/table_set.html')
