@@ -8,6 +8,9 @@ html, body {
 .wrap {
 	margin : 0 auto;
 }
+
+
+
 .navbar-default {
 	border : 1px solid black;
 	background-color : black;
@@ -17,18 +20,17 @@ html, body {
 .title {
 	padding : 1%;
 }
+/*테이블 헤버 */
 
 /*테이블 내 검색창 */
 
 
-.table-responsive {
-	background-color : red
-}
 /* 테이블 부분 */
 table {
 	width: 100%;
 	border : 5px solid #444444;
 }
+
 
 /*버튼이 있는 메인 메뉴 */
 
@@ -46,6 +48,7 @@ table {
 	
 	width: 100%;
 }
+
 
 
 
