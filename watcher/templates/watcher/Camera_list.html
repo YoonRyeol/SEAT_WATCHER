@@ -50,120 +50,84 @@
 						<th class="fixed-header">#</th>
 						<th class="fixed-header">이름</th>
 						<th class="fixed-header">매장 내 위치</th>
+						<th class="fixed-header">이용 여부</th>
 						<th class="fixed-header">편집</th>
 					</tr>
 				</thead>
 				
 				<tbody>
+					{% for list in camera_list%}
 					<tr>
+						<td>{{list.camera_id}}<i style="margin:4px" class="fa fa-camera"></i></td>
+  						<td>{{list.store_id}}</td>
+  						<td>창가 천장 위</td>
+  						<td>{{list.elec_available}}</td>
+  						<td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td>
+  					</tr>
+  					{% endfor %}
+  					<tr>
 						<td>1<i style="margin:4px" class="fa fa-camera"></i></td>
   						<td>카메라1</td>
   						<td>창가 천장 위</td>
+  						<th class="fixed-header">yes</th>
   						<td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td>
   					</tr>
   					<tr>
 						<td>1<i style="margin:4px" class="fa fa-camera"></i></td>
   						<td>카메라1</td>
   						<td>창가 천장 위</td>
+  						<th class="fixed-header">yes</th>
   						<td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td>
   					</tr>
+  					
   					<tr>
 						<td>1<i style="margin:4px" class="fa fa-camera"></i></td>
   						<td>카메라1</td>
   						<td>창가 천장 위</td>
+  						<th class="fixed-header">yes</th>
   						<td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td>
   					</tr>
+  					
   					<tr>
 						<td>1<i style="margin:4px" class="fa fa-camera"></i></td>
   						<td>카메라1</td>
   						<td>창가 천장 위</td>
+  						<th class="fixed-header">yes</th>
   						<td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td>
   					</tr>
+  					
   					<tr>
 						<td>1<i style="margin:4px" class="fa fa-camera"></i></td>
   						<td>카메라1</td>
   						<td>창가 천장 위</td>
+  						<th class="fixed-header">yes</th>
   						<td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td>
   					</tr>
+  					
   					<tr>
 						<td>1<i style="margin:4px" class="fa fa-camera"></i></td>
   						<td>카메라1</td>
   						<td>창가 천장 위</td>
+  						<th class="fixed-header">yes</th>
   						<td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td>
   					</tr>
+  					
   					<tr>
 						<td>1<i style="margin:4px" class="fa fa-camera"></i></td>
   						<td>카메라1</td>
   						<td>창가 천장 위</td>
+  						<th class="fixed-header">yes</th>
   						<td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td>
   					</tr>
+  					
   					<tr>
 						<td>1<i style="margin:4px" class="fa fa-camera"></i></td>
   						<td>카메라1</td>
   						<td>창가 천장 위</td>
+  						<th class="fixed-header">yes</th>
   						<td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td>
   					</tr>
-  					<tr>
-						<td>1<i style="margin:4px" class="fa fa-camera"></i></td>
-  						<td>카메라1</td>
-  						<td>창가 천장 위</td>
-  						<td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td>
-  					</tr>
-  					<tr>
-						<td>1<i style="margin:4px" class="fa fa-camera"></i></td>
-  						<td>카메라1</td>
-  						<td>창가 천장 위</td>
-  						<td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td>
-  					</tr>
-  					<tr>
-						<td>1<i style="margin:4px" class="fa fa-camera"></i></td>
-  						<td>카메라1</td>
-  						<td>창가 천장 위</td>
-  						<td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td>
-  					</tr>
-  					  					<tr>
-						<td>1<i style="margin:4px" class="fa fa-camera"></i></td>
-  						<td>카메라1</td>
-  						<td>창가 천장 위</td>
-  						<td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td>
-  					</tr>
-  					  					<tr>
-						<td>1<i style="margin:4px" class="fa fa-camera"></i></td>
-  						<td>카메라1</td>
-  						<td>창가 천장 위</td>
-  						<td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td>
-  					</tr>
-  					  					<tr>
-						<td>1<i style="margin:4px" class="fa fa-camera"></i></td>
-  						<td>카메라1</td>
-  						<td>창가 천장 위</td>
-  						<td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td>
-  					</tr>
-  					  					<tr>
-						<td>1<i style="margin:4px" class="fa fa-camera"></i></td>
-  						<td>카메라1</td>
-  						<td>창가 천장 위</td>
-  						<td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td>
-  					</tr>
-  					  					<tr>
-						<td>1<i style="margin:4px" class="fa fa-camera"></i></td>
-  						<td>카메라1</td>
-  						<td>창가 천장 위</td>
-  						<td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td>
-  					</tr>
-  					  					<tr>
-						<td>1<i style="margin:4px" class="fa fa-camera"></i></td>
-  						<td>카메라1</td>
-  						<td>창가 천장 위</td>
-  						<td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td>
-  					</tr>
-  					  					<tr>
-						<td>1<i style="margin:4px" class="fa fa-camera"></i></td>
-  						<td>카메라1</td>
-  						<td>창가 천장 위</td>
-  						<td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td>
-  					</tr>
-
+  					
 
   				</tbody>
   			</table>
