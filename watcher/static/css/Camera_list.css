@@ -31,6 +31,15 @@ table {
 	border : 5px solid #444444;
 }
 
+tr[visible='false'],
+.no-result{
+  display:none;
+}
+
+tr[visible='true']{
+  display:table-row;
+}
+
 
 /*버튼이 있는 메인 메뉴 */
 
