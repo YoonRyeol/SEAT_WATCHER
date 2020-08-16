@@ -8,4 +8,4 @@ def Camera_list(request) :
 
 
 def table_set(request):
-	return render(request, 'watcher/table_set.html')
+	return render(request, 'watcher/table_set_fabric.html')

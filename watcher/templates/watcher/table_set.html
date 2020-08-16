@@ -3,19 +3,81 @@
 </head>
 
 <body>
-    <canvas id="canvas" width="300" height="300">
+    <canvas id="canvas" width="800" height="800">
         캔버스의 내용을 설명하는 대체 텍스트
     </canvas>
+
+
 </body>
 <script src="/static/js/jquery-3.5.1.min.js"></script>
 <script src="/static/js/bootstrap.js"></script>
 <script src="/static/js/bootstrap.bundle.js"></script>
+<script src="/static/js/fabric.js"></script>
 <script>
+
+    var click_count=-1;
+    var square_list = []
+    var square_points = []
+
     $(document).ready(function(){
         var canvas = document.getElementById('canvas'); 
         var ctx = canvas.getContext('2d'); 
-        ctx.fillStyle = 'green'; 
-        ctx.fillRect(10, 10, 100, 100);
+        var img = new Image();
+        img.src = '/static/img/Picture 24.jpg';
+/*         ctx.fillStyle = 'green'; 
+        ctx.fillRect(0, 0, 800, 800); */
+        ctx.drawImage(img, 0, 0)
     });
+
+
+
+    const canvas = document.querySelector('canvas')
+    canvas.addEventListener('mousedown', function(e) {
+        getCursorPosition(canvas, e)
+    });
+
+    function getCursorPosition(canvas, event) {
+        const rect = canvas.getBoundingClientRect()
+        const x = event.clientX - rect.left
+        const y = event.clientY - rect.top
+        console.log("x: " + x + " y: " + y)
+        var ctx = canvas.getContext('2d'); 
+        ctx.fillStyle = 'red'; 
+        ctx.fillRect(x,y,10,10);
+        var square_point = {
+                'x':x,
+                'y':y
+            }
+
+        square_points.push(square_point)
+        click_count += 1;
+        if(click_count%4 == 3){
+            square_list.push(square_points)
+            draw_square(square_points)
+            square_points = []
+            console.log(square_list)
+
+        }
+        
+    }
+
+    function draw_square(square_points){
+
+        for(var i=0; i<3; i++){
+            
+            var c = document.getElementById("canvas");
+            var ctx = c.getContext("2d");
+            ctx.beginPath();
+            ctx.moveTo(square_points[i].x, square_points[i].y);
+            ctx.lineTo(square_points[i+1].x, square_points[i+1].y);
+            ctx.stroke();
+        }
+
+        ctx.beginPath();
+        ctx.moveTo(square_points[3].x, square_points[3].y);
+        ctx.lineTo(square_points[0].x, square_points[0].y);
+        ctx.stroke();
+
+    }
 
 </script>
