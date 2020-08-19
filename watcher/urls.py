@@ -9,7 +9,7 @@ from . import apis
 app_name ='watcher'
 
 urlpatterns = [
- 	path('',views.Get_Camera_list, name='Camera_list'),
+ 	path('',views.Get_camera_list, name='Camera_list'),
  	path('get_camera_row', views.get_data, name='ajax_get_data'),
  ]
 
