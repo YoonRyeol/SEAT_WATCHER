@@ -1,22 +1,17 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from watcher.models import *
-import json
+from django.views.decorators.csrf import csrf_exempt
+from watcher.tools import *
+
 # Create your views here.
+def Camera_list(request) :
+	return render(request, 'watcher/Camera_list.html')
 
+def table_set(request):
+	return render(request, 'watcher/table_set_fabric.html')
 
-def Get_camera_list(request) :
-	camera_list = Camera.objects.all()
-	return render(request, 'watcher/Camera_list.html',{'camera_list' : camera_list})
+@csrf_exempt
+def image_test(request):
+	handle_uploaded_file(request.FILES['file'])
 
-def get_data(request) :
-	pk = int(request.GET['pk'])
-	camera_info = Camera.objects.get(pk=pk)
-
-	data = {
-		'pk' : camera_info.pk,
-		'store_id' : camera_info.store_id,
-		'elec_available' : camera_info.elec_available,
-	}
-
-	return JsonResponse(data, safe=False)

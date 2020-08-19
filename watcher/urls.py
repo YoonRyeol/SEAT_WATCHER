@@ -9,8 +9,9 @@ from . import apis
 app_name ='watcher'
 
 urlpatterns = [
- 	path('',views.Get_camera_list, name='Camera_list'),
- 	path('get_camera_row', views.get_data, name='ajax_get_data'),
+ 	path('',views.Camera_list, name='Camera_list'),
+	path('table_set/', views.table_set, name='table_set'),
+	path('image_download', views.image_test, name='image_test'),
  ]
 
 
