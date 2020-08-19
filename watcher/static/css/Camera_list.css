@@ -10,10 +10,15 @@ html, body {
 }
 
 
-
-.navbar-default {
-	border : 1px solid black;
-	background-color : black;
+a{
+	color :#ffffff;
+	text-decoration: none;
+}
+.navbar-expand-lg .navbar-nav > a,
+.navbar-expand-lg .navbar-nav > a :hover,
+.navbar-expand-lg .navbar-nav > a :focus
+{
+	color: #ffffff;
 }
 
 /* 테이블 제목 부분 */
@@ -35,7 +40,6 @@ tr[visible='false'],
 .no-result{
   display:none;
 }
-
 tr[visible='true']{
   display:table-row;
 }
