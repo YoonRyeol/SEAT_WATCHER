@@ -20,4 +20,5 @@ from seat_watcher_cam.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('test', connect_test),
+    path('get_seat_info', get_seat_info)
 ]
