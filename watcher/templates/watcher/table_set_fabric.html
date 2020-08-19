@@ -4,6 +4,12 @@
         .controls {
             display: inline-block;
         }
+        td{
+            align-content: center;
+        }
+        table{
+            text-align:center;
+        }
     </style>
 </head>
 
@@ -20,7 +26,45 @@
             <button id="get_objects" onclick="get_objects()">get objects</button>
         </p>
     </div>
-    <canvas id="c" width="1000" height="1000" style="border:1px solid #ccc"></canvas>
+    <row>
+        <canvas id="c" width="1200" height="900" style="border:1px solid #ccc"></canvas>
+
+        <table class="table table-hover" id='rec_table' style="max-width: 1200px;">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">전기 사용 가능 유무</th>
+                <th scope="col">좌석 갯수</th>
+                <th scope="col">삭제</th>
+            </tr>
+            </thead>
+            <tbody>
+<!--                 <tr>
+                    <td>-1</td>
+                    <td>
+                        <input type="checkbox" id="is_elec">
+                    </td>
+                    <td>
+                        <input type="number" class="form-control" id="inputPassword2" placeholder="좌석 갯수">
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm" id='delete_rec_row' data-rec_id=''>
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>
+                                <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>
+                            </svg>
+                        </button>
+                    </td>
+                </tr> -->
+            </tbody>
+        </table>
+    </row>
+    <button type="button" class="btn btn-primary">
+        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-upload" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M.5 8a.5.5 0 0 1 .5.5V12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8.5a.5.5 0 0 1 1 0V12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V8.5A.5.5 0 0 1 .5 8zM5 4.854a.5.5 0 0 0 .707 0L8 2.56l2.293 2.293A.5.5 0 1 0 11 4.146L8.354 1.5a.5.5 0 0 0-.708 0L5 4.146a.5.5 0 0 0 0 .708z"/>
+            <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0v-8A.5.5 0 0 1 8 2z"/>
+        </svg>
+    </button>
 </body>
 
 <script src="/static/js/jquery-3.5.1.min.js"></script>
@@ -28,30 +72,55 @@
 <script src="/static/js/bootstrap.bundle.js"></script>
 <script src="/static/js/fabric.js"></script>
 <script>
+    var id = 0;
     var canvas = this.__canvas = new fabric.Canvas('c');
     canvas.setBackgroundImage('/static/img/Picture 24.jpg');
+    canvas.selection  = false
     // create a rect object
     fabric.Object.prototype.transparentCorners = false;
     fabric.Object.prototype.cornerColor = 'blue';
     fabric.Object.prototype.cornerStyle = 'circle';
 
 
+
     function Add(_left = 100, _top = 50) {
         var rect = new fabric.Rect({
-            left: _left,
-            top: _top,
+
             fill: 'yellow',
-            width: 200,
+            width: 100,
             height: 100,
             objectCaching: false,
             stroke: 'lightgreen',
             strokeWidth: 4,
             opacity: 0.4,
+            originX: 'center',
+            originY: 'center'
+        });
+
+        var id_text = id+''
+
+        var text = new fabric.Text(id_text, {
+            fontSize: 30,
+            originX: 'center',
+            originY: 'center'
+        });
+
+        console.log(text.scaleX + ', ' + text.scaleY)
+
+        var group = new fabric.Group([ rect, text ], {
+            left: _left,
+            top: _top,
             hasRotatingPoint: false,
         });
-        canvas.add(rect);
-        canvas.setActiveObject(rect);
-    
+
+        group.id = id
+
+        canvas.add(group);
+        canvas.setActiveObject(group);
+        add_row(id)
+        id++;
+        console.log(group)
+
     }
 
     function deleteObject(eventData, target) {
@@ -60,13 +129,34 @@
         canvas.requestRenderAll();
     }
 
+    $(document).on('click', '#delete_rec_row', function(e){
+        var rec_id = $(this).data('rec_id')*1
+
+        var rec_list = canvas.getObjects()
+        console.log(rec_list)
+        rec_id = rec_id*1
+        console.log('delete : ' + rec_id)
+
+        for(var i=0; i<rec_list.length; i++){
+            var rec = rec_list[i]
+            if((rec.id)*1 == rec_id*1){ 
+                canvas.remove(rec)
+                delete_row(rec_id)
+                break;
+            }
+        }
+    });
+
     canvas.on('mouse:down', function(options) {
 
         var is_delete = $('#is_delete').prop('checked')
 
         if(is_delete){
-            canvas.remove(options.target);
-            canvas.requestRenderAll();        
+            if(options.target != null){
+                delete_row(options.target.id)
+                canvas.remove(options.target);
+                canvas.requestRenderAll(); 
+            }       
         }
         else {
             if(options.target == null){
@@ -77,26 +167,118 @@
     });
 
     function get_objects(){
-        var pos_data_list = []
+        var seat_data = []
+        var back_img = canvas.backgroundImage;
         var rect_list = canvas.getObjects()
-        console.log(canvas.width + ', ' + canvas.height)
+        
+        console.log(back_img.width + ', ' + back_img.height)
         console.log(rect_list)
+
+        var tr_list = $('#rec_table > tbody > tr')
+
+        console.log(tr_list)
+
         for(var i=0; i<rect_list.length; i++){
+            var seat_datum = tr_to_data(tr_list[i])
             var cur_rec = rect_list[i];
+            console.log(cur_rec.id)
             var pos_data = {
-                'f_x' : cur_rec.left/canvas.width,
-                'f_y' : cur_rec.top/canvas.height,
-                's_x' : (cur_rec.left+cur_rec.width)/canvas.width,
-                's_y' : (cur_rec.top+cur_rec.height)/canvas.height,
+                'f_x' : cur_rec.left/back_img.width,
+                'f_y' : cur_rec.top/back_img.height,
+                's_x' : (cur_rec.left+cur_rec.width)/back_img.width,
+                's_y' : (cur_rec.top+cur_rec.height)/back_img.height,
             }
-            pos_data_list.push(pos_data)
+            seat_datum['position'] = pos_data
+            seat_data.push(seat_datum)
         }
 
-        console.log(pos_data_list)
+        console.log(seat_data)
     }
+
+    function add_row(id){
+        var row_str = "<tr>" +
+            "<input type='hidden' id='row_data' data-rec_id=''>"+
+            "<td id='rec_id'>1</th>"+
+            "<td>"+
+            '<input type="checkbox" id="is_elec">'+
+/*             '<div class="custom-control custom-switch">'+
+            '<input type="checkbox" class="custom-control-input" id="customSwitch1">'+
+            '<label class="custom-control-label" for="customSwitch1"></label>'+
+            '</div>'+ */
+            '</td>'+
+            '<td>'+
+            '<input type="number" class="form-control" id="capacity" placeholder="좌석 갯수" value="1">'+
+            '</td>'+
+            "<td>"+
+            '<button type="button" class="btn btn-danger btn-sm" id="delete_rec_row" data-rec_id="">'+
+            '<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">'+
+            '<path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>'+
+            '<path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>'+
+            '</svg>'+
+            '</button>'+
+            '</td>'+
+            "</tr>";
+
+        $('#rec_table > tbody:last-child').append(row_str)
+        var last_row = $('#rec_table > tbody:last-child tr:last')
+        $(last_row).find('input[type="hidden"]').attr('data-rec_id', id)
+        $(last_row).find('button[id="delete_rec_row"]').attr('data-rec_id', id)
+        $(last_row).find('td[id="rec_id"]').text(id)        
+    }
+
+    function delete_row(pic_rec_id){
+        var tr_list = $('#rec_table > tbody:last-child').find('tr')
+        for(var i=0; i < tr_list.length; i++){
+            var list_rec_id = $(tr_list[i]).find('input').data('rec_id')
+            if(list_rec_id == pic_rec_id){
+                $(tr_list[i]).remove()
+            }
+        }
+    }
+
+    function tr_to_data(tr){
+        var is_elec = $(tr).find('#is_elec').prop('checked')
+        var capacity = $(tr).find('#capacity').val()
+
+        return {
+            'is_elec' : is_elec,
+            'capacity' : capacity
+        }
+    }
+
+    canvas.on('object:scaling', function(obj){
+
+        console.log("group width: " + obj.target.getWidth());
+        console.log("object scale: " +  obj.target.getScaleX());
+        console.log("rect1 width_static: " + obj.target.item(0).getWidth());
+        console.log("rect1 width: " + obj.target.item(0).getWidth() * obj.target.getScaleX());
+        console.log("rect2 width: " + obj.target.item(1).getWidth() * obj.target.getScaleX());
+
+        var circle = obj.target.item(1);
+        var group = obj.target;
+        group.remove(circle);
+        var id_text = group.id+'';
+        var text = new fabric.Text(id_text, {
+            fontSize: 30,
+            originX: 'center',
+            originY: 'center',
+            scaleX : 1/obj.target.getScaleX(),
+            scaleY : 1/obj.target.getScaleY(),
+        });
+
+        group.add(text);
+    });
+
+
+    function onChange(obj) {
+    
+    
+    }
+
 
     $(document).ready(function(e){
         canvas.renderAll();
+        console.log(canvas.backgroundImage)
     });
 
 </script>
