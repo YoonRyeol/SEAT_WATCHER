@@ -5,21 +5,45 @@ html, body {
   padding: 0;
 }
 
-.navbar-default {
-	border : 1px solid black;
-	background-color : black;
+.wrap {
+	margin : 0 auto;
+}
+
+
+a{
+	color :#ffffff;
+	text-decoration: none;
+}
+.navbar-expand-lg .navbar-nav > a,
+.navbar-expand-lg .navbar-nav > a :hover,
+.navbar-expand-lg .navbar-nav > a :focus
+{
+	color: #ffffff;
 }
 
 /* 테이블 제목 부분 */
 .title {
 	padding : 1%;
 }
+/*테이블 헤버 */
+
+/*테이블 내 검색창 */
+
 
 /* 테이블 부분 */
 table {
 	width: 100%;
 	border : 5px solid #444444;
 }
+
+tr[visible='false'],
+.no-result{
+  display:none;
+}
+tr[visible='true']{
+  display:table-row;
+}
+
 
 /*버튼이 있는 메인 메뉴 */
 
@@ -37,6 +61,7 @@ table {
 	
 	width: 100%;
 }
+
 
 
 

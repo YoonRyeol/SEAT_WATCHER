@@ -73,8 +73,8 @@ WSGI_APPLICATION = 'SEAT_WATCHER.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
 
+DATABASES = {
     'default':{
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'project_alpha_db',
@@ -84,7 +84,6 @@ DATABASES = {
         'PORT': '3306',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
