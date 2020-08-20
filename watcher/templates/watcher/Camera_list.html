@@ -100,6 +100,7 @@
 				</thead>
 				
 				<tbody>
+					<!--
 					{% for list in camera_list%}
 					<tr id="tr_list_{{list.pk}}">
 						<td id="c_num_{{list.pk}}" >{{list.pk}}<i style="margin:4px" class="fa fa-camera"></i></td>
@@ -110,7 +111,7 @@
   						<td><i type="button" name="{{list.pk}}" data-toggle="modal" data-target="#exampleModal"  style="margin:4px" class="fa fa-edit" id="edit_button"><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px" class="fa fa-trash"></i></td>
   					</tr>
   					{% endfor %}
-  					
+  					-->
 
   				</tbody>
   			</table>
@@ -149,7 +150,7 @@
 			}
 		});
 
-	<!--검색기능-->
+	/*<!--검색기능-->*/
 		$(document).ready(function(){
 			$("#keyword").on("keyup", function() {
 				var value = $(this).val().toLowerCase();
@@ -160,26 +161,6 @@
 		});
 
 
-	<!--수정 모달 버튼 기능-->
-		$(document).on('click', '#edit_button', function(e){
-			var pk_check = $(this).attr('name');
-			console.log(pk_check);
-			$.ajax({
-				url:"{% url 'watcher:ajax_get_data' %}",
-				dataType : "json",
-				data:{
-					'pk': pk_check
-				},
-				type:'GET',
-				success:function(data){
-					console.log(data)
-					$('.modal-title').text(pk_check+"번 카메라")
-					$('#location').val(data.store_id)
-
-
-				},
-			});
-		});
 
 	</script>
 

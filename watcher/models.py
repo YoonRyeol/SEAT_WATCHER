@@ -16,6 +16,7 @@ class Camera(models.Model):
     cur_host = models.CharField(max_length=256, blank=True, null=True)
     description = models.CharField(max_length=1024, blank=True, null=True)
 
+
 class Table(models.Model):
     store = models.ForeignKey('Store', on_delete=models.SET_NULL, blank=True, null=True)
     camera = models.ForeignKey('Camera', on_delete=models.SET_NULL, blank=True, null=True)
@@ -30,4 +31,3 @@ class Table(models.Model):
     layout_s_y = models.FloatField(blank=True, null=True)    
     is_elec = models.BooleanField(default=False)
     capacity = models.IntegerField(default=-1)
-
