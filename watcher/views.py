@@ -6,13 +6,15 @@ from watcher.tools import *
 
 # Create your views here.
 def Camera_list(request) :
+	request.GET['store_id']
 	return render(request, 'watcher/Camera_list.html')
 
 def table_set(request):
 	return render(request, 'watcher/table_set_fabric.html')
 
 def store_list(request) :
-	return render(request, 'watcher/store_list.html')
+	store_list = Store.objects.all()
+	return render(request, 'watcher/store_list.html',{"store_list" : store_list})
 
 @csrf_exempt
 def image_test(request):

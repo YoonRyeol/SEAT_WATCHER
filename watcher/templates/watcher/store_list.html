@@ -42,17 +42,10 @@
 		<p class="text-left">현재 관리되고 있는 매장 목록입니다.</p>
 		</div>
 
-		<button style="float :left; margin-left : 1%;" type="button" class="btn btn-dark">매장 추가</button>
-
-		<!--검색창-->
-		<div class="container-fluid" style=""> 
-			<form class="form-inline" style="float: right; padding-bottom : 1%;">
-				<input type="text" id="keyword" class="search-query" placeholder="검색 내용"> <button type="submit" class="btn btn-sm btn-dark"  data-test='aaa' style="margin : 1px;">검색</button>
-			</form>
-		</div>
-	
+		<button style="float :left; margin-left : 1%;" id="add_button" data-toggle="modal" data-target="#addModal" type="button" class="btn btn-dark">매장 추가</button>
+		
 		<!--모달 form-->
-		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
@@ -62,14 +55,14 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <form>
+		        <form id = "form_store_info">
 		          <div class="form-group">
-		            <label for="camera-name" class="col-form-label">카메라 이름 :</label>
-		            <input type="text" class="form-control" id="location" value="">
+		            <label for="camera-name" class="col-form-label">매장 이름 :</label>
+		            <input type="text" id="modal_store_name" class="form-control" id="location" value="">
 		          </div>
 		          <div class="form-group">
-		            <label for="mac-address" class="col-form-label">Mac Address :</label>
-		           <input type="text" class="form-control" id="location" value="">
+		            <label for="mac-address" class="col-form-label">매장 위치 :</label>
+		           <input type="text" id="modal_store_location" class="form-control" id="location" value="">
 		          </div>
 		          <div class="form-group">
 		            <label for="description" class="col-form-label">비고 :</label>
@@ -79,12 +72,21 @@
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-		        <button type="button" class="btn btn-primary">변경사항 저장</button>
+		        <button type="button" id='add_store_btn' class="btn btn-primary">매장 추가</button>
 		      </div>
 		    </div>
 		  </div>
 		</div>
 		<!--모달 form 끝-->
+
+		<!--검색창-->
+		<div class="container-fluid" style=""> 
+			<form class="form-inline" style="float: right; padding-bottom : 1%;">
+				<input type="text" id="keyword" class="search-query" placeholder="검색 내용"> <button type="submit" class="btn btn-sm btn-dark"  data-test='aaa' style="margin : 1px;">검색</button>
+			</form>
+		</div>
+	
+		
 
 		<div class="table-responsive" style="height : 45vh; overflow: scroll;" >
 		<!-- Table -->
@@ -99,14 +101,12 @@
 				</thead>
 				
 				<tbody>
-					{% for list in camera_list%}
-					<tr id="tr_list_{{list.pk}}">
-						<td id="c_num_{{list.pk}}" >{{list.pk}}<i style="margin:4px" class="fa fa-camera"></i></td>
-  						<td>{{list.store_id}}</td>
-  						<td>창가 천장 위</td>
-  						<td>{{list.elec_available}}<i style="margin:4px" class="fa fa-eye"></i></td>
-  						<td>12:34:56:78:90:AB</td>
-  						<td><i type="button" name="{{list.pk}}" data-toggle="modal" data-target="#exampleModal"  style="margin:4px" class="fa fa-edit" id="edit_button"><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px" class="fa fa-trash"></i></td>
+					{% for list in store_list%}
+					<tr name="{{list.pk}}">
+  						<td>{{list.pk}}</td>
+  						<td>{{list.store_name}}</td>
+  						<td>{{list.store_location}}</td>
+  						<td><i type="button" name="{{list.pk}}" data-toggle="modal" data-target="#exampleModal"  style="margin:4px" class="fa fa-edit" ><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px" class="fa fa-trash"></i></td>
   					</tr>
   					{% endfor %}
   					
@@ -136,6 +136,82 @@
 					</div>
 				</div>
 	</footer>
+<script>
 
+		/* 테이블 내 스크롤 */
+		var page = 1;
+		$(window).scroll(function() {
+			if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+				console.log(++page);
+				$("tbody").append('<tr><td>1<i style="margin:4px" class="fa fa-camera"></i></td><td>카메라1</td><td>창가 천장 위</td><td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td></tr>');
+			}
+		});
+
+		/* 가게 클릭시 상세 페이지로 이동 */
+		$(document).on('click', 'tbody > tr', function(e) {
+			var pk = $(this).attr('name');
+			console.log(pk);
+			$.ajax({
+				type: "GET",
+				url: "{% url 'watcher:ajax_send_store_pk' %}",
+				dataType: "json",
+				data : {
+					'store_id' : pk
+				},
+				success : function(data) {
+
+				},
+			});
+		
+		});
+		/*form 유효성 검사*/
+	
+
+		/*수정 모달 버튼 기능*/
+		$(document).on('click', '#add_button', function(e){
+			
+		});
+		/*가게 추가 기능 in 모달 */
+		$(document).on('click', '#add_store_btn', function(e) {
+			var store_name = $('#modal_store_name').val();
+			var store_location = $('#modal_store_location').val();
+			console.log(store_location);
+			console.log(store_name);
+			if (confirm('정말 추가 하시겠습니까?')) {
+				$.ajax({
+					url: "{% url 'watcher:ajax_add_store_list' %}",
+					dataType : "json",
+					data: {
+						'store_name' : store_name,
+						'store_location' : store_location,
+					},
+					type : 'GET',
+					success: function(data) {
+						console.log('save')
+						window.location.href = pk;
+					},
+				});
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
+		
+		});
+	 	/*검색기능*/
+		$(document).ready(function(){
+			$("#keyword").on("keyup", function() {
+				var value = $(this).val().toLowerCase();
+				$("tbody tr").filter(function() {
+					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+				});
+			});
+		});
+
+
+	</script>
+</script>
 </body>
 </html>

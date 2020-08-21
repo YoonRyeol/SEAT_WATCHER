@@ -103,7 +103,7 @@
 					{% for list in camera_list%}
 					<tr id="tr_list_{{list.pk}}">
 						<td id="c_num_{{list.pk}}" >{{list.pk}}<i style="margin:4px" class="fa fa-camera"></i></td>
-  						<td>{{list.store_id}}</td>
+  						<td>{{list.pk}}</td>
   						<td>창가 천장 위</td>
   						<td>{{list.elec_available}}<i style="margin:4px" class="fa fa-eye"></i></td>
   						<td>12:34:56:78:90:AB</td>
@@ -165,7 +165,7 @@
 			var pk_check = $(this).attr('name');
 			console.log(pk_check);
 			$.ajax({
-				url:"{% url 'watcher:ajax_get_data' %}",
+				url:"{% url 'watcher:ajax_get_camera_list' %}",
 				dataType : "json",
 				data:{
 					'pk': pk_check
@@ -173,9 +173,7 @@
 				type:'GET',
 				success:function(data){
 					console.log(data)
-					$('.modal-title').text(pk_check+"번 카메라")
-					$('#location').val(data.store_id)
-
+			
 
 				},
 			});
