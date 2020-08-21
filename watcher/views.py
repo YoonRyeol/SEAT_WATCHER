@@ -11,6 +11,9 @@ def Camera_list(request) :
 def table_set(request):
 	return render(request, 'watcher/table_set_fabric.html')
 
+def store_list(request) :
+	return render(request, 'watcher/store_list.html')
+
 @csrf_exempt
 def image_test(request):
 	handle_uploaded_file(request.FILES['file'])
