@@ -21,18 +21,22 @@ def send_seat_data(request):
 	"""
 
 	"""
-	Todo : cam addr setting
+	Todo : cam addr setting : connection test
 	"""
 	try:
-		response = requests.post('http://localhost:8010/get_seat_info', data={'seat_data':string_data}, timeout=5)
+		response = requests.get('http://localhost:8010/test', timeout=5)
 	except Exception:
 		return HttpResponse('connection error')
-	if response.text != 'good':
+	if response.text != 'ok':
 		return HttpResponse('connection error2')
 	
 	cur_pk_list = []
 
+	to_cam_data_list = []
+
 	for elem in real_data:
+		to_cam_data = {}
+
 		target_data = {
 			'pic_f_x' : elem['position']['f_x'],
 			'pic_f_y' : elem['position']['f_y'],
@@ -44,8 +48,14 @@ def send_seat_data(request):
 		if bool(elem['pk']):
 			cur_pk_list.append(elem['pk'])
 			Table.objects.filter(pk=elem['pk']).update(**target_data)
+			to_cam_data['pk'] = elem['pk']
+			to_cam_data['position'] = elem['position']
+			to_cam_data_list.append(to_cam_data)
 		else:
-			Table.objects.create(**target_data)
+			table_tmp = Table.objects.create(**target_data)
+			to_cam_data['pk'] = table_tmp.pk
+			to_cam_data['position'] = elem['position']
+			to_cam_data_list.append(to_cam_data)
 
 	"""
 	Todo : table delete
@@ -53,7 +63,16 @@ def send_seat_data(request):
 	for before_pk in before_pk_list:
 		if before_pk not in cur_pk_list:
 			Table.objects.filter(pk=before_pk).delete()
-		
+	
+	"""
+	send coord to cam
+	"""
+	try:
+		response = requests.post('http://localhost:8010/get_seat_info', data={'seat_data':json.dumps(to_cam_data_list)}, timeout=5)
+	except Exception:
+		return HttpResponse('connection error')
+	if response.text != 'good':
+		return HttpResponse('connection error2')
 
 	return HttpResponse('good')
 
