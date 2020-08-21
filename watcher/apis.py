@@ -7,6 +7,8 @@ def send_seat_data(request):
 	"""
 	Todo : get camera id, store id
 	"""
+	before_pk_list = json.loads(request.POST['before_pk_list'])
+
 	string_data = request.POST['seat_data']
 	real_data = json.loads(string_data)
 	"""
@@ -28,6 +30,8 @@ def send_seat_data(request):
 	if response.text != 'good':
 		return HttpResponse('connection error2')
 	
+	cur_pk_list = []
+
 	for elem in real_data:
 		target_data = {
 			'pic_f_x' : elem['position']['f_x'],
@@ -37,8 +41,19 @@ def send_seat_data(request):
 			'is_elec' : elem['is_elec'],
 			'capacity' : elem['capacity']
 		}
-		Table.objects.create(**target_data)
+		if bool(elem['pk']):
+			cur_pk_list.append(elem['pk'])
+			Table.objects.filter(pk=elem['pk']).update(**target_data)
+		else:
+			Table.objects.create(**target_data)
 
+	"""
+	Todo : table delete
+	"""
+	for before_pk in before_pk_list:
+		if before_pk not in cur_pk_list:
+			Table.objects.filter(pk=before_pk).delete()
+		
 
 	return HttpResponse('good')
 

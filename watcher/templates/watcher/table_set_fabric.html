@@ -72,6 +72,7 @@
 <script src="/static/js/bootstrap.bundle.js"></script>
 <script src="/static/js/fabric.js"></script>
 <script>
+    var table_list = {{table_list|safe}}
     var id = 0;
     var canvas = this.__canvas = new fabric.Canvas('c');
     canvas.setBackgroundImage('/static/img/Picture 24.jpg');
@@ -83,12 +84,13 @@
 
 
 
-    function Add(_left = 100, _top = 50) {
+    function Add(_left = 100, _top = 50, _width=100, _height=100, _scaleX=1, _scaleY=1, _pk=null) {
+        console.log('_pk : ' + _pk)
         var rect = new fabric.Rect({
 
             fill: 'yellow',
-            width: 100,
-            height: 100,
+            width: _width,
+            height: _height,
             objectCaching: false,
             stroke: 'lightgreen',
             strokeWidth: 4,
@@ -104,20 +106,28 @@
             originX: 'center',
             originY: 'center'
         });
-
-        console.log(text.scaleX + ', ' + text.scaleY)
+        text.scaleX = 1/_scaleX
+        text.scaleY = 1/_scaleY
 
         var group = new fabric.Group([ rect, text ], {
             left: _left,
             top: _top,
+            width: _width,
+            height: _height,
             hasRotatingPoint: false,
         });
 
+        group.scaleX = _scaleX
+        console.log(_scaleX)
+        group.scaleY = _scaleY
+        
         group.id = id
+        if(_pk != null)
+            group.pk = _pk
 
         canvas.add(group);
         canvas.setActiveObject(group);
-        add_row(id)
+        add_row(id, _pk=_pk)
         id++;
         console.log(group)
 
@@ -181,13 +191,14 @@
         for(var i=0; i<rect_list.length; i++){
             var seat_datum = tr_to_data(tr_list[i])
             var cur_rec = rect_list[i];
-            console.log(cur_rec.id)
+            console.log(cur_rec.id + ' ' + cur_rec.width*cur_rec.scaleX)
             var pos_data = {
                 'f_x' : cur_rec.left/back_img.width,
                 'f_y' : cur_rec.top/back_img.height,
-                's_x' : (cur_rec.left+cur_rec.width)/back_img.width,
-                's_y' : (cur_rec.top+cur_rec.height)/back_img.height,
+                's_x' : (cur_rec.left+cur_rec.width*cur_rec.scaleX)/back_img.width,
+                's_y' : (cur_rec.top+cur_rec.height*cur_rec.scaleY)/back_img.height,
             }
+            console.log('(' + (pos_data['s_x']-pos_data['f_x']) + ', ' + (pos_data['s_y']-pos_data['f_y']) + ')')
             seat_datum['position'] = pos_data
             seat_data.push(seat_datum)
         }
@@ -196,9 +207,9 @@
         return seat_data
     }
 
-    function add_row(id){
+    function add_row(id, _pk=null){
         var row_str = "<tr>" +
-            "<input type='hidden' id='row_data' data-rec_id=''>"+
+            "<input type='hidden' id='row_data' data-rec_id='' data-pk=''>"+
             "<td id='rec_id'>1</th>"+
             "<td>"+
             '<input type="checkbox" id="is_elec">'+
@@ -223,6 +234,8 @@
         $('#rec_table > tbody:last-child').append(row_str)
         var last_row = $('#rec_table > tbody:last-child tr:last')
         $(last_row).find('input[type="hidden"]').attr('data-rec_id', id)
+        if(_pk != null)
+            $(last_row).find('input[type="hidden"]').attr('data-pk', _pk)
         $(last_row).find('button[id="delete_rec_row"]').attr('data-rec_id', id)
         $(last_row).find('td[id="rec_id"]').text(id)        
     }
@@ -240,10 +253,13 @@
     function tr_to_data(tr){
         var is_elec = $(tr).find('#is_elec').prop('checked')
         var capacity = $(tr).find('#capacity').val()
-
+        var pk = $(tr).find('input[type="hidden"]').data('pk')
+        if(pk == undefined)
+            pk = null
         return {
             'is_elec' : is_elec,
-            'capacity' : capacity
+            'capacity' : capacity,
+            'pk' : pk
         }
     }
 
@@ -275,11 +291,19 @@
 
         var seat_data = get_objects()
         var input_data = JSON.stringify(seat_data)
+
+        var before_pk_list = []
+        for(var i=0; i<table_list.length; i++)
+            before_pk_list.push(table_list[i].id)
+
+        before_pk_list = JSON.stringify(before_pk_list)
+
         $.ajax({
             url:'{% url "watcher:send_seat_data" %}',
             type:'POST',
             data:{
                 'seat_data' : input_data,
+                'before_pk_list' : before_pk_list,
                 'csrfmiddlewaretoken' : "{{csrf_token}}"
             },
             success:function(data){
@@ -305,6 +329,18 @@
     $(document).ready(function(e){
         canvas.renderAll();
         console.log(canvas.backgroundImage)
+        console.log(table_list)
+        for(var i=0; i<table_list.length; i++){
+            var cur_data = table_list[i]
+            console.log('cur_data.id ' + cur_data.id)
+            var left = cur_data.pic_f_x*1200
+            var top = cur_data.pic_f_y*900
+            var width = Math.abs((cur_data.pic_s_x-cur_data.pic_f_x)*1200)
+            var height = Math.abs((cur_data.pic_s_y-cur_data.pic_f_y)*900)
+            console.log('(' + width + ', ' + height + ')')
+            Add(_left=left, _top=top, _width=width, _height=height, _scaleX=1, _scaleY=1, _pk=cur_data.id)
+
+        }
     });
 
 </script>
