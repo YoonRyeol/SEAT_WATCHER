@@ -1,17 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from watcher.models import *
 import json
-
-def get_camera_list(request):
-	pk = int(request.GET['pk'])
-	camera_info = Camera.objects.get(pk=pk)
-
-	output = {
-		'elec_avaliable' : camera.elec_available
-	} 
-
-
-	return JsonResponse(data, safe=False)
+from django.shortcuts import render
 
 def get_store_list(request) :
 	pk = int(request.GET['pk'])
@@ -36,8 +26,42 @@ def add_store_list(request) :
 	store_list = Store.objects.all()
 	return render(request, 'watcher/store_list.html',{"store_list" : store_list})
 
+def get_camera_list(request):
+	pk = int(request.GET['pk'])
+	camera = Camera.objects.get(pk=pk)
 
-def send_store_pk(requset) :
-	store_id = requset.GET['store_id']
+	output = {
+		'pk' : camera.pk,
+		'store_id' : camera.store_id,
+		'cur_pic' : cur_pic,
+		'mac_addr' : mac_addr,
+		'cur_host' : cur_host,
+		'description' : description,
+	} 
 
-	return render(requset, 'watcher/Camers_list.html',{"store_id" : store_id})
+
+	return JsonResponse(data, safe=False)
+
+def add_camera_list(request) :
+	cur_pic = request.GET['cur_pic']
+	description = request.GET['description']
+	store_id= int(request.GET['store_id'])
+
+	camera=Camera(cur_pic=cur_pic, description = description, mac_addr="ddd", cur_host="cur_host",store_id = store_id)
+	camera.save()
+
+	camera_list = Camera.objects.filter(store_id = store_id)
+	return render(request, 'watcher/Camera_list.html',{"camera_list" : camera_list})
+
+
+def delete_camera_list(request) :
+
+	store_id = int(request.GET['store_id'])
+	pk = int(request.GET['pk'])
+
+	camera = Camera.objects.filter(pk=pk, store_id= store_id)
+	camera.delete()
+
+	camera_list = Camera.objects.filter(store_id = store_id)
+	return render(request, 'watcher/Camera_list.html',{"camera_list" : camera_list})
+

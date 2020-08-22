@@ -27,11 +27,12 @@
 		</button>
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<div class="navbar-nav">
-				<li><a href="#">홈 화면 <span class="sr-only">(current)</span></a></li>
-				<li><a href="#">테이블 영역 선택</a></li>
-				<li><a href="#">카메라 목록</a></li>
-				<li><a href="#">테이블 정보 입력</a><li>
-				<a ref="#" tabindex="-1" aria-disabled="true"></a>
+				<ul class="nav navber-nav">
+					<li><a href="#">홈 화면 <span class="sr-only">(current)</span></a></li>
+					<li><a href="http://127.0.0.1:8000/store_list">가게 목록</a></li>
+					<li><a href="#">가게 배치도</a></li>
+				</ul>
+
 			</div>
 		 </div>
 	</nav>
@@ -51,6 +52,7 @@
 		</div>
 	
 		<!--모달 form-->
+			<!--카메라 정보 수정 모달 -->
 		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
@@ -67,7 +69,7 @@
 		            <input type="text" class="form-control" id="location" value="">
 		          </div>
 		          <div class="form-group">
-		            <label for="mac-address" class="col-form-label">Mac Address :</label>
+		            <label for="mac-address" class="col-form-label"></label>
 		           <input type="text" class="form-control" id="location" value="">
 		          </div>
 		          <div class="form-group">
@@ -83,7 +85,42 @@
 		    </div>
 		  </div>
 		</div>
+		<!--카메라 추가 모달 -->
+		<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel"></h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <form>
+		          <div class="form-group">
+		            <label for="camera-name" class="col-form-label">카메라 위치 :</label>
+		            <input type="text" class="form-control" id="modal_camera_location" value="">
+		          </div>
+		          <div class="form-group">
+		            <label for="mac-address" class="col-form-label">Mac Address :</label>
+		           <input type="text" class="form-control" id="" value="">
+		          </div>
+		          <div class="form-group">
+		            <label for="description" class="col-form-label">비고 :</label>
+		            <textarea class="form-control" id="modal_camera_description"></textarea>
+		          </div>
+		        </form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+		        <button id ="add_camera_btn" type="button" class="btn btn-primary">기기 추가</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
 		<!--모달 form 끝-->
+
+		<button style="float :left; margin-left : 1%;" id="add_button" data-toggle="modal" data-target="#addModal" type="button" class="btn btn-dark">카메라 추가</button>
 
 		<div class="table-responsive" style="height : 45vh; overflow: scroll;" >
 		<!-- Table -->
@@ -91,7 +128,6 @@
 				<thead class="thead-light">
 					<tr>
 						<th data-column-id ="numeric" class="th-sm">#</th>
-						<th data-column-id ="name" class="th-sm">이름</th>
 						<th data-column-id ="location" class="th-sm">매장 내 위치</th>
 						<th data-column-id ="available" class="th-sm">이용 여부</th>
 						<th data-column-id ="mac-address" class="th-sm">Mac Address</th>
@@ -103,11 +139,10 @@
 					{% for list in camera_list%}
 					<tr id="tr_list_{{list.pk}}">
 						<td id="c_num_{{list.pk}}" >{{list.pk}}<i style="margin:4px" class="fa fa-camera"></i></td>
-  						<td>{{list.pk}}</td>
-  						<td>창가 천장 위</td>
-  						<td>{{list.elec_available}}<i style="margin:4px" class="fa fa-eye"></i></td>
-  						<td>12:34:56:78:90:AB</td>
-  						<td><i type="button" name="{{list.pk}}" data-toggle="modal" data-target="#exampleModal"  style="margin:4px" class="fa fa-edit" id="edit_button"><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px" class="fa fa-trash"></i></td>
+  						<td>{{list.cur_pic}}</td>
+  						<td>{{list.pk}}<i style="margin:4px" class="fa fa-eye"></i></td>
+  						<td>{{list.mac_addr}}</td>
+  						<td><i type="button" name="{{list.pk}}" data-toggle="modal" data-target="#exampleModal"  style="margin:4px" class="fa fa-edit" id="td_edit_button"><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px" class="fa fa-trash" name= "{{list.pk}}" id="td_delete_button"></i></td>
   					</tr>
   					{% endfor %}
   					
@@ -149,7 +184,7 @@
 			}
 		});
 
-	<!--검색기능-->
+	/* 검색기능 */
 		$(document).ready(function(){
 			$("#keyword").on("keyup", function() {
 				var value = $(this).val().toLowerCase();
@@ -160,8 +195,8 @@
 		});
 
 
-	<!--수정 모달 버튼 기능-->
-		$(document).on('click', '#edit_button', function(e){
+	/* 테이블 row edit 모달 버튼 기능 */
+		$(document).on('click', '#td_edit_button', function(e){
 			var pk_check = $(this).attr('name');
 			console.log(pk_check);
 			$.ajax({
@@ -173,10 +208,71 @@
 				type:'GET',
 				success:function(data){
 					console.log(data)
-			
+					$('#exampleModalLabel').val(data.pk+"번카레마")
+					$('.modal-title').text(data.pk+"번 카메라")
 
 				},
 			});
+		});
+
+		/* 테이블 row 삭제 버튼 기능 */
+		$(document).on('click', '#td_delete_button', function(e){
+			var pk= $(this).attr('name');
+			console.log(pk);
+			if(confirm("삭제 하시겠습니까?"))
+			{
+				$.ajax({
+					url:"{% url 'watcher:ajax_delete_camera_list' %}",
+					dataType : "json",
+					data:{
+						'pk': pk,
+						'store_id' : {{store_id}}
+					},
+					type:'GET',
+					success:function(data){
+
+					},
+				});
+				return true;
+			}
+			else {
+				return false;
+			}
+		});
+
+		/*카메라 추가 기능 in 모달 */
+		$(document).on('click', '#add_camera_btn', function(e) {
+			var camera_location = $('#modal_camera_location').val();
+			var camera_description = $('#modal_camera_description').val();
+			var store_id = "{{store_id}}"
+			
+			if (confirm('정말 추가 하시겠습니까?')) {
+
+				console.log(camera_location);
+			console.log(camera_description);
+			console.log("{{store_id}}");
+				$.ajax({
+					url: "{% url 'watcher:ajax_add_camera_list' %}",
+					dataType : "json",
+					data: {
+						'cur_pic' : camera_location,
+						'description' : camera_description,
+						'store_id' : store_id,
+					},
+					type : 'GET',
+					success: function(data) {
+						console.log('save')
+						
+					},
+				});
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+
+		
 		});
 
 	</script>

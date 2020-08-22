@@ -28,8 +28,7 @@
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<div class="navbar-nav">
 				<li><a href="#">홈 화면 <span class="sr-only">(current)</span></a></li>
-				<li><a href="#">가게 목록</a></li>
-				<a ref="#" tabindex="-1" aria-disabled="true"></a>
+				<li><a id="navbar_store_list" href="http://127.0.0.1:8000/store_list">가게 목록</a></li>
 			</div>
 		 </div>
 	</nav>
@@ -58,11 +57,11 @@
 		        <form id = "form_store_info">
 		          <div class="form-group">
 		            <label for="camera-name" class="col-form-label">매장 이름 :</label>
-		            <input type="text" id="modal_store_name" class="form-control" id="location" value="">
+		            <input type="text" id="modal_store_name" class="form-control" value="">
 		          </div>
 		          <div class="form-group">
 		            <label for="mac-address" class="col-form-label">매장 위치 :</label>
-		           <input type="text" id="modal_store_location" class="form-control" id="location" value="">
+		           <input type="text" id="modal_store_location" class="form-control"value="">
 		          </div>
 		          <div class="form-group">
 		            <label for="description" class="col-form-label">비고 :</label>
@@ -72,7 +71,7 @@
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-		        <button type="button" id='add_store_btn' class="btn btn-primary">매장 추가</button>
+		        <button type="button" id='add_store_btn' data-dismiss="modal" class="btn btn-primary">매장 추가</button>
 		      </div>
 		    </div>
 		  </div>
@@ -102,7 +101,7 @@
 				
 				<tbody>
 					{% for list in store_list%}
-					<tr name="{{list.pk}}">
+					<tr name="{{list.pk}}" onClick = " location.href={{list.pk}}">
   						<td>{{list.pk}}</td>
   						<td>{{list.store_name}}</td>
   						<td>{{list.store_location}}</td>
@@ -137,6 +136,7 @@
 				</div>
 	</footer>
 <script>
+		/*navbar 가게목록 */
 
 		/* 테이블 내 스크롤 */
 		var page = 1;
@@ -148,22 +148,7 @@
 		});
 
 		/* 가게 클릭시 상세 페이지로 이동 */
-		$(document).on('click', 'tbody > tr', function(e) {
-			var pk = $(this).attr('name');
-			console.log(pk);
-			$.ajax({
-				type: "GET",
-				url: "{% url 'watcher:ajax_send_store_pk' %}",
-				dataType: "json",
-				data : {
-					'store_id' : pk
-				},
-				success : function(data) {
-
-				},
-			});
-		
-		});
+	
 		/*form 유효성 검사*/
 	
 
@@ -175,9 +160,10 @@
 		$(document).on('click', '#add_store_btn', function(e) {
 			var store_name = $('#modal_store_name').val();
 			var store_location = $('#modal_store_location').val();
-			console.log(store_location);
-			console.log(store_name);
 			if (confirm('정말 추가 하시겠습니까?')) {
+
+				console.log(store_location);
+				console.log(store_name);
 				$.ajax({
 					url: "{% url 'watcher:ajax_add_store_list' %}",
 					dataType : "json",
