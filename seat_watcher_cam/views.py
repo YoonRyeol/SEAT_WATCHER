@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, FileResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 
@@ -7,7 +7,8 @@ def connect_test(request):
     return HttpResponse('ok')
 
 def send_image(request):
-    return HttpResponse('something')
+    f = open('Picture 38.jpg', 'rb')
+    return FileResponse(f)
 
 @csrf_exempt
 def get_seat_info(request):
