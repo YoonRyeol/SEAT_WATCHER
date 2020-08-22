@@ -7,6 +7,9 @@ def connect_test(request):
     return HttpResponse('ok')
 
 def send_image(request):
+    """
+    Todo : 사진찍기 후 open에 경로 넣어줄 것 
+    """
     f = open('Picture 38.jpg', 'rb')
     return FileResponse(f)
 
