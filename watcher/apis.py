@@ -2,6 +2,9 @@ from django.http import JsonResponse, HttpResponse
 from watcher.models import *
 import requests
 import json
+from watcher.tools import *
+import os
+from django.utils import timezone
 
 def send_seat_data(request):
 	"""
@@ -85,3 +88,14 @@ def get_data(request):
 	} 
 
 	return HttpResponse(json.dumps(output))
+
+def get_file_from_cam(request):
+	"""
+	Todo : 카메라 pk, 가게 pk -> 카메라에 cur_pic 이름 저장
+	"""
+	response = requests.get('http://localhost:8010/send_image', stream=True)
+	if response.status_code == 200:
+		with open('watcher/static/img/test.jpg', 'wb') as f:
+			for chunk in response:
+				f.write(chunk)
+	return HttpResponse('/static/img/test.jpg')

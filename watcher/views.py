@@ -10,7 +10,7 @@ import json
 def Camera_list(request) :
 	return render(request, 'watcher/Camera_list.html')
 
-def table_set(request):
+def table_set(request, store_pk=None, camera_pk=None):
 	"""
 	Todo : 사진 데이터 로드
 	"""
