@@ -25,6 +25,15 @@ def table_set(request):
 	return render(request, 'watcher/table_set_fabric.html', {
 																'table_list': json.dumps(table_list),
 																							})
+def store_layout(request):
+	table_tmp = Table.objects.all()
+	table_list = []
+	for e in table_tmp:
+		table_list.append(model_to_dict(e))
+	return render(request, 'watcher/store_layout.html', {
+															'table_list':json.dumps(table_list)
+																								})
+
 
 @csrf_exempt
 def image_test(request):
