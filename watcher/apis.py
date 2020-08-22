@@ -10,7 +10,7 @@ def get_store_list(request) :
 	data = {
 		'pk' : store_info.pk,
 		'store_name' : store_info.store_name,
-		'store_loaction' : store_info.store_loaction,
+		'store_location' : store_info.store_location,
 	}
 
 	return JsonResponse(data, safe=False)
@@ -22,15 +22,22 @@ def add_store_list(request) :
 
 	store = Store(store_name = store_name, store_location = store_location)
 	store.save()
+	
 
-	store_list = Store.objects.all()
-	return render(request, 'watcher/store_list.html',{"store_list" : store_list})
+	data = {
+		'pk' : store.pk,
+		'store_name' : store.store_name,
+		'store_location' : store.store_location,
+	}
 
-def get_camera_list(request):
+	return JsonResponse(data, safe=False)
+
+
+def get_camera_info(request):
 	pk = int(request.GET['pk'])
 	camera = Camera.objects.get(pk=pk)
 
-	output = {
+	data = {
 		'pk' : camera.pk,
 		'store_id' : camera.store_id,
 		'cur_pic' : cur_pic,
@@ -47,11 +54,19 @@ def add_camera_list(request) :
 	description = request.GET['description']
 	store_id= int(request.GET['store_id'])
 
-	camera=Camera(cur_pic=cur_pic, description = description, mac_addr="ddd", cur_host="cur_host",store_id = store_id)
+	camera=Camera(cur_pic=cur_pic, description = description, cur_host="cur_host",store_id = store_id)
 	camera.save()
 
-	camera_list = Camera.objects.filter(store_id = store_id)
-	return render(request, 'watcher/Camera_list.html',{"camera_list" : camera_list})
+	data = {
+		'pk' : camera.pk,
+		'store_id' : camera.store_id,
+		'cur_pic' : camera.cur_pic,
+		'mac_addr' : camera.mac_addr,
+		'cur_host' : camera.cur_host,
+		'description' : camera.description,
+
+	}
+	return JsonResponse(data, safe=False)
 
 
 def delete_camera_list(request) :
@@ -63,5 +78,16 @@ def delete_camera_list(request) :
 	camera.delete()
 
 	camera_list = Camera.objects.filter(store_id = store_id)
-	return render(request, 'watcher/Camera_list.html',{"camera_list" : camera_list})
+	camera = camera_list.first();
+
+	data = {
+		'pk' : camera.pk,
+		'store_id' : camera.store_id,
+		'cur_pic' : camera.cur_pic,
+		'mac_addr' : camera.mac_addr,
+		'cur_host' : camera.cur_host,
+		'description' : camera.description,
+
+	}
+	return JsonResponse(data, safe=False)
 

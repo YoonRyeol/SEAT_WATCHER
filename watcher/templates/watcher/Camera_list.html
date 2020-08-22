@@ -113,7 +113,7 @@
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-		        <button id ="add_camera_btn" type="button" class="btn btn-primary">기기 추가</button>
+		        <button id ="add_camera_btn" type="button" data-dismiss="modal" class="btn btn-primary">기기 추가</button>
 		      </div>
 		    </div>
 		  </div>
@@ -135,7 +135,7 @@
 					</tr>
 				</thead>
 				
-				<tbody>
+				<tbody name="{{store_id}}"> <!--store_id 저장-->
 					{% for list in camera_list%}
 					<tr id="tr_list_{{list.pk}}">
 						<td id="c_num_{{list.pk}}" >{{list.pk}}<i style="margin:4px" class="fa fa-camera"></i></td>
@@ -200,7 +200,7 @@
 			var pk_check = $(this).attr('name');
 			console.log(pk_check);
 			$.ajax({
-				url:"{% url 'watcher:ajax_get_camera_list' %}",
+				url:"{% url 'watcher:ajax_get_camera_info' %}",
 				dataType : "json",
 				data:{
 					'pk': pk_check
@@ -216,22 +216,28 @@
 		});
 
 		/* 테이블 row 삭제 버튼 기능 */
-		$(document).on('click', '#td_delete_button', function(e){
-			var pk= $(this).attr('name');
-			console.log(pk);
-			if(confirm("삭제 하시겠습니까?"))
-			{
-				$.ajax({
-					url:"{% url 'watcher:ajax_delete_camera_list' %}",
-					dataType : "json",
-					data:{
-						'pk': pk,
-						'store_id' : {{store_id}}
-					},
-					type:'GET',
-					success:function(data){
 
-					},
+		$(document).on('click', '#td_delete_button', function(e) {
+			var pk = $(this).attr('name');
+			var store_id = $('tbody').attr('name');
+
+			console.log(store_id);
+			if(confirm("삭제 하시겠습니까?")) {
+				$.ajax({
+						url:"{% url 'watcher:ajax_delete_camera_list' %}",
+						dataType : "json",
+						type : 'GET',
+						data:{
+							'pk': pk,
+							'store_id' : store_id,
+						},
+						success : function(data){
+							$('#tr_list_'+pk).remove();
+						},
+						error: function (error) {
+						alert('error; ' + eval(error));
+					}
+
 				});
 				return true;
 			}
@@ -239,7 +245,6 @@
 				return false;
 			}
 		});
-
 		/*카메라 추가 기능 in 모달 */
 		$(document).on('click', '#add_camera_btn', function(e) {
 			var camera_location = $('#modal_camera_location').val();
@@ -258,11 +263,11 @@
 						'cur_pic' : camera_location,
 						'description' : camera_description,
 						'store_id' : store_id,
-					},
+											},
 					type : 'GET',
 					success: function(data) {
 						console.log('save')
-						
+						$('tbody').append('<tr id="tr_list_'+data.pk+'"><td id="'+data.pk+'" >'+data.pk+'<i style="margin:4px" class="fa fa-camera"></i></td><td>'+data.cur_pic+'</td><td>'+data.pk+'<i style="margin:4px" class="fa fa-eye"></i></td><td>'+data.mac_addr+'</td><td><i type="button" name="'+data.pk+'" data-toggle="modal" data-target="#exampleModal"  style="margin:4px" class="fa fa-edit" id="td_edit_button"><input type="hidden" name= "'+data.pk+'"></i><i style="margin:4px" class="fa fa-trash" name= "'+data.pk+'" id="td_delete_button"></i></td></tr>')
 					},
 				});
 				return true;

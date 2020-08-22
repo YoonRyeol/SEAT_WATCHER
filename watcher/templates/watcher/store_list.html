@@ -100,16 +100,14 @@
 				</thead>
 				
 				<tbody>
-					{% for list in store_list%}
-					<tr name="{{list.pk}}" onClick = " location.href={{list.pk}}">
-  						<td>{{list.pk}}</td>
-  						<td>{{list.store_name}}</td>
-  						<td>{{list.store_location}}</td>
-  						<td><i type="button" name="{{list.pk}}" data-toggle="modal" data-target="#exampleModal"  style="margin:4px" class="fa fa-edit" ><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px" class="fa fa-trash"></i></td>
-  					</tr>
-  					{% endfor %}
-  					
-
+				{% for list in store_list %}
+				<tr name="{{list.pk}}" onClick = " location.href={{list.pk}}">
+					<td>{{list.pk}}</td>
+					<td>{{list.store_name}}</td>
+					<td>{{list.store_location}}</td>
+					<td><i type="button" name="{{list.pk}}" data-toggle="modal" data-target="#exampleModal"  style="margin:4px" class="fa fa-edit" ><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px" class="fa fa-trash"></i></td>
+				</tr>
+				{% endfor %}
   				</tbody>
   			</table>
   			
@@ -136,7 +134,7 @@
 				</div>
 	</footer>
 <script>
-		/*navbar 가게목록 */
+
 
 		/* 테이블 내 스크롤 */
 		var page = 1;
@@ -146,8 +144,6 @@
 				$("tbody").append('<tr><td>1<i style="margin:4px" class="fa fa-camera"></i></td><td>카메라1</td><td>창가 천장 위</td><td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td></tr>');
 			}
 		});
-
-		/* 가게 클릭시 상세 페이지로 이동 */
 	
 		/*form 유효성 검사*/
 	
@@ -173,9 +169,12 @@
 					},
 					type : 'GET',
 					success: function(data) {
-						console.log('save')
-						window.location.href = pk;
+						console.log("save")
+						$("tbody").append('<tr name="'+data.pk+'" onClick = " location.href='+data.pk+'"><td>'+data.pk+'</td><td>'+data.store_name+'</td><td>'+data.store_location+'</td><td><i type="button" name="'+data.pk+'" data-toggle="modal" data-target="#exampleModal"  style="margin:4px" class="fa fa-edit" ><input type="hidden" name= "'+data.pk+'"></i><i style="margin:4px" class="fa fa-trash"></i></td></tr>')
 					},
+					error: function (error) {
+						alert('error; ' + eval(error));
+					}
 				});
 				return true;
 			}

@@ -16,7 +16,7 @@ urlpatterns = [
 	path('store_list_row',apis.get_store_list, name='ajax_get_store_list'),
 	path('add_store_list',apis.add_store_list, name='ajax_add_store_list'),
 	path('store_list/<int:store_id>/',views.Camera_list, name='Camera_list'),
-	path('camera_list_row',apis.get_camera_list, name='ajax_get_camera_list'),
+	path('camera_info_row',apis.get_camera_info, name='ajax_get_camera_info'),
 	path('add_camera_list',apis.add_camera_list, name='ajax_add_camera_list'),
 	path('delete_camera_list',apis.delete_camera_list, name='ajax_delete_camera_list'),
  ]
