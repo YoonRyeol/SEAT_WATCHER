@@ -12,7 +12,7 @@ def Camera_list(request,store_id) :
 	floor_list = Floor.objects.filter(store_id = store_id)
 	return render(request, 'watcher/Camera_list.html',{"camera_list": camera_list, "store_id" : store_id ,"floor_list" : floor_list,} )
 
-def table_set(request):
+def table_set(request, store_pk=None, camera_pk=None):
 	"""
 	Todo : 사진 데이터 로드
 	"""
