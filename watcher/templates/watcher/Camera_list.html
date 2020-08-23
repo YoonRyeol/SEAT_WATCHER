@@ -17,6 +17,12 @@
 
 	<title>WATCHER</title>
 
+	<style>
+		.clickable{
+			cursor: pointer;
+		}
+	</style>
+
 </head>
 <body>
 	<!--내비게이션 바-->
@@ -138,7 +144,10 @@
 				<tbody name="{{store_id}}"> <!--store_id 저장-->
 					{% for list in camera_list%}
 					<tr id="tr_list_{{list.pk}}">
-						<td id="c_num_{{list.pk}}" >{{list.pk}}<i style="margin:4px" class="fa fa-camera"></i></td>
+						<td class="clickable" id="c_num_{{list.pk}}" onclick='move_page(this)' link="{% url 'watcher:table_set' store_id list.pk %}">
+							<a href= "{% url 'watcher:table_set' store_id list.pk %}">{{list.pk}}</a>
+							<i style="margin:4px" class="fa fa-camera"></i>
+						</td>
   						<td>{{list.cur_pic}}</td>
   						<td>{{list.pk}}<i style="margin:4px" class="fa fa-eye"></i></td>
   						<td>{{list.mac_addr}}</td>
@@ -279,6 +288,13 @@
 
 		
 		});
+		
+		//move to camera seat data edit page - YR
+		function move_page(el){
+    		var addr = $(el).attr('link')
+			location.href = addr
+  		}	
+
 
 	</script>
 

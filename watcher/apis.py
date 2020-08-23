@@ -45,6 +45,10 @@ def send_seat_data(request):
 	before_pk_list = json.loads(request.POST['before_pk_list'])
 
 	string_data = request.POST['seat_data']
+	camera_pk = int(request.POST['camera_pk'])
+	camera = Camera.objects.get(pk=camera_pk)
+	store_pk = int(request.POST['store_pk'])
+	store = Store.objects.get(pk=store_pk)
 	real_data = json.loads(string_data)
 	"""
 	real data format
@@ -58,8 +62,11 @@ def send_seat_data(request):
 	"""
 	Todo : cam addr setting : connection test
 	"""
+	cam_host = camera.cur_host
+	cam_addr_test = '/'.join([cam_host, 'test'])
+
 	try:
-		response = requests.get('http://localhost:8010/test', timeout=5)
+		response = requests.get(cam_addr_test, timeout=5)
 	except Exception:
 		return HttpResponse('connection error')
 	if response.text != 'ok':
@@ -78,7 +85,9 @@ def send_seat_data(request):
 			'pic_s_x' : elem['position']['s_x'],
 			'pic_s_y' : elem['position']['s_y'],
 			'is_elec' : elem['is_elec'],
-			'capacity' : elem['capacity']
+			'capacity' : elem['capacity'],
+			'camera' : camera,
+			'store' : store,
 		}
 		if bool(elem['pk']):
 			cur_pk_list.append(elem['pk'])
@@ -102,8 +111,9 @@ def send_seat_data(request):
 	"""
 	send coord to cam
 	"""
+	cam_get_seat_info = '/'.join([camera.cur_host, 'get_seat_info'])
 	try:
-		response = requests.post('http://localhost:8010/get_seat_info', data={'seat_data':json.dumps(to_cam_data_list)}, timeout=5)
+		response = requests.post(cam_get_seat_info, data={'seat_data':json.dumps(to_cam_data_list)}, timeout=5)
 	except Exception:
 		return HttpResponse('connection error')
 	if response.text != 'good':
@@ -130,7 +140,7 @@ def add_camera_list(request) :
 	description = request.GET['description']
 	store_id= int(request.GET['store_id'])
 
-	camera=Camera(cur_pic=cur_pic, description = description, cur_host="cur_host",store_id = store_id)
+	camera=Camera(cur_pic=cur_pic, description = description, store_id = store_id)
 	camera.save()
 
 	data = {
@@ -171,7 +181,9 @@ def get_file_from_cam(request):
 	"""
 	Todo : 카메라 pk, 가게 pk -> 카메라에 cur_pic 이름 저장
 	"""
-	response = requests.get('http://localhost:8010/send_image', stream=True)
+	cur_host = request.POST['host_addr']
+	target_addr = '/'.join([cur_host, 'send_image'])
+	response = requests.get(target_addr, stream=True)
 	if response.status_code == 200:
 		with open('watcher/static/img/test.jpg', 'wb') as f:
 			for chunk in response:

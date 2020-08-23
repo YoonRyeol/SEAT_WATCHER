@@ -12,21 +12,31 @@ def Camera_list(request,store_id) :
 	return render(request, 'watcher/Camera_list.html',{"camera_list": camera_list, "store_id" : store_id } )
 
 def table_set(request, store_pk=None, camera_pk=None):
+	store = Store.objects.get(pk=store_pk)
+	camera = Camera.objects.get(pk=camera_pk)
 	"""
 	Todo : 사진 데이터 로드
 	"""
+	if bool(camera.cur_pic):
+		picture_name = camera.cur_pic
+	else:
+		picture_name = 'no_image.jpg'
 	"""
 	Todo : 좌석데이터 로드
 	"""
-	table_tmp = Table.objects.all()
+	table_tmp = Table.objects.filter(camera=camera)
 	table_list = []
 	for e in table_tmp:
 		table_list.append(model_to_dict(e))
 
 	return render(request, 'watcher/table_set_fabric.html', {
 																'table_list': json.dumps(table_list),
+																'picture_name' : picture_name,
+																'store_pk' : store_pk,
+																'camera_pk' : camera_pk,
+																'cam_cur_host' : camera.cur_host
 																							})
-def store_layout(request):
+def store_layout(request, store_pk=None, floor_pk=None):
 	table_tmp = Table.objects.all()
 	table_list = []
 	for e in table_tmp:
