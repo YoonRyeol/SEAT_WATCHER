@@ -2,6 +2,9 @@ from django.http import JsonResponse, HttpResponse
 from watcher.models import *
 import requests
 import json
+from watcher.tools import *
+import os
+from django.utils import timezone
 from django.shortcuts import render
 
 def get_store_info(request) :
@@ -151,7 +154,7 @@ def delete_camera_list(request) :
 	camera.delete()
 
 	camera_list = Camera.objects.filter(store_id = store_id)
-	camera = camera_list.first();
+	camera = camera_list.first()
 
 	data = {
 		'pk' : camera.pk,
@@ -164,3 +167,13 @@ def delete_camera_list(request) :
 	}
 	return JsonResponse(data, safe=False)
 
+def get_file_from_cam(request):
+	"""
+	Todo : 카메라 pk, 가게 pk -> 카메라에 cur_pic 이름 저장
+	"""
+	response = requests.get('http://localhost:8010/send_image', stream=True)
+	if response.status_code == 200:
+		with open('watcher/static/img/test.jpg', 'wb') as f:
+			for chunk in response:
+				f.write(chunk)
+	return HttpResponse('/static/img/test.jpg')
