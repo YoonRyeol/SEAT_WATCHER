@@ -25,6 +25,7 @@
         <p>
             <button id="get_objects" onclick="get_objects()">get objects</button>
         </p>
+        <button class='btn btn-primary' id='get_picture'>get_picture</button>
     </div>
     <row>
         <canvas id="c" width="1200" height="900" style="border:1px solid #ccc"></canvas>
@@ -75,14 +76,41 @@
     var table_list = {{table_list|safe}}
     var id = 0;
     var canvas = this.__canvas = new fabric.Canvas('c');
-    canvas.setBackgroundImage('/static/img/Picture 24.jpg');
+    fabric.Image.fromURL('/static/img/Picture 24.jpg', imgObj => {
+            canvas.setBackgroundImage(imgObj, canvas.renderAll.bind(canvas), {
+                opacity: 1,
+                strech: true
+        });
+    });
     canvas.selection  = false
     // create a rect object
     fabric.Object.prototype.transparentCorners = false;
     fabric.Object.prototype.cornerColor = 'blue';
     fabric.Object.prototype.cornerStyle = 'circle';
 
+    $(document).on('click', '#get_picture', function(e){
+        $.ajax({
+            url:'{% url "watcher:get_file_from_cam" %}',
+            type:'POST',
+            data:{
+                'csrfmiddlewaretoken' : "{{ csrf_token }}",
+            },
+            success:function(data){
+                var file_path = data
+                fabric.Image.fromURL(file_path, imgObj => {
+                    canvas.setBackgroundImage(imgObj, canvas.renderAll.bind(canvas), {
+                        opacity: 1,
+                        strech: true
+                    });
+                    alert('사진이 변경되었습니다.\n' + file_path)
+                });
 
+            },
+            error:function(JQeuryXHR, textStatus, errorThrown){
+                alert(errorThrown)
+            }
+        })
+    });
 
     function Add(_left = 100, _top = 50, _width=100, _height=100, _scaleX=1, _scaleY=1, _pk=null) {
         console.log('_pk : ' + _pk)
@@ -126,7 +154,7 @@
             group.pk = _pk
 
         canvas.add(group);
-        canvas.setActiveObject(group);
+        // canvas.setActiveObject(group);
         add_row(id, _pk=_pk)
         id++;
         console.log(group)
@@ -136,7 +164,7 @@
     function deleteObject(eventData, target) {
         var canvas = target.canvas;
         canvas.remove(target);
-        canvas.requestRenderAll();
+        canvas.renderAll();
     }
 
     $(document).on('click', '#delete_rec_row', function(e){
@@ -165,7 +193,7 @@
             if(options.target != null){
                 delete_row(options.target.id)
                 canvas.remove(options.target);
-                canvas.requestRenderAll(); 
+                canvas.renderAll(); 
             }       
         }
         else {
