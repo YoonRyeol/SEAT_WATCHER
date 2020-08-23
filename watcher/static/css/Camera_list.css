@@ -21,6 +21,11 @@ a{
 	color: #ffffff;
 }
 
+ li{
+  padding-left:30px;
+  padding-right:30px;
+}
+
 /* 테이블 제목 부분 */
 .title {
 	padding : 1%;
