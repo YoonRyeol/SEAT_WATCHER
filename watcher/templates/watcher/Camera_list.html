@@ -154,6 +154,41 @@
 		  </div>
 		</div>
 
+		<!--층 별 상세페이지 모달 -->
+
+		<div class="modal fade" id="modal_floor_info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel"></h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <form>
+		          <div class="form-group">
+		            <label for="floor_name" class="col-form-label">층 이름 :</label>
+		            <input type="text" class="form-control" id="modal_floor_name" value="">
+		          </div>
+		          <div class="form-group">
+		            <label for="floor_num" class="col-form-label">층 수 :</label>
+		           <input type="text" class="form-control" id="modal_floor_num" value="">
+		          </div>
+		          <div class="form-group">
+		            <label for="description" class="col-form-label">설명 :</label>
+		            <textarea class="form-control" id="modal_floor_description"></textarea>
+		          </div>
+		        </form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+		        <button id ="modal_add_floor_btn" type="button" data-dismiss="modal" class="btn btn-primary"> 추가</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
 		<!--모달 form 끝-->
 
 		<!--카메라 테이블 시작-->
@@ -179,7 +214,7 @@
   						<td><i style="margin:4px" class="fa fa-eye"></i></td>
   						<td>{{list.mac_addr}}</td>
   						<td>{{list.description}}</td>
-  						<td><i type="button" name="{{list.pk}}" data-toggle="modal" data-target="#modal_camera"  style="margin:4px" class="fa fa-edit" id="td_edit_button"><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px" class="fa fa-trash" name= "{{list.pk}}" id="td_delete_button"></i></td>
+  						<td><i type="button" name="{{list.pk}}" data-toggle="modal" data-target="#modal_camera"  style="margin:4px" class="fa fa-edit" id="td_camera_edit_button"><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px" class="fa fa-trash" name= "{{list.pk}}" id="td_camera_delete_button"></i></td>
   					</tr>
   					{% endfor %}
   					
@@ -210,7 +245,7 @@
 						<td id="c_num_{{list.pk}}" >{{list.floor_num}}<i style="margin:4px" class="fa fa-camera"></i></td>
   						<td>{{list.name}}</td>
   						<td>{{list.description}}<i style="margin:4px" class="fa fa-eye"></i></td>
-  						<td><i type="button" name="{{list.pk}}" data-toggle="modal" data-target="#modal_camera"  style="margin:4px" class="fa fa-edit" id="td_edit_button"><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px" class="fa fa-trash" name= "{{list.pk}}" id="td_delete_button"></i></td>
+  						<td><i type="button" name="{{list.pk}}" data-toggle="modal" data-target="#modal_floor"  style="margin:4px" class="fa fa-edit" id="td_floor_edit_button"><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px" class="fa fa-trash" name= "{{list.pk}}" id="td_floor_delete_button"></i></td>
   					</tr>
   					{% endfor %}
   					
@@ -265,7 +300,7 @@
 
 
 	/* 테이블 row edit 모달 버튼 기능 */
-		$(document).on('click', '#td_edit_button', function(e){
+		$(document).on('click', '#td_camera_edit_button', function(e){
 			var pk_check = $(this).attr('name');
 			console.log(pk_check);
 			$.ajax({
@@ -285,8 +320,7 @@
 		});
 
 		/* 테이블 row 삭제 버튼 기능 */
-
-		$(document).on('click', '#td_delete_button', function(e) {
+		$(document).on('click', '#td_camera_delete_button', function(e) {
 			var pk = $(this).attr('name');
 			var store_id = $('tbody').attr('name');
 
@@ -314,6 +348,7 @@
 				return false;
 			}
 		});
+
 		/*카메라 추가 기능 in 모달 */
 		$(document).on('click', '#modal_add_camera_btn', function(e) {
 			var camera_location = $('#modal_camera_location').val();
@@ -336,7 +371,7 @@
 					type : 'GET',
 					success: function(data) {
 						console.log('save')
-						$('#tbody_camera').append('<tr id="tr_list_'+data.pk+'"><td id="c_num_'+data.pk+'" >'+data.pk+'<i style="margin:4px" class="fa fa-camera"></i></td><td><i style="margin:4px" class="fa fa-eye"></i></td><td>'+data.mac_addr+'</td><td>'+data.description+'</td><td><i type="button" name="'+data.pk+'" data-toggle="modal" data-target="#modal_camera"  style="margin:4px" class="fa fa-edit" id="td_edit_button"><input type="hidden" name= "'+data.pk+'"></i><i style="margin:4px" class="fa fa-trash" name= "'+data.pk+'" id="td_delete_button"></i></td></tr>');
+						$('#tbody_camera').append('<tr id="tr_list_'+data.pk+'"><td id="c_num_'+data.pk+'" >'+data.pk+'<i style="margin:4px" class="fa fa-camera"></i></td><td><i style="margin:4px" class="fa fa-eye"></i></td><td>'+data.mac_addr+'</td><td>'+data.description+'</td><td><i type="button" name="'+data.pk+'" data-toggle="modal" data-target="#modal_camera"  style="margin:4px" class="fa fa-edit" id="td_edit_button"><input type="hidden" name= "'+data.pk+'"></i><i style="margin:4px" class="fa fa-trash" name= "'+data.pk+'" id="td_camera_delete_button"></i></td></tr>');
 						
 					},
 					error: function (error) {
@@ -375,7 +410,7 @@
 					success : function(data) {
 						console.log(data.pk);
 						console.log(data.floor_num);
-						$('#tbody_floor').append('<tr id="tr_list_'+data.pk+'"><td id="c_num_'+data.pk+'">'+data.floor_num+'<i style="margin:4px" class="fa fa-camera"></i></td><td>'+data.name+'</td><td>'+data.description+'<i style="margin:4px" class="fa fa-eye"></i></td><td><i type="button" name="'+data.pk+'" data-toggle="modal" data-target="#modal_camera"  style="margin:4px" class="fa fa-edit" id="td_edit_button"><input type="hidden" name= "'+data.pk+'"></i><i style="margin:4px" class="fa fa-trash" name= "'+data.pk+'" id="td_delete_button"></i></td></tr>')
+						$('#tbody_floor').append('<tr id="tr_list_'+data.pk+'"><td id="c_num_'+data.pk+'">'+data.floor_num+'<i style="margin:4px" class="fa fa-camera"></i></td><td>'+data.name+'</td><td>'+data.description+'<i style="margin:4px" class="fa fa-eye"></i></td><td><i type="button" name="'+data.pk+'" data-toggle="modal" data-target="#modal_camera"  style="margin:4px" class="fa fa-edit" id="td_floor_edit_button"><input type="hidden" name= "'+data.pk+'"></i><i style="margin:4px" class="fa fa-trash" name= "'+data.pk+'" id="td_floor_delete_button"></i></td></tr>')
 					},
 					error: function (error) {
 							alert('error; ' + eval(error));
@@ -389,6 +424,13 @@
 			}
 
 		});
+
+		/* 층 edit 버튼 */
+		$(document).on('click', '#td_floor_edit_button', function(e) {
+
+		}
+		)
+			
 
 	</script>
 
