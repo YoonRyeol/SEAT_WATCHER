@@ -1,5 +1,6 @@
 <head>
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+    <script src="https://kit.fontawesome.com/1a7adf786d.js" crossorigin="anonymous"></script>
     <style>
         .controls {
             display: inline-block;
@@ -10,55 +11,45 @@
         table{
             text-align:center;
         }
+        .table_container {
+            height: 500px;
+            width:1200px;
+	        overflow: auto;
+        }
+        .sticky-top{
+            background-color:whitesmoke
+        }
     </style>
 </head>
 
 <body>
-
+    <div class='container-fluid mx-2'>
     <div class="row">
-        <p>
-            <button id="add" onclick="Add()">Add a rectangle</button>
-        </p>
-        <p>
-            <input type="checkbox" id='is_delete'> delete
-        </p>
-        <p>
-            <button id="get_objects" onclick="get_objects()">get objects</button>
-        </p>
-        <button class='btn btn-primary' id='get_picture'>get_picture</button>
+        <div class='col-6'>
+            <button class='btn btn-primary' id='get_picture'>
+                <span class="fas fa-images"></span>
+            </button>
+            <input type="checkbox" id='is_delete'> delete    
+        </div>
+
     </div>
     <row>
         <canvas id="c" width="1200" height="900" style="border:1px solid #ccc"></canvas>
-
+        <div class='table_container'>
         <table class="table table-hover" id='rec_table' style="max-width: 1200px;">
             <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">전기 사용 가능 유무</th>
-                <th scope="col">좌석 갯수</th>
-                <th scope="col">삭제</th>
+                <th class='sticky-top' scope="col">#</th>
+                <th class='sticky-top' scope="col">전기 사용 가능 유무</th>
+                <th class='sticky-top' scope="col">좌석 갯수</th>
+                <th class='sticky-top' scope="col">삭제</th>
             </tr>
             </thead>
             <tbody>
-<!--                 <tr>
-                    <td>-1</td>
-                    <td>
-                        <input type="checkbox" id="is_elec">
-                    </td>
-                    <td>
-                        <input type="number" class="form-control" id="inputPassword2" placeholder="좌석 갯수">
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-danger btn-sm" id='delete_rec_row' data-rec_id=''>
-                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708-.708l7-7a.5.5 0 0 1 .708 0z"/>
-                                <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 0 0 0 .708l7 7a.5.5 0 0 0 .708-.708l-7-7a.5.5 0 0 0-.708 0z"/>
-                            </svg>
-                        </button>
-                    </td>
-                </tr> -->
+
             </tbody>
         </table>
+        </div>
     </row>
     <button type="button" class="btn btn-primary" id='save_data'>
         <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-upload" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -66,6 +57,7 @@
             <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v8a.5.5 0 0 1-1 0v-8A.5.5 0 0 1 8 2z"/>
         </svg>
     </button>
+</div>
 </body>
 
 <script src="/static/js/jquery-3.5.1.min.js"></script>
@@ -73,10 +65,13 @@
 <script src="/static/js/bootstrap.bundle.js"></script>
 <script src="/static/js/fabric.js"></script>
 <script>
+    var IMAGE_WIDTH = 1200
+    var IMAGE_HEIGHT = 900
     var table_list = {{table_list|safe}}
     var id = 0;
     var canvas = this.__canvas = new fabric.Canvas('c');
-    fabric.Image.fromURL('/static/img/Picture 24.jpg', imgObj => {
+    var picture_addr = '/static/img/'+'{{picture_name}}'
+    fabric.Image.fromURL(picture_addr, imgObj => {
             canvas.setBackgroundImage(imgObj, canvas.renderAll.bind(canvas), {
                 opacity: 1,
                 strech: true
@@ -93,6 +88,7 @@
             url:'{% url "watcher:get_file_from_cam" %}',
             type:'POST',
             data:{
+                'host_addr' : '{{cam_cur_host}}',
                 'csrfmiddlewaretoken' : "{{ csrf_token }}",
             },
             success:function(data){
@@ -332,6 +328,8 @@
             data:{
                 'seat_data' : input_data,
                 'before_pk_list' : before_pk_list,
+                'camera_pk' : {{camera_pk}},
+                'store_pk' : {{store_pk}},
                 'csrfmiddlewaretoken' : "{{csrf_token}}"
             },
             success:function(data){
@@ -361,10 +359,10 @@
         for(var i=0; i<table_list.length; i++){
             var cur_data = table_list[i]
             console.log('cur_data.id ' + cur_data.id)
-            var left = cur_data.pic_f_x*1200
-            var top = cur_data.pic_f_y*900
-            var width = Math.abs((cur_data.pic_s_x-cur_data.pic_f_x)*1200)
-            var height = Math.abs((cur_data.pic_s_y-cur_data.pic_f_y)*900)
+            var left = cur_data.pic_f_x*IMAGE_WIDTH
+            var top = cur_data.pic_f_y*IMAGE_HEIGHT
+            var width = Math.abs((cur_data.pic_s_x-cur_data.pic_f_x)*IMAGE_WIDTH)
+            var height = Math.abs((cur_data.pic_s_y-cur_data.pic_f_y)*IMAGE_HEIGHT)
             console.log('(' + width + ', ' + height + ')')
             Add(_left=left, _top=top, _width=width, _height=height, _scaleX=1, _scaleY=1, _pk=cur_data.id)
 
