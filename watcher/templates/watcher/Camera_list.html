@@ -57,146 +57,6 @@
 			</form>
 		</div>
 	
-		<!--모달 form-->
-		<!--카메라 정보 수정 모달 -->
-		<div class="modal fade" id="modal_camera" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		  <div class="modal-dialog" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel"></h5>
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		          <span aria-hidden="true">&times;</span>
-		        </button>
-		      </div>
-		      <div class="modal-body">
-		        <form>
-		          <div class="form-group">
-		            <label for="camera-name" class="col-form-label">카메라 이름 :</label>
-		            <input type="text" class="form-control" id="location" value="">
-		          </div>
-		          <div class="form-group">
-		            <label for="mac-address" class="col-form-label"></label>
-		           <input type="text" class="form-control" id="location" value="">
-		          </div>
-		          <div class="form-group">
-		            <label for="description" class="col-form-label">비고 :</label>
-		            <textarea class="form-control" id="message-text"></textarea>
-		          </div>
-		        </form>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-		        <button type="button" class="btn btn-primary">변경사항 저장</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-
-		<!--카메라 추가 모달 -->
-		<div class="modal fade" id="modal_camera_add_btn" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		  <div class="modal-dialog" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel"></h5>
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		          <span aria-hidden="true">&times;</span>
-		        </button>
-		      </div>
-		      <div class="modal-body">
-		        <form>
-		          <div class="form-group">
-		            <label for="camera-name" class="col-form-label">카메라 위치 :</label>
-		            <input type="text" class="form-control" id="modal_camera_location" value="">
-		          </div>
-		          <div class="form-group">
-		            <label for="mac-address" class="col-form-label">Mac Address :</label>
-		           <input type="text" class="form-control" id="" value="">
-		          </div>
-		          <div class="form-group">
-		            <label for="description" class="col-form-label">비고 :</label>
-		            <textarea class="form-control" id="modal_camera_description"></textarea>
-		          </div>
-		        </form>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-		        <button id ="modal_add_camera_btn" type="button" data-dismiss="modal" class="btn btn-primary">기기 추가</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-
-		<!--층 수 추가 모달 -->
-		<div class="modal fade" id="modal_floor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		  <div class="modal-dialog" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel"></h5>
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		          <span aria-hidden="true">&times;</span>
-		        </button>
-		      </div>
-		      <div class="modal-body">
-		        <form>
-		          <div class="form-group">
-		            <label for="floor_name" class="col-form-label">층 이름 :</label>
-		            <input type="text" class="form-control" id="modal_floor_name" value="">
-		          </div>
-		          <div class="form-group">
-		            <label for="floor_num" class="col-form-label">층 수 :</label>
-		           <input type="text" class="form-control" id="modal_floor_num" value="">
-		          </div>
-		          <div class="form-group">
-		            <label for="description" class="col-form-label">설명 :</label>
-		            <textarea class="form-control" id="modal_floor_description"></textarea>
-		          </div>
-		        </form>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-		        <button id ="modal_add_floor_btn" type="button" data-dismiss="modal" class="btn btn-primary"> 추가</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-
-		<!--층 별 상세페이지 모달 -->
-
-		<div class="modal fade" id="modal_floor_info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		  <div class="modal-dialog" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel"></h5>
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		          <span aria-hidden="true">&times;</span>
-		        </button>
-		      </div>
-		      <div class="modal-body">
-		        <form>
-		          <div class="form-group">
-		            <label for="floor_name" class="col-form-label">층 이름 :</label>
-		            <input type="text" class="form-control" id="modal_floor_name" value="">
-		          </div>
-		          <div class="form-group">
-		            <label for="floor_num" class="col-form-label">층 수 :</label>
-		           <input type="text" class="form-control" id="modal_floor_num" value="">
-		          </div>
-		          <div class="form-group">
-		            <label for="description" class="col-form-label">설명 :</label>
-		            <textarea class="form-control" id="modal_floor_description"></textarea>
-		          </div>
-		        </form>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-		        <button id ="modal_add_floor_btn" type="button" data-dismiss="modal" class="btn btn-primary"> 추가</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-
-		<!--모달 form 끝-->
-
 		<!--카메라 테이블 시작-->
 		<button style="float :left; margin-left : 1%; " id="add_button" data-toggle="modal" data-target="#modal_camera_add_btn" type="button" class="btn btn-dark">카메라 추가</button>
 
@@ -216,14 +76,12 @@
 				<tbody id="tbody_camera" name="{{store_id}}"> <!--store_id 저장-->
 					{% for list in camera_list%}
 					<tr id="tr_list_{{list.pk}}">
-						<td id="c_num_{{list.pk}}" >{{list.pk}}<i style="margin:4px" class="fa fa-camera"></i></td>
-  						<td><i style="margin:4px" class="fa fa-eye"></i></td>
+						<input type="hidden" data-pk="{{list.pk}}" data-cur_pic="{{list.cur_pic}}" data-mac_addr="{{list.mac_addr}}" data-cur_host="{{list.cur_host}}" data-description="{{list.description}}" data-store_id="{{list.store_id}}" data-floor_id="{{list.floor_id}}">
 						<td class="clickable" id="c_num_{{list.pk}}" onclick='move_page(this)' link="{% url 'watcher:table_set' store_id list.pk %}">
 							<a href= "{% url 'watcher:table_set' store_id list.pk %}">{{list.pk}}</a>
 							<i style="margin:4px" class="fa fa-camera"></i>
 						</td>
-  						<td>{{list.cur_pic}}</td>
-  						<td>{{list.pk}}<i style="margin:4px" class="fa fa-eye"></i></td>
+						<td><i style="margin:4px" class="fa fa-eye"></i></td>
   						<td>{{list.mac_addr}}</td>
   						<td>{{list.description}}</td>
   						<td><i type="button" name="{{list.pk}}" data-toggle="modal" data-target="#modal_camera"  style="margin:4px" class="fa fa-edit" id="td_camera_edit_button"><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px" class="fa fa-trash" name= "{{list.pk}}" id="td_camera_delete_button"></i></td>
@@ -254,6 +112,7 @@
 				<tbody id="tbody_floor" name="{{store_id}}"> <!--store_id 저장-->
 					{% for list in floor_list%}
 					<tr id="tr_list_{{list.pk}}">
+						<input type="hidden" data-pk="{{list.pk}}" data-name="{{list.name}}" data-num="{{list.num}}" data-store_id="{{list.store_id}}" data-description="{{list.description}}" >
 						<td id="c_num_{{list.pk}}" >{{list.floor_num}}<i style="margin:4px" class="fa fa-camera"></i></td>
   						<td>{{list.name}}</td>
   						<td>{{list.description}}<i style="margin:4px" class="fa fa-eye"></i></td>
@@ -289,6 +148,186 @@
 				</div>
 	</footer>
 
+	<!--모달 form-->
+		<!--카메라 정보 수정 모달 -->
+		<div class="modal fade" id="modal_camera" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel"></h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <form>
+		          <div class="form-group">
+		            <label for="camera-name" class="col-form-label">카메라 이름 :</label>
+		            <input type="text" class="form-control" >
+		          </div>
+		          <div class="form-group">
+		            <label for="mac-address" class="col-form-label"></label>
+		           <input type="text" class="form-control" >
+		          </div>
+		          <div class="form-group">
+		            <label for="description" class="col-form-label">비고 :</label>
+		            <textarea class="form-control"></textarea>
+		          </div>
+		        </form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+		        <button type="button" class="btn btn-primary">변경사항 저장</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<!--카메라 추가 모달 -->
+		<div class="modal fade" id="modal_camera_add_btn" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel"></h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <form>
+		          <div class="form-group">
+		            <label for="camera-name" class="col-form-label">카메라 위치 :</label>
+		            <input type="text" class="form-control" id="modal_camera_location" value="">
+		          </div>
+		          <div class="form-group">
+		            <label for="mac-address" class="col-form-label">Mac Address :</label>
+		           <input type="text" class="form-control" id="modal_camera_mac_addr">
+		          </div>
+		          <div class="form-group">
+		            <label for="description" class="col-form-label">비고 :</label>
+		            <textarea class="form-control" id="modal_camera_description"></textarea>
+		          </div>
+		        </form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+		        <button id ="modal_add_camera_btn" type="button" data-dismiss="modal" class="btn btn-primary">기기 추가</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<!--층 수 추가 모달 -->
+		<div class="modal fade" id="modal_floor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document" style="height:90%;">
+		    <div class="modal-content" style="height:90%;">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel"></h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <form">
+		        	<div class="input-group input-group-sm mb-3" >
+			  			<div class="input-group-prepend" style="width : 13%;">
+						    <span class="input-group-text" style="display:block; width:100%; text-align: center;"> 층 이름</span>
+						</div>
+						  <input id="modal_floor_name" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" >
+					</div>
+					<div class="input-group input-group-sm mb-3" >
+			  			<div class="input-group-prepend" style="width : 13%;">
+						    <span class="input-group-text" style="display:block; width:100%; text-align:center;" > 층 </span>
+						</div>
+						  <input id="modal_floor_num" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+					</div>
+					<div class="input-group input-group-sm mb-3">
+			  			<div class="input-group-prepend" style="width : 13%; text-align: center;">
+						    <span class="input-group-text" id="modal_floor_num" style="display:block; width:100%; text-align: center;" > 설명</span>
+						</div>
+						 <textarea class="form-control" id="modal_floor_description" style="resize:none;"></textarea>
+					</div>
+		      		<div class="container-fluid" style="padding:0;" >
+		      			<div style="border : solid gray 1px; float:left; width:45%; height :300px; max-height:300px; display:inline-block; overflow: scroll;">
+		      				<table class="table table-bordered table-hover" id="modal_floor_camera_list_left" style="border : none;">
+		      					<thead class="thead-light" >
+		      						<tr>
+		      							<td class="td-sm">#</td>
+		      							<td class="td-sm">설명</td>
+		      						</tr>
+		      					</thead>
+		      					<tbody id="tbody_modal_unused_camera">
+		      					</tbody>
+		      				</table>
+		      			</div>
+		      			<div style="min-width:1%;  max-width: 10%; width: 200px; min-height:300px; display: inline-block;">
+		      				<i id="modal_floor_arrow_right_btn" type="button" class="fa fa-arrow-right" style="display: block; float: left; position:absolute; top:55%; left:49%;"></i>
+		      				<i id="modal_floor_arrow_left_btn" type="button" class="fa fa-arrow-left" style="display: block; float:left; position:absolute; top:65%; left:49%;" ></i>
+		      			</div>
+		      				<div style="border : solid gray 1px; float:right; width:45%; height :300px; max-height:300px; display:inline-block; overflow: scroll;">
+		      				<table class="table table-bordered table-hover" id="modal_floor_camera_list_right" style="border : none;">
+		      					<thead class="thead-light" >
+		      						<tr>
+		      							<td class="td-sm">#</td>
+		      							<td class="td-sm">설명</td>
+		      						</tr>
+		      					</thead>
+		      					<tbody id="tbody_modal_used_camera">
+
+		      					</tbody>
+		      				</table>
+		      			</div>
+		      		</div>
+
+		        </form>
+		      </div>
+		      	
+
+		      <div class="modal-footer">
+		      	<button id="test_btn" type="button" class="btn btn-secondary" data-dismiss="modal">test</button>
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+		        <button id ="modal_add_floor_btn" type="button" data-dismiss="modal" class="btn btn-primary"> 추가</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<!--층 별 상세페이지 모달 -->
+
+		<div class="modal fade" id="modal_floor_info" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel"></h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <form>
+		          <div class="form-group">
+		            <label for="floor_name" class="col-form-label">층 이름 :</label>
+		            <input type="text" class="form-control" id="modal_floor_info_name" >
+		          </div>
+		          <div class="form-group">
+		            <label for="floor_num" class="col-form-label">층 수 :</label>
+		           <input type="text" class="form-control" id="modal_floor_info_num">
+		          </div>
+		          <div class="form-group">
+		            <label for="description" class="col-form-label">설명 :</label>
+		            <textarea class="form-control" id="modal_floor_info_description"></textarea>
+		          </div>
+		        </form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+		        <button id ="modal_add_floor_btn" type="button" data-dismiss="modal" class="btn btn-primary"> 추가</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<!--모달 form 끝-->
 
 <!--script start -->
 	<script type="text/javascript">
@@ -299,6 +338,7 @@
 				$("tbody").append('<tr><td>1<i style="margin:4px" class="fa fa-camera"></i></td><td>카메라1</td><td>창가 천장 위</td><td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td></tr>');
 			}
 		});
+
 
 	/* 검색기능 */
 		$(document).ready(function(){
@@ -328,6 +368,9 @@
 					$('.modal-title').text(data.pk+"번 카메라")
 
 				},
+				error: function (error) {
+						alert('error; ' + eval(error));
+					}
 			});
 		});
 
@@ -383,7 +426,7 @@
 					type : 'GET',
 					success: function(data) {
 						console.log('save')
-						$('#tbody_camera').append('<tr id="tr_list_'+data.pk+'"><td id="c_num_'+data.pk+'" >'+data.pk+'<i style="margin:4px" class="fa fa-camera"></i></td><td><i style="margin:4px" class="fa fa-eye"></i></td><td>'+data.mac_addr+'</td><td>'+data.description+'</td><td><i type="button" name="'+data.pk+'" data-toggle="modal" data-target="#modal_camera"  style="margin:4px" class="fa fa-edit" id="td_edit_button"><input type="hidden" name= "'+data.pk+'"></i><i style="margin:4px" class="fa fa-trash" name= "'+data.pk+'" id="td_camera_delete_button"></i></td></tr>');
+						$('#tbody_camera').append('<tr id="tr_list_'+data.pk+'"><input type="hidden" data-pk="'+data.pk+'" data-cur_pic="'+data.cur_pic+'" data-mac_addr="'+data.mac_addr+'" data-cur_host="'+data.cur_host+'" data-description="'+data.description+'" data-store_id="'+data.store_id+'" data-floor_id="'+data.floor_id+'"><td id="c_num_'+data.pk+'" >'+data.pk+'<i style="margin:4px" class="fa fa-camera"></i></td><td><i style="margin:4px" class="fa fa-eye"></i></td><td>'+data.mac_addr+'</td><td>'+data.description+'</td><td><i type="button" name="'+data.pk+'" data-toggle="modal" data-target="#modal_camera"  style="margin:4px" class="fa fa-edit" id="td_edit_button"><input type="hidden" name= "'+data.pk+'"></i><i style="margin:4px" class="fa fa-trash" name= "'+data.pk+'" id="td_camera_delete_button"></i></td></tr>');
 						
 					},
 					error: function (error) {
@@ -400,16 +443,60 @@
 
 		
 		});
-		
+
 		/* 층 추가 modal 버튼 */
+		$(document).on('click','#test_btn', function(e) {
+			var camera_checked = $('input[name=used_camera]').parent().parent();
+				var camera_list = Array();
+				for(var i = 0; i < camera_checked.length; i++) {
+					camera_list.push(camera_checked[i].dataset.pk);
+					console.log(camera_checked[i].dataset.pk);
+				}
+
+				
+			$.ajax({
+				url : "{% url 'watcher:ajax_test' %}",
+				dataType:'json',
+				type:'GET',
+				data :{
+					'camera_list[]' : camera_list,
+
+				},
+			});
+		});
+
+		$(document).on('click', '#add_floor_button',function(e) {
+		var store_id = "{{store_id}}"
+
+		var list = $('#tbody_camera > tr > input[data-floor_id=None]');
+
+		console.log(list.length +"개의 카메라가 층이 정해져 있지 않음");
+		$('#tbody_modal_unused_camera').empty();
+		for( var i =0 ; i<list.length ; i++){
+			$('#tbody_modal_unused_camera').append('<tr data-pk="'+list[i].dataset.pk+'"><td class="td-sm"><input type="checkbox" name="unused_camera" style="margin:1%;" >'+list[i].dataset.pk+'</label></td><td class="td-sm">'+list[i].dataset.description+'</td><tr>');
+		}
+
+		});
+
 		$(document).on('click', '#modal_add_floor_btn', function(e) {
 			var store_id = "{{store_id}}"
 			var floor_name = $('#modal_floor_name').val();
 			var floor_num = $('#modal_floor_num').val();
 			var description = $('#modal_floor_description').val();
-			console.log(store_id);
+
+
+			
+			console.log("ifasd;lksadflkjas");
 
 			if(confirm("정말 추가 하시겠습니까?")) {
+
+				var camera_checked = $('input[name=used_camera]').parent().parent();
+				var camera_list = Array();
+				for(var i = 0; i < camera_checked.length; i++) {
+					camera_list.push(camera_checked[i].dataset.pk);
+					//console.log(camera_checked[i].dataset.pk);
+				}
+				jQuery.ajaxSettings.traditional = true;
 				$.ajax({
 					url : "{% url 'watcher:ajax_add_floor_info' %}",
 					dataType : "json",
@@ -419,11 +506,17 @@
 						'floor_name' : floor_name,
 						'floor_num' : floor_num,
 						'description' : description,
+						'camera_list[]' : camera_list,
 					},
-					success : function(data) {
+					success : function(data,c_list) {
 						console.log(data.pk);
 						console.log(data.floor_num);
 						$('#tbody_floor').append('<tr id="tr_list_'+data.pk+'"><td id="c_num_'+data.pk+'">'+data.floor_num+'<i style="margin:4px" class="fa fa-camera"></i></td><td>'+data.name+'</td><td>'+data.description+'<i style="margin:4px" class="fa fa-eye"></i></td><td><i type="button" name="'+data.pk+'" data-toggle="modal" data-target="#modal_camera"  style="margin:4px" class="fa fa-edit" id="td_floor_edit_button"><input type="hidden" name= "'+data.pk+'"></i><i style="margin:4px" class="fa fa-trash" name= "'+data.pk+'" id="td_floor_delete_button"></i></td></tr>')
+
+						for(var i =0; i < c_list.length ; i++){
+								c_list[i].attr('data-floor_id',c_list[i].floor_id);
+						}
+
 					},
 					error: function (error) {
 							alert('error; ' + eval(error));
@@ -433,16 +526,51 @@
 			}
 			else
 			{
+				console.log("false");
 				return false
 			}
 
 		});
 
+		/* 층 추가 모달에서 카메라 이동버튼 이벤트*/
+		$(document).on('click', '#modal_floor_arrow_right_btn', function(e) {
+			var checked_camera_list = $('input[name=unused_camera]:checked');
+			console.log("clicked");
+			for(var i = 0; i < checked_camera_list.length ; i++){
+				var name = checked_camera_list.parent().parent().eq(i).children().eq(0).text();
+				checked_camera_list.parent().parent().eq(i).remove();
+				checked_camera_list.prop('checked',false);
+				checked_camera_list.attr('name','used_camera');
+				$('#tbody_modal_used_camera').append(checked_camera_list.parent().parent().eq(i));
+
+				console.log(name);
+			}
+		});
+
+		$(document).on('click', '#modal_floor_arrow_left_btn', function(e) {
+			var checked_camera_list = $('input[name=used_camera]:checked');
+			console.log("clicked");
+			for(var i = 0; i < checked_camera_list.length ; i++){
+				var name = checked_camera_list.parent().parent().eq(i).children().eq(0).text();
+				checked_camera_list.parent().parent().eq(i).remove();
+				checked_camera_list.prop('checked',false);
+				checked_camera_list.attr('name','unused_camera');
+				$('#tbody_modal_unused_camera').append(checked_camera_list.parent().parent().eq(i));
+
+				console.log(name);
+			}
+		});
+
 		/* 층 edit 버튼 */
 		$(document).on('click', '#td_floor_edit_button', function(e) {
 
-		}
-		)
+		});
+
+		/*모달 종료시 데이터 초기화 */
+		$('.modal').on('hide.bs.modal', function (e) {
+			console.log('modal close');
+			$(this).find('form')[0].reset()
+		});
 		
 		//move to camera seat data edit page - YR
 		function move_page(el){

@@ -22,7 +22,9 @@ urlpatterns = [
 	path('delete_camera_list',apis.delete_camera_list, name='ajax_delete_camera_list'),
 	path('api/send_seat_data', apis.send_seat_data, name='send_seat_data'),
 	path('add_floor_info',apis.add_floor_info, name='ajax_add_floor_info'),
+	path('get_camera_info_without_floor',apis.get_camera_info_without_floor, name='get_camera_info_without_floor'),
 	path('api/get_file_from_cam', apis.get_file_from_cam, name='get_file_from_cam'),
+	path('test',apis.test, name='ajax_test'),
  ]
 
 

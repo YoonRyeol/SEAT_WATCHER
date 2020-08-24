@@ -6,6 +6,8 @@ from watcher.tools import *
 import os
 from django.utils import timezone
 from django.shortcuts import render
+from django.core import serializers
+
 
 def send_seat_data(request):
 	"""
@@ -102,7 +104,7 @@ def get_store_info(request) :
 		'store_location' : store_info.store_location,
 	}
 
-	return JsonResponse(data, safe=False)
+	return JsonResponse(json.dumps(store_info))
 
 
 def add_store_list(request) :
@@ -155,6 +157,15 @@ def add_camera_list(request) :
 	}
 	return JsonResponse(data, safe=False) 
 
+def get_camera_info_without_floor(request) :
+	store_id = int(request.GET['store_id'])
+	camera_floor_list = Camera.objects.filter(store_id= store_id, floor_id__isnull= True)
+
+	camera = camera_floor_list.first();
+
+	data = serializers.serialize("json",camera_floor_list,fields=('id','cur_pic','description','mac_addr','cur_host','store_id','floor_id'))
+	
+	return HttpResponse(data)
 
 def delete_camera_list(request) :
 
@@ -185,9 +196,17 @@ def add_floor_info(request) :
 	floor_num = int(request.GET['floor_num'])
 	floor_name = request.GET['floor_name']
 	description = request.GET['description']
+	camera_list = request.GET.getlist('camera_list[]')
+
 
 	floor=Floor(store_id=store_id, floor_num=floor_num, name=floor_name,description=description)
 	floor.save()
+
+	for c_list in camera_list :
+		camera = Camera.objects.filter(pk=int(c_list))
+		camera.update(floor_id=floor.pk)
+
+	c_list = Camera.objects.filter(floor_id = floor.pk)
 
 	data = {
 		'pk' : floor.pk,
@@ -195,10 +214,22 @@ def add_floor_info(request) :
 		'name' : floor.name,
 		'description' : floor.description,
 	}
-	return JsonResponse(data)
+	return JsonResponse(data, serializers('json',c_list))
 
 
+def test(request) :
 
+
+	camera_list = request.GET.getlist('camera_list[]')
+	floor_id = int(request.GET['floor_pk'])
+
+	for c_list in camera_list :
+		camera = Camera.objects.filter(pk=int(c_list))
+		camera.update(floor_id=int(8))
+
+
+	ß
+	return HttpResponse("good");
 
 def get_file_from_cam(request):
 	"""
