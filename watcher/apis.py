@@ -18,6 +18,7 @@ def send_seat_data(request):
 	camera = Camera.objects.get(pk=camera_pk)
 	store_pk = int(request.POST['store_pk'])
 	store = Store.objects.get(pk=store_pk)
+	picture_name = request.POST['picture_name']
 	real_data = json.loads(string_data)
 	"""
 	real data format
@@ -57,6 +58,7 @@ def send_seat_data(request):
 			'capacity' : elem['capacity'],
 			'camera' : camera,
 			'store' : store,
+			'pic_name': picture_name,
 		}
 		if bool(elem['pk']):
 			cur_pk_list.append(elem['pk'])
@@ -212,3 +214,37 @@ def get_file_from_cam(request):
 			for chunk in response:
 				f.write(chunk)
 	return HttpResponse('/static/img/test.jpg')
+
+
+def save_layout(request):
+	layout_pos_data = json.loads(request.POST['layout_pos_data'])
+	before_pk_list = json.loads(request.POST['before_pk_list'])
+	floor_pk = int(request.POST['floor_pk'])
+	floor = Floor.objects.get(pk=floor_pk)
+	cur_pk_list = []
+
+	for datum in layout_pos_data:
+		save_datum = {
+			'floor':floor,
+			'layout_f_x':datum['f_x'],
+			'layout_f_y':datum['f_y'],
+			'layout_s_x':datum['s_x'],
+			'layout_s_y':datum['s_y']
+		}
+		Table.objects.filter(pk=datum['pk']).update(**save_datum)
+		cur_pk_list.append(datum['pk'])
+
+	
+	for before_pk in before_pk_list:
+
+		if before_pk not in cur_pk_list:
+			save_datum = {
+				'floor':None,
+				'layout_f_x':None,
+				'layout_f_y':None,
+				'layout_s_x':None,
+				'layout_s_y':None
+			}
+			Table.objects.filter(pk=before_pk).update(**save_datum)
+
+	return HttpResponse('good')
