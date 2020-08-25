@@ -146,7 +146,7 @@ def add_store_list(request) :
 
 def get_camera_info(request):
 	pk = int(request.GET['pk'])
-	camera = Camera.objects.filter(pk=pk)
+	camera = Camera.objects.get(pk=pk)
 
 	data = {
 		'pk' : camera.pk,

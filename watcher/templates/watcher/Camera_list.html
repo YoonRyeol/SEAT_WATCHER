@@ -383,7 +383,7 @@
 		}
 
 		function create_camera_info(data) {
-			$('#tbody_camera').append('<tr id="tr_list_'+data.pk+'"><input type="hidden" data-pk="'+data.pk+'" data-cur_pic="'+data.cur_pic+'" data-mac_addr="'+data.mac_addr+'" data-cur_host="'+data.cur_host+'" data-description="'+data.description+'" data-store_id="'+data.store_id+'" data-floor_id="None"><td id="c_num_'+data.pk+'" >'+data.pk+'<i style="margin:4px" class="fa fa-camera"></i></td><td><i style="margin:4px" class="fa fa-eye"></i></td><td>'+data.mac_addr+'</td><td>'+data.description+'</td><td><i type="button" name="'+data.pk+'" data-toggle="modal" data-target="#modal_camera_edit"  style="margin:4px" class="fa fa-edit" id="td_edit_button"><input type="hidden" name="'+data.pk+'"></i><i style="margin:4px" class="fa fa-trash" name= "'+data.pk+'" id="td_camera_delete_button"></i></td></tr>');
+			$('#tbody_camera').append('<tr id="tr_list_'+data.pk+'"><input type="hidden" data-pk="'+data.pk+'" data-cur_pic="'+data.cur_pic+'" data-mac_addr="'+data.mac_addr+'" data-cur_host="'+data.cur_host+'" data-description="'+data.description+'" data-store_id="'+data.store_id+'" data-floor_id="'+data.floor_id+'"><td id="c_num_'+data.pk+'" ><i style="margin:4px" class="fa fa-camera"></i>'+data.pk+'</td><td><i style="margin:4px" class="fa fa-eye"></i></td><td>'+data.mac_addr+'</td><td>'+data.description+'</td><td><i type="button" name="'+data.pk+'" data-pk="'+data.pk+'" data-cur_host="'+data.cur_host+'" data-toggle="modal" data-target="#modal_camera_edit"  style="margin:4px" class="fa fa-edit" id="td_edit_button"><input type="hidden" name= "'+data.pk+'"></i><i style="margin:4px" class="fa fa-trash" name= "'+data.pk+'" id="td_camera_delete_button"></i></td></tr>');
 		}
 
 		/*floor 모달에서 카메라가 배정되는 floor_id를 수정해주는 함수 */
@@ -419,7 +419,7 @@
 
 		/* floor 리스트 추가 함수 */
 		function create_floor_info(data) {
-			$('#tbody_floor').append('<tr id="tr_list_'+data.pk+'" data-store="'+data.store_id+'"><input type="hidden" data-pk="'+data.pk+'" data-name="'+data.name+'" data-num="'+data.floor_num+'" data-store_id="'+data.store_id+'" data-description="'+data.description+'" ><td id="c_num_'+data.pk+'">'+data.floor_num+'</td><td>'+data.name+'</td><td>'+data.description+'</td><td><i type="button" name="'+data.pk+'" data-toggle="modal" data-target="#modal_floor_edit"  style="margin:4px" class="fa fa-edit" id="td_floor_edit_button"><input type="hidden" name= "'+data.pk+'"></i><i type="button" style="margin:4px" class="fa fa-trash" name="'+data.pk+'" id="td_floor_delete_button"></i></td></tr>');
+			$('#tbody_floor').append('<tr id="tr_list_'+data.pk+'" data-store="'+data.store_id+'"><input type="hidden" data-pk="'+data.pk+'" data-name="'+data.name+'" data-num="'+data.floor_num+'" data-store_id="'+data.store_id+'" data-description="'+data.description+'" ><td id="c_num_'+data.pk+'">'+data.floor_num+'</td><td>'+data.name+'</td><td>'+data.description+'</td><td><i type="button" name="'+data.pk+'" data-toggle="modal" data-target="#modal_floor_edit"  style="margin:4px" class="fa fa-edit" id="td_floor_edit_button"><input type="hidden" name="'+data.pk+'"></i><i type="button" style="margin:4px" class="fa fa-trash" name="'+data.pk+'" id="td_floor_delete_button"></i></td></tr>');
 
 		
 		}
