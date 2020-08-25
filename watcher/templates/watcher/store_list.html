@@ -41,42 +41,8 @@
 		<p class="text-left">현재 관리되고 있는 매장 목록입니다.</p>
 		</div>
 
-		<button style="float :left; margin-left : 1%;" id="add_button" data-toggle="modal" data-target="#addModal" type="button" class="btn btn-dark">매장 추가</button>
-		
-		<!--모달 form-->
-		<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		  <div class="modal-dialog" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLabel"></h5>
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		          <span aria-hidden="true">&times;</span>
-		        </button>
-		      </div>
-		      <div class="modal-body">
-		        <form id = "form_store_info">
-		          <div class="form-group">
-		            <label for="camera-name" class="col-form-label">매장 이름 :</label>
-		            <input type="text" id="modal_store_name" class="form-control" value="">
-		          </div>
-		          <div class="form-group">
-		            <label for="mac-address" class="col-form-label">매장 위치 :</label>
-		           <input type="text" id="modal_store_location" class="form-control"value="">
-		          </div>
-		          <div class="form-group">
-		            <label for="description" class="col-form-label">비고 :</label>
-		            <textarea class="form-control" id="message-text"></textarea>
-		          </div>
-		        </form>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-		        <button type="button" id='add_store_btn' data-dismiss="modal" class="btn btn-primary">매장 추가</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-		<!--모달 form 끝-->
+		<button style="float :left; margin-left : 1%;" id="store_add_button" data-toggle="modal" data-target="#modal_store_add" type="button" class="btn btn-dark">매장 추가</button>
+	
 
 		<!--카메라 리스트 테이블 시작 -->
 		<!--검색창-->
@@ -100,13 +66,16 @@
 					</tr>
 				</thead>
 				
-				<tbody>
+				<tbody id ="tbody_store">
 				{% for list in store_list %}
-				<tr name="{{list.pk}}" onClick = " location.href={{list.pk}}">
-					<td>{{list.pk}}</td>
-					<td>{{list.store_name}}</td>
+				<tr id="tr_store_list_{{list.pk}}">
+					<input type="hidden" data-pk="{{list.pk}}" data-store_name="{{list.store_name}}" data-store_location="{{list.store_location}}">
+					<td>
+						<i type="button" style="margin:4px;" class="fa fa-home" onClick = "location.href={{list.pk}}"></i>{{list.pk}}
+					</td>
+					<td><i class="fa fa-store"></i>{{list.store_name}}</td>
 					<td>{{list.store_location}}</td>
-					<td><i type="button" name="{{list.pk}}" data-toggle="modal" data-target="#exampleModal"  style="margin:4px" class="fa fa-edit" ><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px" class="fa fa-trash"></i></td>
+					<td><i type="button" id="td_store_edit_button" data-pk="{{list.pk}}" data-store_name="{{list.store_name}}" data-store_location="{{list.store_location}}" data-toggle="modal" data-target="#modal_store_edit"  style="margin:4px" class="fa fa-edit" ></i><i type="button" id="td_store_delete_button" name="{{list.pk}}" style="margin:4px" class="fa fa-trash"></i></td>
 				</tr>
 				{% endfor %}
   				</tbody>
@@ -114,11 +83,9 @@
   			
   		</div><!--container-fluid-->
   		<!--카메라 리스트 테이블 끝-->
-
-
-</div>
-
+  	</div>
   	</div><!--wrap-->
+
 	<!--footer-->
 	<footer>
 		<div class="container">
@@ -136,9 +103,85 @@
 					</div>
 				</div>
 	</footer>
+
+	<!--가게 추가 모달 -->
+		<div class="modal fade" id="modal_store_add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="modal_store_add_label"></h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <form id = "modal_store_add_form">
+		          <div class="form-group">
+		            <label for="camera-name" class="col-form-label">매장 이름 :</label>
+		            <input type="text" id="modal_store_add_name" class="form-control" value="">
+		          </div>
+		          <div class="form-group">
+		            <label for="mac-address" class="col-form-label">매장 위치 :</label>
+		           <input type="text" id="modal_store_add_location" class="form-control"value="">
+		          </div>
+		          <div class="form-group">
+		            <label for="description" class="col-form-label">비고 :</label>
+		            <textarea class="form-control" id="modal_store_add_description"></textarea>
+		          </div>
+		        </form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" id="modal_store_add_close_btn" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+		        <button type="button" id="moald_store_add_btn' data-dismiss="modal" class="btn btn-primary">매장 추가</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+	<!--가게 수정 모달 -->
+		<div class="modal fade" id="modal_store_edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="modal_store_edit_label"></h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <form id = "modal_store_edit_form">
+		          <div class="form-group">
+		            <label for="camera-name" class="col-form-label">매장 이름 :</label>
+		            <input type="text" id="modal_store_edit_name" class="form-control" >
+		          </div>
+		          <div class="form-group">
+		            <label for="mac-address" class="col-form-label">매장 위치 :</label>
+		           <input type="text" id="modal_store_edit_location" class="form-control">
+		          </div>
+		          <div class="form-group">
+		            <label for="description" class="col-form-label">비고 :</label>
+		            <textarea class="form-control" id="modal_store_edit_description"></textarea>
+		          </div>
+		        </form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" id="modal_store_edit_close_btn" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+		        <button type="button" id="modal_store_edit_btn" data-dismiss="modal" class="btn btn-primary">수정 및 저장</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<!--모달 form 끝-->
+
 <script>
-
-
+	/* 가게리스트 만드는 함수*/
+	function create_store_list(data) {
+		$('#tbody_store').empty();
+		for(var i =0; i < data.length; i++) {
+			$('#tbody_store').append('<tr id="tr_store_list_'+data[i].pk+'"><input type="hidden" data-pk="'+data[i].pk+'" data-store_name="'+data[i].store_name+'" data-store_location="'+data[i].store_location+'"><td><i type="button" style="margin:4px;" class="fa fa-home" onClick = "location.href="'+data[i].pk+'"></i>'+data[i].pk+'</td><td><i class="fa fa-store"></i>'+data[i].store_name+'</td><td>'+data[i].store_location+'</td><td><i type="button" id="td_store_edit_button" data-pk="'+data[i].pk+'" data-store_name="'+data[i].store_name+'" data-store_location="'+data[i].store_location+'" data-toggle="modal" data-target="#modal_store_edit"  style="margin:4px" class="fa fa-edit" ></i><i type="button" id="td_store_delete_button" name="'+data[i].pk+'" style="margin:4px" class="fa fa-trash"></i></td></tr>');
+		}
+	}
 		/* 테이블 내 스크롤 */
 		var page = 1;
 		$(window).scroll(function() {
@@ -148,13 +191,70 @@
 			}
 		});
 	
-		/*form 유효성 검사*/
+		/*가게 테이블 리스트 삭제*/
+		$(document).on('click', '#td_store_delete_button', function(e) {
+			if(confirm("가게를 삭제 하시겠습니까?")){
+				var pk =$(this).attr('name');
+				console.log(pk);
+				$.ajax({
+					url : "{% url 'watcher:ajax_delete_store_info' %}",
+					type : 'GET',
+					data : {
+						'pk' : pk,
+					},
+					success : function(data) {
+						$('#tr_store_list_'+pk).remove();
+						
+					},
+					error: function(error){
+						alert('td_store_edit_button error; ' + eval(error));
+					}
+				});
+				return true;
+			}
+			else {
+				return false;
+			}
+		});
 	
 
-		/*수정 모달 버튼 기능*/
-		$(document).on('click', '#add_button', function(e){
-			
+		/*가게 정보 수정 버튼 */
+		$(document).on('click', '#td_store_edit_button', function(e){
+			$('#modal_store_edit_label').text($(this).attr('data-store_name'));
+			$('#modal_store_edit_name').val($(this).attr('data-store_name'));
+			$('#modal_store_edit_name').attr('name',$(this).attr('data-pk'));
+			$('#modal_store_edit_location').val($(this).attr('data-store_location'));
 		});
+			/*가게 정보 수정 모달에서 저장버튼*/
+			$(document).on('click', '#modal_store_edit_btn',function(e) {
+				var pk = $('#modal_store_edit_name').attr('name');
+				var store_name = $('#modal_store_edit_name').val();
+				var store_location = $('#modal_store_edit_location').val();
+
+				if(confirm("변경사항을 저장 하시겠습니까?")){
+					$.ajax({
+						url : "{% url 'watcher:ajax_edit_store_info' %}",
+						type : 'GET',
+						dataType : 'json',
+						data : {
+							'pk' : pk,
+							'store_name' : store_name,
+							'store_location' : store_location,
+						},
+						success : function(data) {
+							create_store_list(data);
+						},
+						error : function(error) {
+
+						},
+					});
+					return true;
+				}
+				else{
+					return false;
+				}
+			});
+
 		/*가게 추가 기능 in 모달 */
 		$(document).on('click', '#add_store_btn', function(e) {
 			var store_name = $('#modal_store_name').val();
@@ -173,7 +273,7 @@
 					type : 'GET',
 					success: function(data) {
 						console.log("save")
-						$("tbody").append('<tr name="'+data.pk+'" onClick = " location.href='+data.pk+'"><td>'+data.pk+'</td><td>'+data.store_name+'</td><td>'+data.store_location+'</td><td><i type="button" name="'+data.pk+'" data-toggle="modal" data-target="#exampleModal"  style="margin:4px" class="fa fa-edit" ><input type="hidden" name= "'+data.pk+'"></i><i style="margin:4px" class="fa fa-trash"></i></td></tr>')
+						$("tbody").append('<tr id=t"tr_store_list_'+data.pk+'" onClick = " location.href='+data.pk+'"><td>'+data.pk+'</td><td>'+data.store_name+'</td><td>'+data.store_location+'</td><td><i type="button" name="'+data.pk+'" data-toggle="modal" data-target="#exampleModal"  style="margin:4px" class="fa fa-edit" ><input type="hidden" name= "'+data.pk+'"></i><i style="margin:4px" class="fa fa-trash"></i></td></tr>')
 					},
 					error: function (error) {
 						alert('error; ' + eval(error));

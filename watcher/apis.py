@@ -6,7 +6,8 @@ from watcher.tools import *
 import os
 from django.utils import timezone
 from django.shortcuts import render
-from django.core import serializers
+from .serializers import *
+from rest_framework.response import Response
 
 
 def send_seat_data(request):
@@ -105,7 +106,25 @@ def get_store_info(request) :
 	}
 
 	return JsonResponse(json.dumps(store_info))
+def delete_store_info(request) :
+	pk = int(request.GET['pk'])
 
+	store = Store.objects.get(pk=pk)
+	store.delete();
+	return HttpResponse("delete success")
+
+def edit_store_info(request) :
+	pk = int(request.GET['pk'])
+	store_name = request.GET['store_name']
+	store_location = request.GET['store_location']
+
+	store = Store.objects.filter(pk=pk)
+	store.update(store_name=store_name,store_location=store_location)
+
+	stores = Store.objects.all()
+	serialized_stores = StoreSerializer(stores,many=True)
+
+	return HttpResponse(json.dumps(serialized_stores.data))
 
 def add_store_list(request) :
 	store_name = request.GET['store_name']
@@ -127,7 +146,7 @@ def add_store_list(request) :
 
 def get_camera_info(request):
 	pk = int(request.GET['pk'])
-	camera = Camera.objects.get(pk=pk)
+	camera = Camera.objects.filter(pk=pk)
 
 	data = {
 		'pk' : camera.pk,
@@ -153,6 +172,7 @@ def add_camera_list(request) :
 		'mac_addr' : camera.mac_addr,
 		'cur_host' : camera.cur_host,
 		'description' : camera.description,
+		'floor_id' : camera.floor_id,
 
 	}
 	return JsonResponse(data, safe=False) 
@@ -175,19 +195,8 @@ def delete_camera_list(request) :
 	camera = Camera.objects.filter(pk=pk, store_id= store_id)
 	camera.delete()
 
-	camera_list = Camera.objects.filter(store_id = store_id)
-	camera = camera_list.first()
-
-	data = {
-		'pk' : camera.pk,
-		'store_id' : camera.store_id,
-		'cur_pic' : camera.cur_pic,
-		'mac_addr' : camera.mac_addr,
-		'cur_host' : camera.cur_host,
-		'description' : camera.description,
-
-	}
-	return JsonResponse(data, safe=False) #수정 필요
+	
+	return HttpResponse('delete success') #수정 필요 -> 2020-08-25 수정완료
 
 #층 정보 관련
 def add_floor_info(request) :
@@ -206,30 +215,70 @@ def add_floor_info(request) :
 		camera = Camera.objects.filter(pk=int(c_list))
 		camera.update(floor_id=floor.pk)
 
-	c_list = Camera.objects.filter(floor_id = floor.pk)
-
 	data = {
 		'pk' : floor.pk,
-		'floor_num' : floor.floor_num,
+		'floor_num' : floor_num,
 		'name' : floor.name,
 		'description' : floor.description,
 	}
-	return JsonResponse(data, serializers('json',c_list))
+	return JsonResponse(data)
 
 
-def test(request) :
-
+def edit_floor_id(request) :
 
 	camera_list = request.GET.getlist('camera_list[]')
-	floor_id = int(request.GET['floor_pk'])
+	store_id = int(request.GET['store_id'])
+	floor_id = int(request.GET['floor_id'])
 
 	for c_list in camera_list :
 		camera = Camera.objects.filter(pk=int(c_list))
-		camera.update(floor_id=int(8))
+		camera.update(floor_id=floor_id)
+
+	cameras = Camera.objects.filter(store_id=store_id)
+	serialized_cameras = CameraSerializer(cameras,many=True)
+
+	return HttpResponse(json.dumps(serialized_cameras.data))
+
+def delete_floor_info(request) :
+
+	floor_id = int(request.GET['floor_id'])
+	store_id = int(request.GET['store_id'])
+
+	floor = Floor.objects.filter(pk=floor_id)
+	floor.delete()
+
+	cameras = Camera.objects.filter(store_id=store_id)
+	serialized_cameras = CameraSerializer(cameras,many=True)
+
+	return HttpResponse(json.dumps(serialized_cameras.data))
+
+def edit_floor_camera_list(request) :
+
+	camera_used_list = request.GET.getlist('camera_used[]')
+	camera_unused_list = request.GET.getlist('camera_unused[]')
+	store_id = int(request.GET['store_id'])
+	floor_id = int(request.GET['floor_id'])
+	name = request.GET['floor_name']
+	floor_num = int(request.GET['floor_num'])
+	description = request.GET['floor_description']
+
+	floor = Floor.objects.filter(pk=floor_id)
+	floor.update(name=name,floor_num=floor_num,description=description)
+
+	for lists in camera_used_list :
+		camera = Camera.objects.filter(pk=int(lists))
+		camera.update(floor_id=floor_id)
+
+	for lists in camera_unused_list :
+		camera = Camera.objects.filter(pk=int(lists))
+		camera.update(floor_id=None)
+
+	cameras = Camera.objects.filter(store_id=store_id)
+
+	serialized_cameras = CameraSerializer(cameras,many=True)
+	return HttpResponse(json.dumps(serialized_cameras.data)) 
 
 
-	ß
-	return HttpResponse("good");
 
 def get_file_from_cam(request):
 	"""
