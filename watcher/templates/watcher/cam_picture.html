@@ -13,6 +13,8 @@
     var IMAGE_HEIGHT = 900
     var table_list = {{table_list|safe}}
     var canvas = this.__canvas = new fabric.Canvas('c');
+    canvas.selection  = false
+
     var picture_addr = '/static/img/'+'{{picture_name}}'
     fabric.Image.fromURL(picture_addr, imgObj => {
             canvas.setBackgroundImage(imgObj, canvas.renderAll.bind(canvas), {
@@ -78,6 +80,8 @@
             width: _width,
             height: _height,
             hasRotatingPoint: false,
+            selectable: false,
+            hoverCursor: "default"
         });
 
         group.scaleX = _scaleX
