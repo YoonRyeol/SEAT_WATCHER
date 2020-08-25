@@ -35,16 +35,51 @@ def table_set(request, store_pk=None, camera_pk=None):
 																'store_pk' : store_pk,
 																'camera_pk' : camera_pk,
 																'cam_cur_host' : camera.cur_host
-																							})
+																									})
 def store_layout(request, store_pk=None, floor_pk=None):
-	table_tmp = Table.objects.all()
+	camera_list = Camera.objects.filter(store__pk=store_pk, floor__pk=floor_pk)
+	data_list=[]
+	for camera in camera_list:
+		undeployed_table_list = Table.objects.filter(camera=camera, layout_f_x=None)
+		deployed_table_list = Table.objects.filter(camera=camera).exclude(layout_f_x=None)
+		datum = {
+			'camera':camera,
+			'undeployed_table_list' : undeployed_table_list,
+			'deployed_table_list' : deployed_table_list
+		}
+		data_list.append(datum)
+	table_tmp = Table.objects.filter(store__pk=store_pk, floor__pk=floor_pk).exclude(layout_f_x=None)
 	table_list = []
 	for e in table_tmp:
 		table_list.append(model_to_dict(e))
 	return render(request, 'watcher/store_layout.html', {
-															'table_list':json.dumps(table_list)
+															'table_list':json.dumps(table_list),
+															'data_list':data_list,
+															'floor_pk' : floor_pk,
 																								})
 
+
+def cam_picture(request, camera_pk):
+	camera = Camera.objects.get(pk=camera_pk)
+	"""
+	Todo : 사진 데이터 로드
+	"""
+	if bool(camera.cur_pic):
+		picture_name = camera.cur_pic
+	else:
+		picture_name = 'no_image.jpg'
+	"""
+	Todo : 좌석데이터 로드
+	"""
+	table_tmp = Table.objects.filter(camera=camera)
+	table_list = []
+	for e in table_tmp:
+		table_list.append(model_to_dict(e))
+
+	return render(request, 'watcher/cam_picture.html', {
+														'picture_name' : picture_name,
+														'table_list' : json.dumps(table_list)
+																						})
 
 def store_list(request) :
 	store_list = Store.objects.all()
