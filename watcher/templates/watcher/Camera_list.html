@@ -253,7 +253,7 @@
 				</thead>
 				<tbody id="tbody_floor" name="{{store_id}}"> <!--store_id 저장-->
 					{% for list in floor_list%}
-					<tr id="tr_list_{{list.pk}}">
+					<tr id="tr_list_{{list.pk}}" link="{% url 'watcher:store_layout' store_id list.pk %}" onclick="move_page(this)">
 						<td id="c_num_{{list.pk}}" >{{list.floor_num}}<i style="margin:4px" class="fa fa-camera"></i></td>
   						<td>{{list.name}}</td>
   						<td>{{list.description}}<i style="margin:4px" class="fa fa-eye"></i></td>
