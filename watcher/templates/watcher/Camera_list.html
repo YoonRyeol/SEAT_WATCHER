@@ -60,7 +60,7 @@
 		<!--카메라 테이블 시작-->
 		<button style="float :left; margin-left : 1%; " id="add_button" data-toggle="modal" data-target="#modal_camera_add" type="button" class="btn btn-dark">카메라 추가</button>
 
-		<div class="table-responsive" style="height : 20vh; overflow: scroll;" >
+		<div class="table-responsive" style="height : 25vh; overflow: scroll;" >
 		<!-- Table -->
 			<table class="table table-striped table-bordered table-dark table-hover">
 				<thead class="thead-light">
@@ -98,7 +98,7 @@
   		<button style="float :left; margin-top: 1%; margin-left : 1%; margin-bottom : 0.5%" id="add_floor_button" data-toggle="modal" data-target="#modal_floor" type="button" class="btn btn-dark" name="{{store_id}}">층 추가</button>
   		
   		<!--가게층 정보 리스트 테이블 시작 -->
-		<div class="table-responsive" style="height : 20vh; overflow: scroll;" >
+		<div class="table-responsive" style="height : 25vh; overflow: scroll;" >
 		<!-- Table -->
 			<table class="table table-striped table-bordered table-dark table-hover">
 				<thead class="thead-light">
@@ -131,11 +131,11 @@
 
   	</div><!--wrap-->
 	<!--footer-->
-	<footer>
+	<footer >
 		<div class="container">
 					<br>
 					<div class="row">
-						<div class="col-sm-4" ><h5>Copyright &copy; 2020</h5>
+						<div id="footer_copyright" class="col-sm-4" ><h5>Copyright &copy; 2020</h5>
 							<ul>
 							<li><h5>김민호(KIM MINHO)</h5></li>
 							<li><h5>박지범(PARK JIBEOM)</h5></li>
@@ -816,6 +816,14 @@
 			location.href = addr
   		}	
 
+
+		$('#footer_copyright>ul').hide();
+  		$(document).on('mouseleave', 'footer',function(e){
+  				$('#footer_copyright>ul').hide();
+  		});
+  		$(document).on('mouseenter', 'footer',function(e){
+  				$('#footer_copyright>ul').show();
+  		});
 	</script>
 
 
