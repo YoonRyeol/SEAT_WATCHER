@@ -11,6 +11,7 @@ urlpatterns = [
  	path('', views.store_list, name='store_list'),
 	path('table_set/', views.table_set, name='table_set'),
 	path('store_info/<int:store_pk>/camera/<int:camera_pk>', views.table_set, name='table_set'),
+	path('store_info/<int:store_pk>/layout/<int:floor_pk>', views.store_layout, name="store_layout"),
 	path('image_download', views.image_test, name='image_test'),
 	path('store_layout', views.store_layout, name='store_layout'),
 	path('store_list/',views.store_list, name='store_list'),
@@ -29,6 +30,8 @@ urlpatterns = [
 	path('floor/edit_floor_camera_list',apis.edit_floor_camera_list,name='ajax_edit_floor_camera_list'),
 	path('api/get_file_from_cam', apis.get_file_from_cam, name='get_file_from_cam'),
 	path('api/send_seat_data', apis.send_seat_data, name='send_seat_data'),
+	path('cam_picture/<int:camera_pk>', views.cam_picture, name='cam_picture'),
+	path('api/save_layout', apis.save_layout, name='save_layout')
  ]
 
 
