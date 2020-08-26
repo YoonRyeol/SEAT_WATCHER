@@ -77,7 +77,7 @@
 					{% for list in camera_list%}
 					<tr id="tr_list_{{list.pk}}">
 						<input type="hidden" data-pk="{{list.pk}}" data-cur_pic="{{list.cur_pic}}" data-mac_addr="{{list.mac_addr}}" data-cur_host="{{list.cur_host}}" data-description="{{list.description}}" data-store_id="{{list.store_id}}" data-floor_id="{{list.floor_id}}">
-						<td class="clickable" onclick='move_page(this)' link="{% url 'watcher:table_set' store_id list.pk %}">
+						<td class="clickable" onclick='move_page(this)' link="camera/{{list.pk}}">
 							<i style="margin:4px" class="fa fa-camera"></i>
 							<a href= "{% url 'watcher:table_set' store_id list.pk %}">{{list.pk}}</a>
 						</td>
@@ -197,20 +197,20 @@
 		        <form>
 		          <div class="form-group">
 		            <label for="camera-name" class="col-form-label">카메라 위치 :</label>
-		            <input type="text" class="form-control" id="modal_camera_location" value="">
+		            <input type="text" class="form-control" id="modal_camera_add_location" value="">
 		          </div>
 		          <div class="form-group">
 		            <label for="mac-address" class="col-form-label">Mac Address :</label>
-		           <input type="text" class="form-control" id="modal_camera_mac_addr">
+		           <input type="text" class="form-control" id="modal_camera_add_mac_addr">
 		          </div>
 		          <div class="form-group">
 		            <label for="description" class="col-form-label">비고 :</label>
-		            <textarea class="form-control" id="modal_camera_description"></textarea>
+		            <textarea class="form-control" id="modal_camera_add_description"></textarea>
 		          </div>
 		        </form>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="modal_camera_init()">닫기</button>
 		        <button id ="modal_camera_add_btn" type="button" data-dismiss="modal" class="btn btn-primary">기기 추가</button>
 		      </div>
 		    </div>
@@ -379,12 +379,12 @@
 		function create_camera_tables(data) {
 			$('#tbody_camera').empty();
 			for(var i = 0; i < data.length; i++) {
-				$('#tbody_camera').append('<tr id="tr_list_'+data[i].pk+'"><input type="hidden" data-pk="'+data[i].pk+'" data-cur_pic="'+data[i].cur_pic+'" data-mac_addr="'+data[i].mac_addr+'" data-cur_host="'+data[i].cur_host+'" data-description="'+data[i].description+'" data-store_id="'+data[i].store_id+'" data-floor_id="'+data[i].floor_id+'"><td id="c_num_'+data[i].pk+'" ><i style="margin:4px" class="fa fa-camera"></i>'+data[i].pk+'</td><td><i style="margin:4px" class="fa fa-eye"></i></td><td>'+data[i].mac_addr+'</td><td>'+data[i].description+'</td><td><i type="button" name="'+data[i].pk+'" data-toggle="modal" data-target="#modal_camera_edit"  style="margin:4px" class="fa fa-edit" id="td_edit_button"><input type="hidden" name= "'+data[i].pk+'"></i><i style="margin:4px" class="fa fa-trash" name= "'+data[i].pk+'" id="td_camera_delete_button"></i></td></tr>');
+				$('#tbody_camera').append('<tr id="tr_list_'+data[i].pk+'"><input type="hidden" data-pk="'+data[i].pk+'" data-cur_pic="'+data[i].cur_pic+'" data-mac_addr="'+data[i].mac_addr+'" data-cur_host="'+data[i].cur_host+'" data-description="'+data[i].description+'" data-store_id="'+data[i].store_id+'" data-floor_id="'+data[i].floor_id+'"><td class="clickable" onclick="move_page(this)" link="camera/'+data[i].pk+'"><i style="margin:4px" class="fa fa-camera"></i><a style="margin:4px" href= "camera/'+data[i].pk+'">'+data[i].pk+'</a></td><td><i style="margin:4px" class="fa fa-eye"></i></td><td>'+data[i].mac_addr+'</td><td>'+data[i].description+'</td><td><i type="button" name="'+data[i].pk+'" data-toggle="modal" data-target="#modal_camera_edit"  style="margin:4px" class="fa fa-edit" id="td_camera_edit_button"><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px" class="fa fa-trash" name= "'+data[i].pk+'" id="td_camera_delete_button"></i></td></tr>');
 			}
 		}
 
 		function create_camera_info(data) {
-			$('#tbody_camera').append('<tr id="tr_list_'+data.pk+'"><input type="hidden" data-pk="'+data.pk+'" data-cur_pic="'+data.cur_pic+'" data-mac_addr="'+data.mac_addr+'" data-cur_host="'+data.cur_host+'" data-description="'+data.description+'" data-store_id="'+data.store_id+'" data-floor_id="'+data.floor_id+'"><td id="c_num_'+data.pk+'" ><i style="margin:4px" class="fa fa-camera"></i>'+data.pk+'</td><td><i style="margin:4px" class="fa fa-eye"></i></td><td>'+data.mac_addr+'</td><td>'+data.description+'</td><td><i type="button" name="'+data.pk+'" data-pk="'+data.pk+'" data-cur_host="'+data.cur_host+'" data-toggle="modal" data-target="#modal_camera_edit"  style="margin:4px" class="fa fa-edit" id="td_edit_button"><input type="hidden" name= "'+data.pk+'"></i><i style="margin:4px" class="fa fa-trash" name= "'+data.pk+'" id="td_camera_delete_button"></i></td></tr>');
+			$('#tbody_camera').append('<tr id="tr_list_'+data.pk+'"><input type="hidden" data-pk="'+data.pk+'" data-cur_pic="'+data.cur_pic+'" data-mac_addr="'+data.mac_addr+'" data-cur_host="'+data.cur_host+'" data-description="'+data.description+'" data-store_id="'+data.store_id+'" data-floor_id="'+data.floor_id+'"><td class="clickable" onclick="move_page(this)" link="camera/'+data.pk+'"><i style="margin:4px" class="fa fa-camera"></i><a style="margin:4px" href= "camera/'+data.pk+'">'+data.pk+'</a></td><td><i style="margin:4px" class="fa fa-eye"></i></td><td>'+data.mac_addr+'</td><td>'+data.description+'</td><td><i type="button" name="'+data.pk+'" data-toggle="modal" data-target="#modal_camera_edit"  style="margin:4px" class="fa fa-edit" id="td_camera_edit_button"><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px" class="fa fa-trash" name= "'+data.pk+'" id="td_camera_delete_button"></i></td></tr>');
 		}
 
 		/*floor 모달에서 카메라가 배정되는 floor_id를 수정해주는 함수 */
@@ -797,6 +797,21 @@
 
 		});
 		/*모달 종료시 데이터 초기화 */
+			/*모달창에서 esc누를경우 */
+		$(document).on('keydown', function(e) {
+			if (e.keyCode == 27) {
+				modal_floor_init(0);
+				modal_floor_init(1);
+				modal_camera_init();
+			}
+		});
+
+		function modal_camera_init() {
+			$('#modal_camera_add_description').val('');
+			$('#modal_camera_add_mac_addr').val('');
+			$('#modal_camera_add_location').val('');
+		}
+
 		function modal_floor_init(data) {
 			var type;
 			if(data){
