@@ -808,8 +808,13 @@
 				$('tbody[name=modal_floor_'+type+'_tbody_unused_camera]').empty();
 				$('tbody[name=modal_floor_'+type+'_tbody_used_camera]').empty();
 			}
-			else
+			else{
+				type="edit"
+				console.log("close :"+type);
+				$('tbody[name=modal_floor_'+type+'_tbody_unused_camera]').empty();
+				$('tbody[name=modal_floor_'+type+'_tbody_used_camera]').empty();
 				return false;
+			}
 		}
 		//move to camera seat data edit page - YR
 		function move_page(el){
