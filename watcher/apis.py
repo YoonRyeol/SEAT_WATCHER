@@ -161,10 +161,10 @@ def get_camera_info(request):
 	return JsonResponse(data, safe=False)
 
 def add_camera_list(request) :
-	cur_pic = request.GET['cur_pic']
+	#cur_pic = request.GET['cur_pic']
 	description = request.GET['description']
 	store_id= int(request.GET['store_id'])
-	camera=Camera(cur_pic=cur_pic, description = description, store_id = store_id)
+	camera=Camera(description = description, store_id = store_id)
 	camera.save()
 
 	data = {
@@ -175,7 +175,6 @@ def add_camera_list(request) :
 		'cur_host' : camera.cur_host,
 		'description' : camera.description,
 		'floor_id' : camera.floor_id,
-
 	}
 	return JsonResponse(data, safe=False) 
 
