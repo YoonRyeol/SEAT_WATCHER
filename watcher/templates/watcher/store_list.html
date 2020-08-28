@@ -106,7 +106,7 @@
 	</footer>
 
 	<!--가게 추가 모달 -->
-		<div class="modal fade" id="modal_store_add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal fade" id="modal_store_add" tabindex="-1" role="dialog" aria-labelledby="modal_store_add_lable" aria-hidden="true">
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
@@ -132,7 +132,7 @@
 		        </form>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" id="modal_store_add_close_btn" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+		        <button type="button" id="modal_store_add_close_btn" class="btn btn-secondary" data-dismiss="modal" onclick='modal_store_init()'>닫기</button>
 		        <button type="button" id="modal_store_add_btn" data-dismiss="modal" class="btn btn-primary">매장 추가</button>
 		      </div>
 		    </div>
@@ -293,6 +293,18 @@
 
 		
 		});
+
+
+		$('#modal_store_add').on('hidden.bs.modal', function (e) {
+			console.log("modal_close");
+		})
+
+		/*카메라 추가 모달 데이터 초기화 */
+		function modal_store_init() {
+			$('#modal_store_add_name').val('');
+			$('#modal_store_add_location').val('');
+		}
+
 	 	/*검색기능*/
 		$(document).ready(function(){
 			$("#keyword").on("keyup", function() {
@@ -302,10 +314,7 @@
 				});
 			});
 		});
-		/* 가게 상세페이지로 이동*/
-		function move_page_store_info(store_id) {
 
-		}
 		$('#footer_copyright>ul').hide();
   		$(document).on('mouseleave', 'footer',function(e){
   				$('#footer_copyright>ul').hide();
