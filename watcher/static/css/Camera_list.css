@@ -35,11 +35,12 @@ a{
 /*테이블 내 검색창 */
 
 
-/* 테이블 부분 */
+/* 테이블 부분 
 table {
 	width: 100%;
 	border : 5px solid #444444;
 }
+*/
 
 tr[visible='false'],
 .no-result{
