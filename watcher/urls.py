@@ -25,7 +25,8 @@ urlpatterns = [
 	path('api/send_seat_data', apis.send_seat_data, name='send_seat_data'),
 	path('add_floor_info',apis.add_floor_info, name='ajax_add_floor_info'),
 	path('api/get_file_from_cam', apis.get_file_from_cam, name='get_file_from_cam'),
-	path('api/save_layout', apis.save_layout, name='save_layout')
+	path('api/save_layout', apis.save_layout, name='save_layout'),
+	path('api/get_seat_inspection_result', apis.get_seat_inspection_result, name='get_seat_inspection_result'),
  ]
 
 

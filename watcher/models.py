@@ -29,6 +29,7 @@ class Table(models.Model):
     layout_s_y = models.FloatField(blank=True, null=True)    
     is_elec = models.BooleanField(default=False)
     capacity = models.IntegerField(default=-1)
+    is_occupied = models.BooleanField(default=False)
 
 class Floor(models.Model):
     store = models.ForeignKey('Store', on_delete=models.SET_NULL, blank=True, null=True)
