@@ -7,7 +7,6 @@ import time
 import json
 
 cap = cv2.VideoCapture(0)
-result = dict()
 
 #frame_width = int(cap.get(3))
 #frame_height = int(cap.get(4))
@@ -15,11 +14,15 @@ result = dict()
 capture = False
 isStart = False
 
-def is_there_seat(x1, x2, y1, y2, pk):
-#     origin = cv2.imread("origin.jpg", 0)
-    g_captured = cv2.imread("30.jpg", 0)
-    origin = cv2.imread("origin.jpg", 1)
-    captured = cv2.imread("30.jpg", 1)
+
+def save_result_json():
+    with open('result.json', 'w') as make_file:
+        json.dump(result, make_file)
+
+def ROI(x1, x2, y1, y2, pk):
+    g_captured = cv2.imread("images/30.jpg", 0)
+    origin = cv2.imread("images/origin.jpg", 1)
+    captured = cv2.imread("images/30.jpg", 1)
 
     spot1, spot2 = [int(round(origin.shape[0] * y1 * 0.01)), int(round(origin.shape[1] * x1 * 0.01))], [int(round(origin.shape[0] * y2 * 0.01)), int(round(origin.shape[1] * x2 * 0.01))]
 #     origin = origin[spot1[0]:spot2[0], spot1[1]:spot2[1]]
@@ -27,15 +30,32 @@ def is_there_seat(x1, x2, y1, y2, pk):
 
     origin = origin[spot1[0]:spot2[0], spot1[1]:spot2[1]]
     captured = captured[spot1[0]:spot2[0], spot1[1]:spot2[1]]
-    cv2.imwrite("origin_"+str(pk)+".jpg", origin)
-    cv2.imwrite("captured_"+str(pk)+".jpg", captured)
+    cv2.imwrite("images/origin_"+str(pk)+".jpg", origin)
+    cv2.imwrite("images/captured_"+str(pk)+".jpg", captured)
+    return captured
+    
+
+def is_there_seat(x1, x2, y1, y2, pk):
+#     origin = cv2.imread("images/origin.jpg", 0)
+    g_captured = cv2.imread("images/30.jpg", 0)
+    origin = cv2.imread("images/origin.jpg", 1)
+    captured = cv2.imread("images/30.jpg", 1)
+
+    spot1, spot2 = [int(round(origin.shape[0] * y1 * 0.01)), int(round(origin.shape[1] * x1 * 0.01))], [int(round(origin.shape[0] * y2 * 0.01)), int(round(origin.shape[1] * x2 * 0.01))]
+#     origin = origin[spot1[0]:spot2[0], spot1[1]:spot2[1]]
+    test = g_captured[spot1[0]:spot2[0], spot1[1]:spot2[1]]
+
+    origin = origin[spot1[0]:spot2[0], spot1[1]:spot2[1]]
+    captured = captured[spot1[0]:spot2[0], spot1[1]:spot2[1]]
+    cv2.imwrite("images/origin_"+str(pk)+".jpg", origin)
+    cv2.imwrite("images/captured_"+str(pk)+".jpg", captured)
 
 
     cnt_correct = 0
     SUM = 0
 
-    cv2.imshow("origin"+str(pk), origin)
-    cv2.imshow("captured"+str(pk), captured)
+#    cv2.imshow("origin"+str(pk), origin)
+#    cv2.imshow("captured"+str(pk), captured)
     
     for y in range(0, spot2[0] - spot1[0]):
         for x in range(0, spot2[1] - spot1[1]):
@@ -65,29 +85,31 @@ def is_there_seat(x1, x2, y1, y2, pk):
             if(avg <=0.80):
                 test[y,x] = 0
                 cnt_correct += 1
-            
-
-
                 
-    cv2.imshow("after"+str(pk), test)
+#    cv2.imshow("after"+str(pk), test)
     print("pk is =", pk)
     if(cnt_correct / float(((spot2[1] - spot1[1]) * (spot2[0] - spot1[0]))) >= 0.3):
-        result[str(pk)] = "T"
         return True
     else:
-        cv2.imwrite("origin_"+str(pk)+".jpg", captured)
-        result[str(pk)] = "F"
         return False
 
 
-if os.path.isfile("origin.jpg"):
+if os.path.isfile("images/origin.jpg"):
     isStart = True
 
 with open('pos_data.json', 'r') as json_file:
     data = json.load(json_file)
+with open('result.json', 'r') as json_file:
+    result = json.load(json_file)
+        
 #    print(data["t1"]["x1"])
 #    print(len(json_data))
 #    print(json_data['percentage']['x1'])
+
+table_status = []
+status_index = 0
+for elem in data:
+    table_status.append(0)
 
     
 while (True):
@@ -98,32 +120,53 @@ while (True):
     if ret == True:
         # Display the resulting frame
         cv2.imshow('frame', frame)
-        if not os.path.isfile("origin.jpg"):
+        if not os.path.isfile("images/origin.jpg"):
             time.sleep(2)
-            cv2.imwrite("origin.jpg", frame)
+            cv2.imwrite("images/origin.jpg", frame)
 
         if cv2.waitKey(1) & 0xFF == ord('o'):
-            cv2.imwrite("origin.jpg", frame)
+            cv2.imwrite("images/origin.jpg", frame)
             isStart = True
         if cv2.waitKey(1) & 0xFF == ord('t'):
             is_there_seat(30, 60, 25, 75)
             capture = True
         if(now == "30" and capture != True and isStart is not False) :
-            cv2.imwrite(str(now)+".jpg", frame)
+            cv2.imwrite("images/30.jpg", frame)
+            print("30 is start")
+            status_index = 0
             for elem in data:
-                x1 = elem['position']['f_x']
-                x2 = elem['position']['s_x']
-                y1 = elem['position']['f_y']
-                y2 = elem['position']['s_y']
-                print("Test", x1, x2, y1, y2)
-                if(is_there_seat(x1 * 100, x2 * 100, y1 * 100, y2 * 100, elem['pk'])):
-                    print("yes")
+                x1 = elem['position']['f_x'] * 100
+                x2 = elem['position']['s_x'] * 100
+                y1 = elem['position']['f_y'] * 100
+                y2 = elem['position']['s_y'] * 100
+                print("axis", x1, x2, y1, y2)
+                captured = ROI(x1, x2, y1, y2, elem['pk'])
+                if(is_there_seat(x1, x2, y1, y2, elem['pk'])):
+                    if(table_status[status_index] > 1):
+                        if(result[str(elem['pk'])] == "T"):
+                            result[str(elem['pk'])] = "F"
+                            save_result_json();
+                        else:
+                            result[str(elem['pk'])] = "T"
+                            save_result_json();
+                            print("table " + str(elem['pk']) + " is diff")
+                        cv2.imwrite("images/origin"+str(elem['pk'])+".jpg", captured)
+                    elif(table_status[status_index] < 0):
+                        table_status[status_index] = 1
+                    else:
+                        table_status[status_index] += 1
+                        
                 else:
-                    print("no")
-            with open('result.json', 'w') as make_file:
-                json.dump(result, make_file)
+                    if(table_status[status_index] < -1):
+                        print("table " + str(elem['pk']) + " is same")
+                        cv2.imwrite("images/origin"+str(elem['pk'])+".jpg", captured)
+                        save_result_json();
+                    elif(table_status[status_index] > 0):
+                        table_status[status_index] = -1
+                    else:
+                        table_status[status_index] -= 1
+                status_index += 1
             capture = True
-
         if(now == "31"):
             capture = False
 
@@ -131,15 +174,5 @@ while (True):
     else:
         break
 cap.release()
-
-
-
-#   https://m.blog.naver.com/PostView.nhn?blogId=samsjang&logNo=220502203203&proxyReferer=https:%2F%2Fwww.google.com%2F
-#   img = cv2.GaussianBlur(img, (5, 5), 0)
-#   _, img_result3 = cv2.threshold(img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-#   cv2.imshow("3_"+str(n), img_result3)
-
-
-
 cv2.waitKey(0)
 cv2.destroyAllWindows()
