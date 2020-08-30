@@ -15,7 +15,7 @@ result = dict()
 capture = False
 isStart = False
 
-def is_there_seat(x1, x2, y1, y2, index):
+def is_there_seat(x1, x2, y1, y2, pk):
 #     origin = cv2.imread("origin.jpg", 0)
     g_captured = cv2.imread("30.jpg", 0)
     origin = cv2.imread("origin.jpg", 1)
@@ -27,15 +27,15 @@ def is_there_seat(x1, x2, y1, y2, index):
 
     origin = origin[spot1[0]:spot2[0], spot1[1]:spot2[1]]
     captured = captured[spot1[0]:spot2[0], spot1[1]:spot2[1]]
-    cv2.imwrite("origin_"+str(index)+".jpg", origin)
-    cv2.imwrite("captured_"+str(index)+".jpg", captured)
+    cv2.imwrite("origin_"+str(pk)+".jpg", origin)
+    cv2.imwrite("captured_"+str(pk)+".jpg", captured)
 
 
     cnt_correct = 0
     SUM = 0
 
-    cv2.imshow("origin"+str(index), origin)
-    cv2.imshow("captured"+str(index), captured)
+    cv2.imshow("origin"+str(pk), origin)
+    cv2.imshow("captured"+str(pk), captured)
     
     for y in range(0, spot2[0] - spot1[0]):
         for x in range(0, spot2[1] - spot1[1]):
@@ -69,21 +69,21 @@ def is_there_seat(x1, x2, y1, y2, index):
 
 
                 
-    cv2.imshow("after"+str(index), test)
-    print("index is =", index)
+    cv2.imshow("after"+str(pk), test)
+    print("pk is =", pk)
     if(cnt_correct / float(((spot2[1] - spot1[1]) * (spot2[0] - spot1[0]))) >= 0.3):
-        result["t"+str(index)] = "T"
-        print("true index is =", index)
+        result[str(pk)] = "T"
         return True
     else:
-        cv2.imwrite("origin_"+str(index)+".jpg", captured)
-        result["t"+str(index)] = "F"
-        print("false index is =", index)
+        cv2.imwrite("origin_"+str(pk)+".jpg", captured)
+        result[str(pk)] = "F"
         return False
+
+
 if os.path.isfile("origin.jpg"):
     isStart = True
 
-with open('percentage.json', 'r') as json_file:
+with open('pos_data.json', 'r') as json_file:
     data = json.load(json_file)
 #    print(data["t1"]["x1"])
 #    print(len(json_data))
@@ -110,12 +110,13 @@ while (True):
             capture = True
         if(now == "30" and capture != True and isStart is not False) :
             cv2.imwrite(str(now)+".jpg", frame)
-            for index in range(1, len(data)+1):
-                x1 = data["t"+str(index)]["x1"]
-                x2 = data["t"+str(index)]["x2"]
-                y1 = data["t"+str(index)]["y1"]
-                y2 = data["t"+str(index)]["y2"]
-                if(is_there_seat(x1, x2, y1, y2, index)):
+            for elem in data:
+                x1 = elem['position']['f_x']
+                x2 = elem['position']['s_x']
+                y1 = elem['position']['f_y']
+                y2 = elem['position']['s_y']
+                print("Test", x1, x2, y1, y2)
+                if(is_there_seat(x1 * 100, x2 * 100, y1 * 100, y2 * 100, elem['pk'])):
                     print("yes")
                 else:
                     print("no")
