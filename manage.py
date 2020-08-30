@@ -2,9 +2,16 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+import multiprocessing
+import subprocess
 
+def cam():
+    os.system('python main.py')
+    
 
 def main():
+    mp = multiprocessing.Process(target=cam, args=())
+    mp.start()
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'seat_watcher_cam.settings')
     try:

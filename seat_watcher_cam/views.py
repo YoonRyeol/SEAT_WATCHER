@@ -10,7 +10,11 @@ def send_image(request):
     """
     Todo : 사진찍기 후 open에 경로 넣어줄 것 
     """
-    f = open('Picture 38.jpg', 'rb')
+    f = open('30.jpg', 'rb')
+    return FileResponse(f)
+
+def send_result(request):
+    f = open('result.json', 'rb')
     return FileResponse(f)
 
 @csrf_exempt

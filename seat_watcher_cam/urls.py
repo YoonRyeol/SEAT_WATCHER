@@ -22,4 +22,5 @@ urlpatterns = [
     path('test', connect_test),
     path('get_seat_info', get_seat_info),
     path('send_image', send_image),
+    path('send_result', send_result),
 ]
