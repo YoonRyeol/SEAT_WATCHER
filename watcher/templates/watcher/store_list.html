@@ -72,7 +72,7 @@
 				<tr id="tr_store_list_{{list.pk}}">
 					<input type="hidden" data-pk="{{list.pk}}" data-store_name="{{list.store_name}}" data-store_location="{{list.store_location}}">
 					<td>
-						<i type="button" style="margin:4px;" class="fa fa-home" onClick = "location.href={{list.pk}}"></i>{{list.pk}}
+						<a href ="store_info/{{list.pk}}/"><i type="button" style="margin:4px;" class="fa fa-home" ></i></a>{{list.pk}}
 					</td>
 					<td><i class="fa fa-store"></i>{{list.store_name}}</td>
 					<td>{{list.store_location}}</td>
@@ -106,7 +106,7 @@
 	</footer>
 
 	<!--가게 추가 모달 -->
-		<div class="modal fade" id="modal_store_add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal fade" id="modal_store_add" tabindex="-1" role="dialog" aria-labelledby="modal_store_add_lable" aria-hidden="true">
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
@@ -132,8 +132,8 @@
 		        </form>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" id="modal_store_add_close_btn" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-		        <button type="button" id="moald_store_add_btn' data-dismiss="modal" class="btn btn-primary">매장 추가</button>
+		        <button type="button" id="modal_store_add_close_btn" class="btn btn-secondary" data-dismiss="modal" onclick='modal_store_init()'>닫기</button>
+		        <button type="button" id="modal_store_add_btn" data-dismiss="modal" class="btn btn-primary">매장 추가</button>
 		      </div>
 		    </div>
 		  </div>
@@ -180,7 +180,8 @@
 	function create_store_list(data) {
 		$('#tbody_store').empty();
 		for(var i =0; i < data.length; i++) {
-			$('#tbody_store').append('<tr id="tr_store_list_'+data[i].pk+'"><input type="hidden" data-pk="'+data[i].pk+'" data-store_name="'+data[i].store_name+'" data-store_location="'+data[i].store_location+'"><td><i type="button" style="margin:4px;" class="fa fa-home" onClick = "location.href="'+data[i].pk+'"></i>'+data[i].pk+'</td><td><i class="fa fa-store"></i>'+data[i].store_name+'</td><td>'+data[i].store_location+'</td><td><i type="button" id="td_store_edit_button" data-pk="'+data[i].pk+'" data-store_name="'+data[i].store_name+'" data-store_location="'+data[i].store_location+'" data-toggle="modal" data-target="#modal_store_edit"  style="margin:4px" class="fa fa-edit" ></i><i type="button" id="td_store_delete_button" name="'+data[i].pk+'" style="margin:4px" class="fa fa-trash"></i></td></tr>');
+
+			$('#tbody_store').append('<tr id="tr_store_list_'+data[i].pk+'"><input type="hidden" data-pk="'+data[i].pk+'" data-store_name="'+data[i].store_name+'" data-store_location="'+data[i].store_location+'"><td><a href="store_info/'+data[i].store_id+'/"<i type="button" style="margin:4px;" class="fa fa-home"></i></a>'+data[i].pk+'</td><td><i class="fa fa-store"></i>'+data[i].store_name+'</td><td>'+data[i].store_location+'</td><td><i type="button" id="td_store_edit_button" data-pk="'+data[i].pk+'" data-store_name="'+data[i].store_name+'" data-store_location="'+data[i].store_location+'" data-toggle="modal" data-target="#modal_store_edit"  style="margin:4px" class="fa fa-edit" ></i><i type="button" id="td_store_delete_button" name="'+data[i].pk+'" style="margin:4px" class="fa fa-trash"></i></td></tr>');
 		}
 	}
 		/* 테이블 내 스크롤 */
@@ -257,9 +258,12 @@
 			});
 
 		/*가게 추가 기능 in 모달 */
-		$(document).on('click', '#add_store_btn', function(e) {
-			var store_name = $('#modal_store_name').val();
-			var store_location = $('#modal_store_location').val();
+		$(document).on('click', '#modal_store_add_btn', function(e) {
+			var store_name = $('#modal_store_add_name').val();
+			var store_location = $('#modal_store_add_location').val();
+			console.log(store_name);
+			console.log(store_location);
+
 			if (confirm('정말 추가 하시겠습니까?')) {
 
 				console.log(store_location);
@@ -274,7 +278,7 @@
 					type : 'GET',
 					success: function(data) {
 						console.log("save")
-						$("tbody").append('<tr id=t"tr_store_list_'+data.pk+'" onClick = " location.href='+data.pk+'"><td>'+data.pk+'</td><td>'+data.store_name+'</td><td>'+data.store_location+'</td><td><i type="button" name="'+data.pk+'" data-toggle="modal" data-target="#exampleModal"  style="margin:4px" class="fa fa-edit" ><input type="hidden" name= "'+data.pk+'"></i><i style="margin:4px" class="fa fa-trash"></i></td></tr>')
+						$("tbody").append('<tr id="tr_store_list_'+data.pk+'"><input type="hidden" data-pk="'+data.pk+'" data-store_name="'+data.store_name+'" data-store_location="'+data.store_location+'"><td><a href="store_info/'+data.pk+'/"<i type="button" style="margin:4px;" class="fa fa-home"></i></a>'+data.pk+'</td><td><i class="fa fa-store"></i>'+data.store_name+'</td><td>'+data.store_location+'</td><td><i type="button" id="td_store_edit_button" data-pk="'+data.pk+'" data-store_name="'+data.store_name+'" data-store_location="'+data.store_location+'" data-toggle="modal" data-target="#modal_store_edit"  style="margin:4px" class="fa fa-edit" ></i><i type="button" id="td_store_delete_button" name="'+data.pk+'" style="margin:4px" class="fa fa-trash"></i></td></tr>')
 					},
 					error: function (error) {
 						alert('error; ' + eval(error));
@@ -289,6 +293,18 @@
 
 		
 		});
+
+
+		$('#modal_store_add').on('hidden.bs.modal', function (e) {
+			console.log("modal_close");
+		})
+
+		/*카메라 추가 모달 데이터 초기화 */
+		function modal_store_init() {
+			$('#modal_store_add_name').val('');
+			$('#modal_store_add_location').val('');
+		}
+
 	 	/*검색기능*/
 		$(document).ready(function(){
 			$("#keyword").on("keyup", function() {

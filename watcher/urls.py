@@ -8,14 +8,13 @@ from . import apis
 app_name ='watcher'
 
 urlpatterns = [
- 	path('', views.store_list, name='store_list'),
+ 	path('', views.store_list, name='store_info'),
 	path('table_set/', views.table_set, name='table_set'),
 	path('store_info/<int:store_pk>/camera/<int:camera_pk>', views.table_set, name='table_set'),
 	path('store_info/<int:store_pk>/layout/<int:floor_pk>', views.store_layout, name="store_layout"),
 	path('image_download', views.image_test, name='image_test'),
 	path('store_layout', views.store_layout, name='store_layout'),
-	path('store_list/',views.store_list, name='store_list'),
-	path('store_list/<int:store_id>/',views.Camera_list, name='Camera_list'),
+	path('store_info/<int:store_id>/',views.Camera_list, name='Camera_list'),
 	path('store/add_store_list',apis.add_store_list, name='ajax_add_store_list'),
 	path('store/delete_store_info',apis.delete_store_info,name='ajax_delete_store_info'),
 	path('store/edit_store_info',apis.edit_store_info,name='ajax_edit_store_info'),
