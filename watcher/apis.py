@@ -6,6 +6,7 @@ from watcher.tools import *
 import os
 from django.utils import timezone
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 from .serializers import *
 from rest_framework.response import Response
 
@@ -325,5 +326,13 @@ def save_layout(request):
 				'layout_s_y':None
 			}
 			Table.objects.filter(pk=before_pk).update(**save_datum)
+
+	return HttpResponse('good')
+
+@csrf_exempt
+def get_seat_inspection_result(request):
+	inspection_result = json.loads(request.POST['input'])
+	for e in inspection_result:
+		Table.objects.filter(pk=e['pk']).update(is_occupied=e['res'])
 
 	return HttpResponse('good')
