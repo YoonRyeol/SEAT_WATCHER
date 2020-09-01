@@ -161,7 +161,18 @@ def get_camera_info(request):
 	} 
 	return JsonResponse(data, safe=False)
 
-def add_camera_list(request) :
+def edit_camera_info(request) :
+	pk = int(request.GET['pk'])
+	mac_addr = request.GET['mac_addr']
+	description = request.GEt['description']
+
+	camera = Camera.objects.get(pk=pk)
+
+	camera.update(mac_addr=mac_addr,description=description)
+
+	return HttpResponse(json.dumps(camera));
+	
+def add_camera_info(request) :
 	#cur_pic = request.GET['cur_pic']
 	description = request.GET['description']
 	store_id= int(request.GET['store_id'])
