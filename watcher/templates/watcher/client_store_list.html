@@ -20,28 +20,17 @@
 <body>
 	<div class="container-fluid" style="padding:0;">
 	
-		<nav class="navbar fixed-top navbar-light bg-dark" style="position:sticky; top:0; height:6vh; margin-bottom:1rem;">
+		<nav class="navbar fixed-top navbar-light bg-dark" style="position:sticky; top:0; height:7vh; margin-bottom:1rem;">
 			<div class="navbar-header"> 
-				<a style="font-size:3rem; color:white;" class="navbar-brand navbar-lg" href="{% url 'watcher:client_store_list' %}">WATCHER</a>
+				<a style="font-size:3.5rem; color:white;" class="navbar-brand navbar-lg" href="{% url 'watcher:client_store_list' %}">WATCHER</a>
 			</div>
 			<input style="font-size: 2.6rem; border-top-right-radius: 0.8em; border-top-left-radius: 0.8em; border-bottom-right-radius: 0.8em; border-bottom-left-radius: 0.8em; width:30%; height:50%" value="검색" />
 		</nav>
-
-	
-		{% for list in store_list %}
-		<div class="row" style="border: solid black 1px; margin-left:4%; margin-right:4%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em; margin-bottom:3.5rem;">
-			<div class="col-12" style="height:36vh; padding:0;">
-				<div class="card" style="height:100%; width:100%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;">
-					<img src="/static/img/modal_cafe_img.jpg" alt="" class="card-img-top" style="height:60%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;">
-					<div class="card-body" style="height:90%;">
-						 <h1 class="card-title" style="font-size:7rem;">{{list.store_name}}</h1>
-						 <h3 style="color:gray; display:inline-block;">위치 : {{list.store_location}}</h3>
-						<a href="#" class="btn btn-dark btn-lg" style="font-size:3rem; display:inline-block; float:right;">매장 확인</a>
-					</div>
-				</div>
-			</div>
+		<div id="container_store_list" class="container-fluid" style="overflow:scroll">
+		
 		</div>
-		{% endfor %}
+
+		
 	</div>
 
 
@@ -58,6 +47,55 @@
 	
 </body>
 <script>
-	
+	function create_store_info(list){
+		$('#container_store_list').append('<div class="row" style="border: solid black 1px; margin-left:4%; margin-right:4%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em; margin-bottom:3.5rem;"><div class="col-12" style="height:36vh; padding:0;"><div class="card" style="height:100%; width:100%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><img src="/static/img/modal_cafe_img.jpg" alt="" class="card-img-top" style="height:60%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><div class="card-body" style="height:90%;"><h1 class="card-title" style="font-size:7rem;">'+list.store_name+'</h1><h3 style="color:gray; display:inline-block;">위치 : '+list.store_location+'</h3><a href="#" class="btn btn-dark btn-lg" style="font-size:3rem; display:inline-block; float:right;">매장 확인</a></div></div></div></div>')
+
+	}
+
+	var count = 0;
+	var store_list;
+
+
+	//가게리스트를 처음에 5개만 가져옴
+	$(document).ready(function(){
+		$.ajax({
+			url : "{% url 'watcher:ajax_get_client_store_list' %}",
+			dataType: 'json',
+			type :'GET',
+			success : function(data) {
+				store_list = data;
+				console.log(store_list.length);
+				if(store_list.length > 5){
+					for(; count < 5; count++) {create_store_info(store_list[count]);}
+				}
+				else {
+					for(var i = 0; i < store_list.length; i++) {create_store_info(store_list[i]);}
+				}
+			},
+
+		});
+	});
+
+	//이후 스크롤이 일정범위 벗어나면 5개씩 추가로 가져옴
+	window.onscroll = function(e) {
+    //추가되는 임시 콘텐츠
+    //window height + window scrollY 값이 document height보다 클 경우,
+    console.log();
+    if( count < store_list.length) {
+    	var element = document.getElementById('container_store_list');
+    	
+    	console.log("innerHeight : " + window.innerHeight);
+    	console.log("scrollY : " + window.scrollY);
+    	console.log(element.offsetHeight);
+    	
+    	if((window.innerHeight + window.scrollY) >= element.offsetHeight) {
+    		for(var i=0; i < 5; i++ ){
+    			console.log("count : " + count);
+    			if(count >= store_list.length){ console.log("break"); break;}
+    			create_store_info(store_list[count++]);
+    		}
+    	}
+    }
+};
 </script>
 </html>

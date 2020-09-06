@@ -145,6 +145,14 @@ def add_store_list(request) :
 
 	return JsonResponse(data, safe=False)
 
+def get_client_store_list(request) :
+
+	stores = Store.objects.all();
+	serialized_stores = StoreSerializer(stores,many=True)
+
+	return HttpResponse(json.dumps(serialized_stores.data))
+
+
 #카메라 정보 관련
 
 def get_camera_info(request):
