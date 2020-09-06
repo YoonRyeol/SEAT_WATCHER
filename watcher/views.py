@@ -87,6 +87,10 @@ def store_list(request) :
 	store_list = Store.objects.all()
 	return render(request, 'watcher/store_list.html',{"store_list" : store_list})
 
+def client_store_list(request) :
+	store_list = Store.objects.all()
+	return render(request, 'watcher/client_store_list.html',{"store_list" : store_list})
+
 @csrf_exempt
 def image_test(request):
 	handle_uploaded_file(request.FILES['file'])
