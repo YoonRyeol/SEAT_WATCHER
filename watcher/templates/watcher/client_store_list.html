@@ -61,7 +61,10 @@
 		$.ajax({
 			url : "{% url 'watcher:ajax_get_client_store_list' %}",
 			dataType: 'json',
-			type :'GET',
+			type :'POST',
+			data : {
+				'csrfmiddlewaretoken' : "{{csrf_token}}",
+			},
 			success : function(data) {
 				store_list = data;
 				console.log(store_list.length);

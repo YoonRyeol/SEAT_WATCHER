@@ -145,18 +145,12 @@ def add_store_list(request) :
 
 	return JsonResponse(data, safe=False)
 
-def get_client_store_list(request) :
-
-	stores = Store.objects.all();
-	serialized_stores = StoreSerializer(stores,many=True)
-
-	return HttpResponse(json.dumps(serialized_stores.data))
 
 
 #카메라 정보 관련
 
 def get_camera_info(request):
-	pk = int(request.GET['pk'])
+	pk = int(request.POST.get('pk'))
 	camera = Camera.objects.get(pk=pk)
 
 	data = {
@@ -247,9 +241,9 @@ def add_floor_info(request) :
 
 def edit_floor_id(request) :
 
-	camera_list = request.GET.getlist('camera_list[]')
-	store_id = int(request.GET['store_id'])
-	floor_id = int(request.GET['floor_id'])
+	camera_list = request.POST.getlist('camera_list[]')
+	store_id = int(request.POST.get('store_id'))
+	floor_id = int(request.POST.get('floor_id'))
 
 	for c_list in camera_list :
 		camera = Camera.objects.filter(pk=int(c_list))
