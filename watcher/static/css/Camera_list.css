@@ -10,7 +10,7 @@ html, body {
 }
 
 
-a{
+.navbar-nav > ul > li > a{
 	color :#ffffff;
 	text-decoration: none;
 }
@@ -67,7 +67,6 @@ tr[visible='true']{
 	
 	width: 100%;
 }
-
 
 
 

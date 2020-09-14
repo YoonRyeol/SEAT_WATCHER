@@ -146,6 +146,14 @@ def add_store_list(request) :
 
 	return JsonResponse(data, safe=False)
 
+def get_client_store_list(request) :
+
+	stores = Store.objects.all();
+	serialized_stores = StoreSerializer(stores,many=True)
+
+	return HttpResponse(json.dumps(serialized_stores.data))
+
+
 #카메라 정보 관련
 
 def get_camera_info(request):
@@ -162,11 +170,22 @@ def get_camera_info(request):
 	} 
 	return JsonResponse(data, safe=False)
 
-def add_camera_list(request) :
-	cur_pic = request.GET['cur_pic']
+def edit_camera_info(request) :
+	pk = int(request.GET['pk'])
+	mac_addr = request.GET['mac_addr']
+	description = request.GEt['description']
+
+	camera = Camera.objects.get(pk=pk)
+
+	camera.update(mac_addr=mac_addr,description=description)
+
+	return HttpResponse(json.dumps(camera));
+	
+def add_camera_info(request) :
+	#cur_pic = request.GET['cur_pic']
 	description = request.GET['description']
 	store_id= int(request.GET['store_id'])
-	camera=Camera(cur_pic=cur_pic, description = description, store_id = store_id)
+	camera=Camera(description = description, store_id = store_id)
 	camera.save()
 
 	data = {
@@ -177,7 +196,6 @@ def add_camera_list(request) :
 		'cur_host' : camera.cur_host,
 		'description' : camera.description,
 		'floor_id' : camera.floor_id,
-
 	}
 	return JsonResponse(data, safe=False) 
 
