@@ -90,7 +90,8 @@ def store_list(request) :
 def client_page(request, store_pk=None):
 	all_table_count = Table.objects.filter(store__pk=store_pk).count()
 	occupied_table_count = Table.objects.filter(store__pk=store_pk, is_occupied=True).count()
-
+	elec_all = Table.objects.filter(store__pk=store_pk, is_elec=True).count()
+	elec_occupied = Table.objects.filter(store__pk=store_pk, is_elec=True, is_occupied=True).count()
 	floor_list = Floor.objects.filter(store__pk = store_pk)
 
 	layout_coord_list = []
@@ -112,6 +113,8 @@ def client_page(request, store_pk=None):
 														'all_table_count':all_table_count,
 														'occupied_table_count':occupied_table_count,
 														'floor_list' : floor_list,
+														'elec_all':elec_all,
+														'elec_occupied':elec_occupied,
 														'layout_coord_list' : json.dumps(layout_coord_list),
 																									})
 
