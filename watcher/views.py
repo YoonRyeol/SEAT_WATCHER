@@ -90,9 +90,28 @@ def client_page(request, store_pk=None):
 	all_table_count = Table.objects.filter(store__pk=store_pk).count()
 	occupied_table_count = Table.objects.filter(store__pk=store_pk, is_occupied=True).count()
 
+	floor_list = Floor.objects.filter(store__pk = store_pk)
+
+	layout_coord_list = []
+
+	for floor in floor_list:
+		table_list = Table.objects.filter(floor=floor)
+		tmp_list = []
+		for e in table_list:
+			tmp_list.append(model_to_dict(e))
+		tmp_data = {
+			'floor' : model_to_dict(floor),
+			'coor_list' : tmp_list
+		}
+		layout_coord_list.append(tmp_data)
+
+
+
 	return render(request, 'watcher/client_page.html', {
 														'all_table_count':all_table_count,
-														'occupied_table_count':occupied_table_count
+														'occupied_table_count':occupied_table_count,
+														'floor_list' : floor_list,
+														'layout_coord_list' : json.dumps(layout_coord_list),
 																									})
 
 @csrf_exempt
