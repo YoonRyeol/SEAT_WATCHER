@@ -78,7 +78,7 @@
 					</tr>
 				</thead>
 				
-				<tbody id="tbody_camera" name="{{store_id}}"> <!--store_id 저장-->
+				<tbody id="tbody_camera" name="{{store.pk}}"> <!--store_id 저장-->
 					{% for list in camera_list%}
 					<tr id="tr_list_{{list.pk}}">
 						<input type="hidden" data-pk="{{list.pk}}" data-cur_pic="{{list.cur_pic}}" data-mac_addr="{{list.mac_addr}}" data-cur_host="{{list.cur_host}}" data-description="{{list.description}}" data-store_id="{{list.store_id}}" data-floor_id="{{list.floor_id}}">
@@ -100,7 +100,7 @@
   		</div><!--container-fluid-->
   		<!-- 카메라 테이블 끝 -->
 
-  		<button style="float :left; margin-top: 1%; margin-left : 1%; margin-bottom : 0.5%" id="add_floor_button" data-toggle="modal" data-target="#modal_floor" type="button" class="btn btn-dark" name="{{store_id}}">층 추가</button>
+  		<button style="float :left; margin-top: 1%; margin-left : 1%; margin-bottom : 0.5%" id="add_floor_button" data-toggle="modal" data-target="#modal_floor" type="button" class="btn btn-dark" name="{{store.pk}}">층 추가</button>
   		
   		<!--가게층 정보 리스트 테이블 시작 -->
 		<div class="table-responsive" style="height : 25vh; overflow: scroll;" >
@@ -114,9 +114,9 @@
 						<th style="position:sticky; top:0;" data-column-id ="th_edit" class="th-sm">편집</th>
 					</tr>
 				</thead>
-				<tbody id="tbody_floor" name="{{store_id}}"> <!--store_id 저장-->
+				<tbody id="tbody_floor" name="{{store.pk}}"> <!--store_id 저장-->
 					{% for list in floor_list%}
-					<tr id="table_floor_tr_{{list.pk}}" data-store_id="{{store_id}}">
+					<tr id="table_floor_tr_{{list.pk}}" data-store_id="{{store.pk}}">
 						<input type="hidden" data-pk="{{list.pk}}" data-name="{{list.name}}" data-num="{{list.floor_num}}" data-store_id="{{list.store_id}}" data-description="{{list.description}}" >
 						<td>{{list.floor_num}}</td>
   						<td>{{list.name}}</td>
@@ -292,7 +292,7 @@
 		        </form>
 		      </div>
 		      <div class="modal-footer">
-		        <button id="modal_floor_add_close_btn" onclick="modal_floor_init(0)" type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+		        <button id="modal_floor_add_close_btn" onclick="modal_floor_init('add')" type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
 		        <button id ="modal_floor_add_btn" type="button" data-dismiss="modal" class="btn btn-primary"> 추가</button>
 		      </div>
 		    </div>
@@ -364,7 +364,7 @@
 		        </form>
 		      </div>
 		      <div class="modal-footer">
-		        <button id="modal_floor_edit_close_btn" onclick="modal_floor_init(1)" type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+		        <button id="modal_floor_edit_close_btn" onclick="modal_floor_init('edit')" type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
 		        <button id ="modal_floor_edit_btn" type="button" data-floor_id="" data-dismiss="modal" class="btn btn-primary">수정 및 저장</button>
 		      </div>
 		    </div>
@@ -395,8 +395,9 @@
 			$.ajax({
 				url : "{% url 'watcher:ajax_edit_floor_id' %}",
 				dataType:'json',
-				type:'GET',
+				type:'POST',
 				data :{
+					'csrfmiddlewaretoken' : "{{csrf_token}}",
 					'store_id' : store_id,
 					'camera_list[]' : camera_list,
 					'floor_id' : floor_id,
@@ -475,14 +476,16 @@
 	/* 카메라 테이블 >row > edit 버튼 기능 */
 		$(document).on('click', '#td_camera_edit_button', function(e){
 			var pk_check = $(this).attr('name');
+			pk_check *=1;
 			console.log(pk_check);
 			$.ajax({
 				url:"{% url 'watcher:ajax_get_camera_info' %}",
 				dataType : "json",
+				type:'POST',
 				data:{
 					'pk': pk_check,
+					'csrfmiddlewaretoken' : "{{csrf_token}}",
 				},
-				type:'GET',
 				success:function(data){
 					console.log(data)
 
@@ -606,7 +609,7 @@
 		});
 
 		$(document).on('click', '#modal_floor_add_btn', function(e) {
-			var store_id = "{{store_id}}"
+			var store_id = "{{store.pk}}"
 			var floor_name = $('#modal_floor_add_name').val();
 			var floor_num = $('#modal_floor_add_num').val();
 			var description = $('#modal_floor_add_description').val();
@@ -692,7 +695,7 @@
 		/* floor delete 버튼 */
 		$(document).on('click','#td_floor_delete_button',function(e) {
 			var floor_id = $(this).attr('name');
-			var store_id = "{{store_id}}";
+			var store_id = "{{store.pk}}";
 
 			console.log(floor_id);
 			if(confirm("삭제 하시겠습니까?")) {
@@ -761,15 +764,9 @@
 				var floor_num = $('#modal_floor_edit_num').val();
 				var floor_description =$('#modal_floor_edit_description').val();	
 
-				console.log(floor_name);			
-				console.log(floor_num);
-				console.log(floor_description);
-
-
-
 				var camera_used = $('input[name=used_camera]').parent().parent();
 				var camera_unused = $('input[name=unused_camera]').parent().parent();
-				var store_id ="{{store_id}}";
+				var store_id ="{{store.pk}}";
 				
 				var camera_used_list = Array();
 				var camera_unused_list = Array();
@@ -807,9 +804,9 @@
 							if(element.mac_addr === null){element.mac_addr = "None"}
 						});
 						$('#tbody_camera').empty();
-							for(var i =0; i < data.length; i++){
-								create_camera_info(data[i]);
-							}
+						for(var i =0; i < data.length; i++){create_camera_info(data[i]);}
+
+						modal_floor_init('edit');	
 						/*floor 정보 수정후 해당 row정보 만 바꿔줌 */
 						$('#table_floor_tr_'+floor_id).contents().empty(); 
 						$('#table_floor_tr_'+floor_id).html('<input type="hidden" data-pk="'+floor_id+'" data-name="'+floor_name+'" data-num="'+floor_num+'" data-store_id="'+store_id+'" data-description="'+floor_description+'" ><td>'+floor_num+'</td><td>'+floor_name+'</td><td>'+floor_description+'</td><td><i type="button" name="'+floor_id+'" data-toggle="modal" data-target="#modal_floor_edit"  style="margin:4px" class="fa fa-edit" id="td_floor_edit_button"><input type="hidden" name= "'+floor_id+'"></i><i type="button" style="margin:4px" class="fa fa-trash" name= "'+floor_id+'" id="td_floor_delete_button"></i></td>');
@@ -829,8 +826,8 @@
 			/*모달창에서 esc누를경우 */
 			$(document).on('keydown', function(e) {
 				if (e.keyCode == 27) {
-					modal_floor_init(0);
-					modal_floor_init(1);
+					modal_floor_init('add');
+					modal_floor_init('edit');
 					modal_camera_init();
 				}
 			});
@@ -841,17 +838,15 @@
 			$('#modal_camera_add_location').val('');
 		}
 
-		function modal_floor_init(data) {
-			var type;
-			if(data){
-				type="edit"
+		function modal_floor_init(type) {
+
+			if(type === "edit"){
 				console.log("close :"+type);
 				$('tbody[name=modal_floor_'+type+'_tbody_unused_camera]').empty();
 				$('tbody[name=modal_floor_'+type+'_tbody_used_camera]').empty();
 				return false;
 			}
 			else{
-				type="add"
 				console.log("close :"+type);
 				$('#modal_floor_'+type+'_name').val('');
 				$('#modal_floor_'+type+'_num').val('');
