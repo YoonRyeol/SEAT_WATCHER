@@ -86,6 +86,7 @@ def send_seat_data(request):
 	"""
 	send coord to cam
 	"""
+	
 	cam_get_seat_info = '/'.join([camera.cur_host, 'get_seat_info'])
 	try:
 		response = requests.post(cam_get_seat_info, data={'seat_data':json.dumps(to_cam_data_list)}, timeout=5)

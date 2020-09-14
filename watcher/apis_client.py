@@ -5,7 +5,6 @@ import requests
 import json
 
 def get_client_store_list(request) :
-
 	stores = Store.objects.all();
 	serialized_stores = StoreSerializer(stores,many=True)
 
