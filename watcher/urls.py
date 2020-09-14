@@ -40,7 +40,6 @@ urlpatterns = [
 	path('api/send_seat_data', apis.send_seat_data, name='send_seat_data'),
 	path('cam_picture/<int:camera_pk>', views.cam_picture, name='cam_picture'),
 	path('api/save_layout', apis.save_layout, name='save_layout'),
-	path('client/',views.client_store_list, name='client_store_list'),
  ]
 
 

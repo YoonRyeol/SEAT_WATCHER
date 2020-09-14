@@ -30,11 +30,28 @@
 </head>
 
 <body>
+	<!--내비게이션 바-->
+	<nav class="navbar navbar-expand-lg navbar-light" style="background-color:black;">
+		<a class="navbar-brand" href="#" style="color :white; ">WATCHER</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<div class="navbar-nav">
+				<ul class="nav navber-nav">
+					<li><a href="#" style="text-decoration: none;">홈 화면 <span class="sr-only">(current)</span></a></li>
+					<li><a href="{% url 'watcher:store_info' %}" style="text-decoration: none;">가게 목록</a></li> <!-- 수정필요 -->
+					<li ><a href="#" style="text-decoration: none;" ">가게 배치도</a></li>
+				</ul>
+
+			</div>
+		 </div>
+	</nav>
+    <div class='counter' data-count="{{occupied_table_count}}" data-max="{{all_table_count}}" style='font-size:30px; text-align: center;'>0/{{all_table_count}}</div>
     <div class='my-3'>
-        <div class="normal"><i class="fas fa-bolt fa-3x" style="color:#ffff00"></i> normal</div>
+        <div class="normal"><i class="fas fa-bolt fa-2x" style="color:#ffff00"></i>{{elec_occupied}}/{{elec_all}}</div>
     </div>
-    <div class='counter' data-count="2200" style='font-size:30px; text-align: center;'>0/All</div>
-    {{occupied_table_count}}/{{all_table_count}}
+    <div class='container-fluid'>
     <div class='layout'>
         <div class="card text-center">
             <div class="card-header">
@@ -58,7 +75,7 @@
                 {% else %}
                 <div class="card-body" style="display: none;" name="{{floor.name}}">
                     {% endif %}
-                    <div class='container'>
+                    <div class='container-fluid' id="canvas_container_man">
                     <canvas class='layout_canvas' id="{{floor.name}}" name="{{floor.name}}" width="1200" height="900"
                         style="border:1px solid #ccc"></canvas>
                     </div>
@@ -67,6 +84,7 @@
             </div>
 
         </div>
+    </div>
 
 </body>
 <script src="https://kit.fontawesome.com/1a7adf786d.js" crossorigin="anonymous"></script>
@@ -85,13 +103,23 @@
     tmp_canvas.selection = false
     canvas_list.push(tmp_canvas)
     {% endfor %}
-
     console.log(canvas_list)
 
     $(document).ready(function (e) {
-        console.log(canvas_list.length)
+        var canvas_container_one = $('[id="canvas_container_man"]')[0]
+        console.log('canvas_container_one');
+        console.log($(canvas_container_one).css('width'));
+        var tmp_width = $(canvas_container_one).width()
+        var tmp_height = 3*(tmp_width/4)
+        IMAGE_WIDTH = tmp_width
+        IMAGE_HEIGHT = tmp_height
+        
         for (var i = 0; i < tmp_list.length; i++) {
             var cur_canvas = canvas_list[i]
+            cur_canvas.setWidth(tmp_width)
+            cur_canvas.setHeight(tmp_height)
+            cur_canvas.renderAll();
+
             var table_list = tmp_list[i].coor_list
             for (var j = 0; j < table_list.length; j++) {
                 var cur_data = table_list[j]
@@ -113,6 +141,7 @@
         }
     });
 
+
     function Add(_left = 100, _top = 50, _width = 100, _height = 100, _scaleX = 1, _scaleY = 1, _pk = null, _is_occupied = false, _is_elec = false, _canvas = null) {
         console.log('_pk : ' + _pk)
         var color;
@@ -131,7 +160,8 @@
             originY: 'center'
         });
 
-        var id_text = _pk + ''
+//        var id_text = _pk + ''
+        var id_text = ''
 
         var text = new fabric.Text(id_text, {
             fontSize: 30,
@@ -170,6 +200,8 @@
     $('.counter').each(function () {
         var $this = $(this),
             countTo = $this.attr('data-count');
+        
+        var max_count = $(this).data("max");
 
         $({ countNum: $this.text() }).animate({
             countNum: countTo
@@ -180,10 +212,10 @@
                 duration: 2000,
                 easing: 'linear',
                 step: function () {
-                    $this.text(Math.floor(this.countNum) + '/All');
+                    $this.text(Math.floor(this.countNum) + '/' + max_count);
                 },
                 complete: function () {
-                    $this.text(this.countNum + '/All');
+                    $this.text(this.countNum + '/' + max_count);
                     //alert('finished');
                 }
 
