@@ -87,6 +87,10 @@ def store_list(request) :
 	store_list = Store.objects.all()
 	return render(request, 'watcher/store_list.html',{"store_list" : store_list})
 
+def client_store_list(request) :
+	store_list = Store.objects.all()
+	return render(request, 'watcher/client_store_list.html',{"store_list" : store_list})
+
 def client_page(request, store_pk=None):
 	all_table_count = Table.objects.filter(store__pk=store_pk).count()
 	occupied_table_count = Table.objects.filter(store__pk=store_pk, is_occupied=True).count()

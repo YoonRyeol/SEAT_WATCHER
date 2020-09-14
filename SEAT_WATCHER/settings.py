@@ -80,7 +80,7 @@ DATABASES = {
         'NAME': 'project_alpha_db',
         'USER': 'root',
         'PASSWORD': 'tellme',
-        'HOST': '18.224.139.84',
+        'HOST': '18.222.125.203',
         'PORT': '3306',
     }
 }
