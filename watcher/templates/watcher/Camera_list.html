@@ -510,6 +510,7 @@
 	/* 카메라 테이블 >row > edit 버튼 기능 */
 		$(document).on('click', '#td_camera_edit_button', function(e){
 			var pk_check = $(this).attr('name');
+			
 			pk_check *=1;
 			console.log(pk_check);
 			$.ajax({
@@ -525,6 +526,7 @@
 
 					$('#modal_camera_edit_label').text(data.pk+"번 카메라");
 					$('#modal_camera_edit_description').val(data.description);
+					$('#modal_camera_edit_mac_addr').val(data.mac_addr);
 					$('#modal_camera_edit_curhost').val(data.cur_host);
 					$('#modal_camera_edit_btn').attr('name',pk_check);
 
