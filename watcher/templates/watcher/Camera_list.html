@@ -86,21 +86,7 @@
 							<i style="margin:4px" class="fa fa-camera"></i>
 							<a href= "{% url 'watcher:table_set' store.pk list.pk %}" style="color:white;">{{list.pk}}</a>
 						</td>
-						<td class="td_camera_{{list.pk}}"></td>
-
-						<script type="text/javascript">
-							function elec_available(pk,elec_available){
-								console.log(pk);
-								if(elec_available == "YES") {
-									$('.td_camera_'+pk).append('<i style="margin:4px" class="fa fa-eye"></i>');
-								}
-								else
-								{
-									$('.td_camera_'+pk).append('<i style="margin:4px" class="fa fa-eye-slash"></i>');	
-								}
-							}
-							elec_available("{{list.pk}}","{{list.elec_available}}");
-						</script>
+						<td class="td_camera_{{list.pk}}"> </td>
   						<td>{{list.mac_addr}}</td>
   						<td>{{list.description}}</td>
   						<td><i type="button" name="{{list.pk}}" data-toggle="modal" data-target="#modal_camera_edit" style="margin:4px" class="fa fa-edit" id="td_camera_edit_button"><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px" class="fa fa-trash" name= "{{list.pk}}" id="td_camera_delete_button"></i></td>
@@ -654,14 +640,14 @@
 
 		//카메라 연결 테스트 버튼 
 		function check_camera_connection(type) {
-			var camera_ip = $('#modal_camera_'+type+'_curhost').val();
-			console.log(camera_ip);
+			var cur_host = $('#modal_camera_'+type+'_curhost').val();
+			console.log(cur_host);
 
 				$.ajax({
 					url: "{% url 'watcher:ajax_check_camera_connection' %}",
 					type : 'GET',
 					data : {
-						'camera_ip' : camera_ip,
+						'camera_ip' : cur_host,
 					},
 					success : function(data) {
 						alert(data)
@@ -672,29 +658,58 @@
 		$(document).ready(function(){
 			var camera_list = new Array(); 
 			var cur_host;
+			var pk;
 
-			camera_list = $("#tbody_camera").find("tr > input");
+			camera_list = $('#tbody_camera').find("tr > input");
 			for( var i=0 ; i < camera_list.length ; i++) {
 				cur_host = camera_list[i].dataset.cur_host;
-				console.log("cur_host : "+cur_host);
-				
-			}
-			/*
-			$.ajax({
-					url: "{% url 'watcher:ajax_check_camera_connection' %}",
+				pk = camera_list[i].dataset.pk;
+				$.ajax({
+					url : "{% url 'watcher:ajax_check_camera_connection_table' %}",
 					type : 'GET',
 					data : {
-						'camera_ip' : camera_ip,
-					},
-					success : function(data) {
-						if(data=="good"){
-							alert("ok");
-
+						'camera_ip' : cur_host,
+						'pk' : pk,
+					},success : function(data) {
+						console.log(data);
+						if(data.con == 'good') {
+							$('.td_camera_'+data.pk).html('<i style="margin:4px" class="fa fa-eye"></i>');
+						}
+						else {
+							$('.td_camera_'+data.pk).html('<i style="margin:4px" class="fa fa-eye-slash"></i>');	
 						}
 					},
 				});
-				*/
+			}
 		});
+
+			$(document).ready(setInterval(function(){
+			var camera_list = new Array(); 
+			var cur_host;
+			var pk;
+
+			camera_list = $('#tbody_camera').find("tr > input");
+			for( var i=0 ; i < camera_list.length ; i++) {
+				cur_host = camera_list[i].dataset.cur_host;
+				pk = camera_list[i].dataset.pk;
+				$.ajax({
+					url : "{% url 'watcher:ajax_check_camera_connection_table' %}",
+					type : 'GET',
+					data : {
+						'camera_ip' : cur_host,
+						'pk' : pk,
+					},success : function(data) {
+						console.log(data);
+						if(data.con == 'good') {
+							$('.td_camera_'+data.pk).html('<i style="margin:4px" class="fa fa-eye"></i>');
+						}
+						else {
+							$('.td_camera_'+data.pk).html('<i style="margin:4px" class="fa fa-eye-slash"></i>');	
+						}
+					},
+				});
+			}
+		},36000));
 
 
 

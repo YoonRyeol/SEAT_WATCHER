@@ -228,9 +228,28 @@ def check_camera_connection(request) :
 
 	try :
 		rq = requests.get('https://'+ip+'/test',timeout=5)
-		return HttpResponse("connected")
+		return HttpResponse('good')
 	except Exception as e :
-		return HttpResponse("connect failed")
+		return JsonResponse('bad')
+
+		
+def check_camera_connection_table(request) :
+	ip = request.GET['camera_ip']
+	pk = request.GET['pk']
+
+	try :
+		rq = requests.get('https://'+ip+'/test',timeout=5)
+		data = {
+			'pk' : pk,
+			'con' : "good",
+		}
+		return JsonResponse(data)
+	except Exception as e :
+		data = {
+			'pk' :pk,
+			'con' : "bad",
+		}
+		return JsonResponse(data)
 
 
 #층 정보 관련
