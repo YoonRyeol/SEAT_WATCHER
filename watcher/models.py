@@ -5,6 +5,7 @@ from django.db import models
 class Store(models.Model):
     store_name = models.CharField(max_length=256, blank=True, null=True)
     store_location = models.CharField(max_length=256, blank=True, null=True)
+    picture_name = models.CharField(max_length=256, blank=True, null=True)
 
 class Camera(models.Model):
     store = models.ForeignKey('Store', on_delete=models.SET_NULL, blank=True, null=True)

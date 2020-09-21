@@ -48,8 +48,8 @@
 </body>
 <script>
 	function create_store_info(list){
-		$('#container_store_list').append('<div class="row" style="border: solid black 1px; margin-left:4%; margin-right:4%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em; margin-bottom:3.5rem;"><div class="col-12" style="height:36vh; padding:0;"><div class="card" style="height:100%; width:100%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><img src="/static/img/modal_cafe_img.jpg" alt="" class="card-img-top" style="height:60%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><div class="card-body" style="height:90%;"><h1 class="card-title" style="font-size:7rem;">'+list.store_name+'</h1><h3 style="color:gray; display:inline-block;">위치 : '+list.store_location+'</h3><a href="#" class="btn btn-dark btn-lg" style="font-size:3rem; display:inline-block; float:right;">매장 확인</a></div></div></div></div>')
-
+		$('#container_store_list').append('<div class="row" style="border: solid black 1px; margin-left:4%; margin-right:4%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em; margin-bottom:3.5rem;"><div class="col-12" style="height:36vh; padding:0;"><div class="card" style="height:100%; width:100%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><img src="/static/img/modal_cafe_img.jpg" alt="" class="card-img-top" style="height:60%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><div class="card-body" style="height:90%;"><h1 class="card-title" style="font-size:7rem;">'+list.store_name+'</h1><h3 style="color:gray; display:inline-block;">위치 : '+list.store_location+'</h3><a href="#" class="btn btn-dark btn-lg" id="next_page_button" data-pk="'+list.pk+'"style="font-size:3rem; display:inline-block; float:right;">매장 확인</a></div></div></div></div>')
+		
 	}
 
 	var count = 0;
@@ -100,5 +100,11 @@
     	}
     }
 };
+
+	$(document).on('click', '#next_page_button', function(e){
+		let target_pk = $(e.target).data('pk')
+		console.log($(e.target).data('pk'))
+		location.href="/client_page/" + target_pk
+	});
 </script>
 </html>
