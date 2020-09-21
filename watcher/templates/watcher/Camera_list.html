@@ -647,7 +647,7 @@
 					url: "{% url 'watcher:ajax_check_camera_connection' %}",
 					type : 'GET',
 					data : {
-						'camera_ip' : cur_host,
+						'cur_host' : cur_host,
 					},
 					success : function(data) {
 						alert(data)
@@ -668,7 +668,7 @@
 					url : "{% url 'watcher:ajax_check_camera_connection_table' %}",
 					type : 'GET',
 					data : {
-						'camera_ip' : cur_host,
+						'cur_host' : cur_host,
 						'pk' : pk,
 					},success : function(data) {
 						console.log(data);

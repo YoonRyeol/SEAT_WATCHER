@@ -224,21 +224,21 @@ def delete_camera_list(request) :
 	return HttpResponse('delete success') #수정 필요 -> 2020-08-25 수정완료
 
 def check_camera_connection(request) :
-	ip = request.GET['camera_ip']
+	cur_host = request.GET['cur_host']
 
 	try :
-		rq = requests.get('https://'+ip+'/test',timeout=5)
+		rq = requests.get('https://'+cur_host+'/test',timeout=5)
 		return HttpResponse('good')
 	except Exception as e :
-		return JsonResponse('bad')
+		return HttpResponse('bad')
 
-		
+
 def check_camera_connection_table(request) :
-	ip = request.GET['camera_ip']
+	cur_host = request.GET['cur_host']
 	pk = request.GET['pk']
 
 	try :
-		rq = requests.get('https://'+ip+'/test',timeout=5)
+		rq = requests.get('https://'+cur_host+'/test',timeout=5)
 		data = {
 			'pk' : pk,
 			'con' : "good",
