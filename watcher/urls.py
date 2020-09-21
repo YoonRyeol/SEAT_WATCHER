@@ -30,6 +30,7 @@ urlpatterns = [
 	path('camera/edit_camera_info',apis.edit_camera_info, name='ajax_edit_camera_info'),
 	path('camera/delete_camera_list',apis.delete_camera_list, name='ajax_delete_camera_list'),
 	path('camera/get_camera_info_without_floor',apis.get_camera_info_without_floor, name='get_camera_info_without_floor'),
+	path('camera/check_camera_connection',apis.check_camera_connection, name='ajax_check_camera_connection'),
 	path('floor/add_floor_info',apis.add_floor_info, name='ajax_add_floor_info'),
 	path('floor/edit_floor_id',apis.edit_floor_id, name='ajax_edit_floor_id'),
 	path('floor/delete_floor_info',apis.delete_floor_info, name='ajax_delete_floor_info'),
