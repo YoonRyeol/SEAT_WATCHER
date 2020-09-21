@@ -5,6 +5,7 @@ import datetime
 import os
 import time
 import json
+import requests
 
 cap = cv2.VideoCapture(0)
 
@@ -18,16 +19,21 @@ isStart = False
 def save_result_json():
     with open('result.json', 'w') as make_file:
         json.dump(result, make_file)
+        url = "3.131.110.180:8001/api/get_seat_inspection_result"
+        r = requests.post(url, result)
+
 
 def ROI(x1, x2, y1, y2, pk):
-    g_captured = cv2.imread("images/30.jpg", 0)
-    origin = cv2.imread("images/origin.jpg", 1)
+
     captured = cv2.imread("images/30.jpg", 1)
+    spot1, spot2 = [int(round(captured.shape[0] * y1)), int(round(captured.shape[1] * x1))], [int(round(captured.shape[0] * y2)), int(round(captured.shape[1] * x2))]
 
-    spot1, spot2 = [int(round(origin.shape[0] * y1 * 0.01)), int(round(origin.shape[1] * x1 * 0.01))], [int(round(origin.shape[0] * y2 * 0.01)), int(round(origin.shape[1] * x2 * 0.01))]
-#     origin = origin[spot1[0]:spot2[0], spot1[1]:spot2[1]]
-    test = g_captured[spot1[0]:spot2[0], spot1[1]:spot2[1]]
+    if os.path.isfile("images/captured_"+str(pk)+".jpg"):
+        captured = captured[spot1[0]:spot2[0], spot1[1]:spot2[1]]
+        cv2.imwrite("images/captured_"+str(pk)+".jpg", captured)
+        return(captured)
 
+    origin = cv2.imread("images/origin.jpg", 1)
     origin = origin[spot1[0]:spot2[0], spot1[1]:spot2[1]]
     captured = captured[spot1[0]:spot2[0], spot1[1]:spot2[1]]
     cv2.imwrite("images/origin_"+str(pk)+".jpg", origin)
@@ -36,59 +42,44 @@ def ROI(x1, x2, y1, y2, pk):
     
 
 def is_there_seat(x1, x2, y1, y2, pk):
-#     origin = cv2.imread("images/origin.jpg", 0)
-    g_captured = cv2.imread("images/30.jpg", 0)
-    origin = cv2.imread("images/origin.jpg", 1)
-    captured = cv2.imread("images/30.jpg", 1)
+    origin = cv2.imread("images/origin_"+str(pk)+".jpg", 1)
+    captured = cv2.imread("images/captured_"+str(pk)+".jpg", 1)
 
-    spot1, spot2 = [int(round(origin.shape[0] * y1 * 0.01)), int(round(origin.shape[1] * x1 * 0.01))], [int(round(origin.shape[0] * y2 * 0.01)), int(round(origin.shape[1] * x2 * 0.01))]
-#     origin = origin[spot1[0]:spot2[0], spot1[1]:spot2[1]]
-    test = g_captured[spot1[0]:spot2[0], spot1[1]:spot2[1]]
-
-    origin = origin[spot1[0]:spot2[0], spot1[1]:spot2[1]]
-    captured = captured[spot1[0]:spot2[0], spot1[1]:spot2[1]]
-    cv2.imwrite("images/origin_"+str(pk)+".jpg", origin)
-    cv2.imwrite("images/captured_"+str(pk)+".jpg", captured)
-
-
+    spot = [int(origin.shape[0]), int(origin.shape[1])]
     cnt_correct = 0
-    SUM = 0
-
-#    cv2.imshow("origin"+str(pk), origin)
-#    cv2.imshow("captured"+str(pk), captured)
-    
-    for y in range(0, spot2[0] - spot1[0]):
-        for x in range(0, spot2[1] - spot1[1]):
-            test.itemset((y, x), 255)
     avg = 0.0
-    for y in range(0, spot2[0] - spot1[0]):
-        for x in range(0, spot2[1] - spot1[1]):
+    for y in range(0, spot[0]):
+        for x in range(0, spot[1]):
             avg = 0.0
-#            if (origin_result.item(y, x) == captured_result.item(y, x)):
-#                cnt_correct += 1
             if(captured.item(y,x,0) >= origin.item(y,x,0) and captured.item(y,x,0) != 0):
                 avg += origin.item(y,x,0) / float(captured.item(y,x,0))
             elif(captured.item(y,x,0) <= origin.item(y,x,0) and origin.item(y,x,0) != 0):
                 avg += captured.item(y,x,0) / float(origin.item(y,x,0))
+                
+#            print("avg 1 : " + str(avg))
 
             if(captured.item(y,x,1) >= origin.item(y,x,1) and captured.item(y,x,1) != 0):
                 avg += origin.item(y,x,1) / float(captured.item(y,x,1))
             elif(captured.item(y,x,1) <= origin.item(y,x,1) and origin.item(y,x,1) != 0):
                 avg += captured.item(y,x,1) / float(origin.item(y,x,1))
 
+ #           print("avg 2 : " + str(avg))
+
             if(captured.item(y,x,2) >= origin.item(y,x,2) and captured.item(y,x,2) != 0):
                 avg += origin.item(y,x,2) / float(captured.item(y,x,2))
             elif(captured.item(y,x,2) <= origin.item(y,x,2) and origin.item(y,x,2) != 0):
                 avg += captured.item(y,x,2) / float(origin.item(y,x,2))
-                
+
+
             avg = avg / 3.0
-            if(avg <=0.80):
-                test[y,x] = 0
+            if(avg <=0.75):
                 cnt_correct += 1
+#                print("avg isssss : " + str(avg))
                 
-#    cv2.imshow("after"+str(pk), test)
     print("pk is =", pk)
-    if(cnt_correct / float(((spot2[1] - spot1[1]) * (spot2[0] - spot1[0]))) >= 0.3):
+    print("average is = " + str(cnt_correct / float((spot[1] * spot[0]))))
+
+    if(cnt_correct / float((spot[1] * spot[0])) >= 0.3):
         return True
     else:
         return False
@@ -130,41 +121,40 @@ while (True):
         if cv2.waitKey(1) & 0xFF == ord('t'):
             is_there_seat(30, 60, 25, 75)
             capture = True
-        if(now == "30" and capture != True and isStart is not False) :
+        if((now == "30" or now == "00") and capture != True and isStart is not False) :
             cv2.imwrite("images/30.jpg", frame)
             print("30 is start")
             status_index = 0
             for elem in data:
-                x1 = elem['position']['f_x'] * 100
-                x2 = elem['position']['s_x'] * 100
-                y1 = elem['position']['f_y'] * 100
-                y2 = elem['position']['s_y'] * 100
+                x1 = elem['position']['f_x']
+                x2 = elem['position']['s_x']
+                y1 = elem['position']['f_y']
+                y2 = elem['position']['s_y']
                 print("axis", x1, x2, y1, y2)
                 captured = ROI(x1, x2, y1, y2, elem['pk'])
                 if(is_there_seat(x1, x2, y1, y2, elem['pk'])):
-                    if(table_status[status_index] > 1):
-                        if(result[str(elem['pk'])] == "T"):
-                            result[str(elem['pk'])] = "F"
+                    if(table_status[status_index] >= 3):
+                        if(result[status_index]['res'] == "T"):
+                            result[status_index]['res'] = "F"
                             save_result_json();
                         else:
-                            result[str(elem['pk'])] = "T"
+                            result[status_index]['res'] = "T"
                             save_result_json();
                             print("table " + str(elem['pk']) + " is diff")
-                        cv2.imwrite("images/origin"+str(elem['pk'])+".jpg", captured)
-                    elif(table_status[status_index] < 0):
-                        table_status[status_index] = 1
+                        table_status[status_index] = 0    
+                        cv2.imwrite("images/origin_"+str(elem['pk'])+".jpg", captured)
                     else:
                         table_status[status_index] += 1
                         
                 else:
-                    if(table_status[status_index] < -1):
+                    if(table_status[status_index] <= -3):
                         print("table " + str(elem['pk']) + " is same")
-                        cv2.imwrite("images/origin"+str(elem['pk'])+".jpg", captured)
+                        cv2.imwrite("images/origin_"+str(elem['pk'])+".jpg", captured)
                         save_result_json();
-                    elif(table_status[status_index] > 0):
-                        table_status[status_index] = -1
+                        table_status[status_index] = 0
                     else:
                         table_status[status_index] -= 1
+                print("status is = " + str(table_status[status_index]))
                 status_index += 1
             capture = True
         if(now == "31"):
