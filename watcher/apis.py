@@ -186,7 +186,7 @@ def add_camera_info(request) :
 	#cur_pic = request.GET['cur_pic']
 	description = request.GET['description']
 	store_id= int(request.GET['store_id'])
-	cur_host = requset.GET['cur_host']
+	cur_host = request.GET['cur_host']
 
 	camera=Camera(description = description, store_id = store_id, cur_host= cur_host)
 	camera.save()
