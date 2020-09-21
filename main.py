@@ -15,15 +15,23 @@ cap = cv2.VideoCapture(0)
 capture = False
 isStart = False
 
-#def initialize():
-#    with open('result.json', 'w') as make_file:
+def initializeResult():
+    result = []
+    tempResult = []
+    for elem in data:
+        tempResult = {'pk' : data['pk'], 'res' : 'F'}
+        result.update(tempResult)
+    with open('result.json', 'w') as make_file:
+        json.dump(tempResult, make_file)
     
 
 def save_result_json():
     with open('result.json', 'w') as make_file:
         json.dump(result, make_file)
-        url = "3.131.110.180:8001/api/get_seat_inspection_result"
-        r = requests.post(url, data=result)
+        url = 'http://18.219.121.103:8001/api/get_seat_inspection_result'
+        send_data = { 'input' : json.dumps(result)}
+        print("post :: " + str(result))
+        r = requests.post(url, data=send_data)
 
 
 def ROI(x1, x2, y1, y2, pk):
@@ -91,20 +99,7 @@ def is_there_seat(x1, x2, y1, y2, pk):
 if os.path.isfile("images/origin.jpg"):
     isStart = True
 
-with open('pos_data.json', 'r') as json_file:
-    data = json.load(json_file)
-with open('result.json', 'r') as json_file:
-    result = json.load(json_file)
-        
-#    print(data["t1"]["x1"])
-#    print(len(json_data))
-#    print(json_data['percentage']['x1'])
-
 table_status = []
-status_index = 0
-for elem in data:
-    table_status.append(0)
-
     
 while (True):
     ret, frame = cap.read()
@@ -117,17 +112,24 @@ while (True):
         if not os.path.isfile("images/origin.jpg"):
             time.sleep(2)
             cv2.imwrite("images/origin.jpg", frame)
-
-        if cv2.waitKey(1) & 0xFF == ord('o'):
-            cv2.imwrite("images/origin.jpg", frame)
-            isStart = True
-        if cv2.waitKey(1) & 0xFF == ord('t'):
-            is_there_seat(30, 60, 25, 75)
-            capture = True
-        if((now == "30" or now == "00") and capture != True and isStart is not False) :
+        if((now == "00" or now == "20" or now == "40") and capture != True and isStart is not False) :
             cv2.imwrite("images/30.jpg", frame)
             print("30 is start")
+            
+            with open('pos_data.json', 'r') as json_file:
+                data = json.load(json_file)
+            with open('result.json', 'r') as json_file:
+                result = json.load(json_file)
+                    
+            #    print(data["t1"]["x1"])
+            #    print(len(json_data))
+            #    print(json_data['percentage']['x1'])
+
+
             status_index = 0
+            for elem in data:
+                table_status.append(0)
+                    
             for elem in data:
                 x1 = elem['position']['f_x']
                 x2 = elem['position']['s_x']
@@ -136,7 +138,7 @@ while (True):
                 print("axis", x1, x2, y1, y2)
                 captured = ROI(x1, x2, y1, y2, elem['pk'])
                 if(is_there_seat(x1, x2, y1, y2, elem['pk'])):
-                    if(table_status[status_index] >= 3):
+                    if(table_status[status_index] >= 1):
                         if(result[status_index]['res'] == "T"):
                             result[status_index]['res'] = "F"
                             save_result_json();
@@ -150,10 +152,9 @@ while (True):
                         table_status[status_index] += 1
                         
                 else:
-                    if(table_status[status_index] <= -3):
+                    if(table_status[status_index] <= -1):
                         print("table " + str(elem['pk']) + " is same")
                         cv2.imwrite("images/origin_"+str(elem['pk'])+".jpg", captured)
-                        save_result_json();
                         table_status[status_index] = 0
                     else:
                         table_status[status_index] -= 1
