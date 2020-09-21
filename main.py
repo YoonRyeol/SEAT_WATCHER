@@ -15,12 +15,15 @@ cap = cv2.VideoCapture(0)
 capture = False
 isStart = False
 
+#def initialize():
+#    with open('result.json', 'w') as make_file:
+    
 
 def save_result_json():
     with open('result.json', 'w') as make_file:
         json.dump(result, make_file)
         url = "3.131.110.180:8001/api/get_seat_inspection_result"
-        r = requests.post(url, result)
+        r = requests.post(url, data=result)
 
 
 def ROI(x1, x2, y1, y2, pk):
@@ -159,10 +162,11 @@ while (True):
             capture = True
         if(now == "31"):
             capture = False
-
     # Break the loop
     else:
         break
+    time.sleep(1)
+
 cap.release()
 cv2.waitKey(0)
 cv2.destroyAllWindows()
