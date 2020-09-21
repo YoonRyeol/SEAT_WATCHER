@@ -1,6 +1,8 @@
 <head>
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
-    <style>
+    <link rel="stylesheet" type="img" href="/static/img/bolt-solid.svg">
+
+<style>
         .normal {
             position: relative;
             left: 50%;
@@ -30,23 +32,7 @@
 </head>
 
 <body>
-	<!--내비게이션 바-->
-	<nav class="navbar navbar-expand-lg navbar-light" style="background-color:black;">
-		<a class="navbar-brand" href="#" style="color :white; ">WATCHER</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-			<div class="navbar-nav">
-				<ul class="nav navber-nav">
-					<li><a href="#" style="text-decoration: none;">홈 화면 <span class="sr-only">(current)</span></a></li>
-					<li><a href="{% url 'watcher:store_info' %}" style="text-decoration: none;">가게 목록</a></li> <!-- 수정필요 -->
-					<li ><a href="#" style="text-decoration: none;" ">가게 배치도</a></li>
-				</ul>
 
-			</div>
-		 </div>
-	</nav>
     <div class='counter' data-count="{{occupied_table_count}}" data-max="{{all_table_count}}" style='font-size:30px; text-align: center;'>0/{{all_table_count}}</div>
     <div class='my-3'>
         <div class="normal"><i class="fas fa-bolt fa-2x" style="color:#ffff00"></i>{{elec_occupied}}/{{elec_all}}</div>
@@ -139,6 +125,21 @@
             }
             console.log(cur_canvas)
         }
+        fabric.loadSVGFromURL('/static/img/bolt-solid.svg', function(objects, options){
+            var svg_image = fabric.util.groupSVGElements(objects, options);
+            console.log(svg_image)
+        
+            for(let i=0; i<canvas_list.length; i++){
+                var cur_canvas = canvas_list[i];
+                var obj_list = cur_canvas.getObjects()
+                for(let i=0; i<obj_list.length; i++){
+                    let cur_obj = obj_list[i];
+                    if(cur_obj.is_elec)
+                        cur_obj.add(svg_image);
+                }   
+                cur_canvas.renderAll()
+            }
+        });
     });
 
 
@@ -187,6 +188,7 @@
 
         if (_pk != null)
             group.pk = _pk
+        group.is_elec = _is_elec
 
         _canvas.add(group);
     }

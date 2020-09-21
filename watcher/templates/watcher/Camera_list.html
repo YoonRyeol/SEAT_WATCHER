@@ -82,7 +82,7 @@
 					{% for list in camera_list%}
 					<tr id="tr_list_{{list.pk}}">
 						<input type="hidden" data-pk="{{list.pk}}" data-cur_pic="{{list.cur_pic}}" data-mac_addr="{{list.mac_addr}}" data-cur_host="{{list.cur_host}}" data-description="{{list.description}}" data-store_id="{{list.store_id}}" data-floor_id="{{list.floor_id}}">
-						<td  class="clickable" onclick='move_page(this)' link="camera/{{list.pk}}" >
+						<td class="clickable" onclick='move_page(this)' link="camera/{{list.pk}}">
 							<i style="margin:4px" class="fa fa-camera"></i>
 							<a href= "{% url 'watcher:table_set' store.pk list.pk %}" style="color:white;">{{list.pk}}</a>
 						</td>
@@ -118,7 +118,7 @@
 					{% for list in floor_list%}
 					<tr id="table_floor_tr_{{list.pk}}" data-store_id="{{store.pk}}">
 						<input type="hidden" data-pk="{{list.pk}}" data-name="{{list.name}}" data-num="{{list.floor_num}}" data-store_id="{{list.store_id}}" data-description="{{list.description}}" >
-						<td>{{list.floor_num}}</td>
+						<td class="clickable" onclick='move_page(this)' link="layout/{{list.pk}}">{{list.floor_num}}</td>
   						<td>{{list.name}}</td>
   						<td>{{list.description}}</td>
   						<td><i type="button" name="{{list.pk}}" data-toggle="modal" data-target="#modal_floor_edit"  style="margin:4px" class="fa fa-edit" id="td_floor_edit_button"><input type="hidden" name= "{{list.pk}}"></i><i type="button" style="margin:4px" class="fa fa-trash" name= "{{list.pk}}" id="td_floor_delete_button"></i></td>

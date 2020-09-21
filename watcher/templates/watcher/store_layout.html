@@ -1,5 +1,7 @@
 <head>
   <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/Camera_list.css">
+
   <style>
     .nav-link {
       cursor: pointer;
@@ -36,25 +38,24 @@
 </head>
 
 <body>
-      <!--내비게이션 바-->
-      <nav class="navbar navbar-expand-lg navbar-light" style="background-color:black;">
-        <a class="navbar-brand" href="#" style="color :white; ">WATCHER</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <div class="navbar-nav">
-                <ul class="nav navber-nav">
-                    <li><a href="#" style="text-decoration: none;">홈 화면 <span class="sr-only">(current)</span></a></li>
-                    <li><a href="{% url 'watcher:store_info' %}" style="text-decoration: none;">가게 목록</a></li>
-                    <!-- 수정필요 -->
-                    <li><a href="#" style="text-decoration: none;" ">가게 배치도</a></li>
+	<!--내비게이션 바-->
+	<nav class="navbar navbar-expand-lg navbar-light" style="background-color:black;">
+		<a class="navbar-brand" href="#" style="color :white; ">WATCHER</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<div class="navbar-nav">
+				<ul class="nav navber-nav">
+					<li><a href="#" style="text-decoration: none;">홈 화면 <span class="sr-only">(current)</span></a></li>
+					<li><a href="{% url 'watcher:store_info' %}" style="text-decoration: none;">가게 목록</a></li> <!-- 수정필요 -->
+					<li ><a href="#" style="text-decoration: none;" ">가게 배치도</a></li>
 				</ul>
 
 			</div>
 		 </div>
-	</nav>
+  </nav>
+  
   <div class='container'>
     <button class="btn btn-primary" type='button' id='save_data'>
       <i class="fas fa-save"></i>
