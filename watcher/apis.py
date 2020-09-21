@@ -165,21 +165,30 @@ def get_camera_info(request):
 	return JsonResponse(data, safe=False)
 
 def edit_camera_info(request) :
+	store_id = int(request.GET['store_id'])
 	pk = int(request.GET['pk'])
 	mac_addr = request.GET['mac_addr']
-	description = request.GEt['description']
+	description = request.GET['description']
+	cur_host = request.GET['cur_host']
 
+	print("hello")
+
+	camera = Camera.objects.filter(pk=pk)
+	camera.update(mac_addr=mac_addr,description=description,cur_host=cur_host)
 	camera = Camera.objects.get(pk=pk)
 
-	camera.update(mac_addr=mac_addr,description=description)
+	cameras = Camera.objects.filter(store_id=store_id)
+	serialized_cameras = CameraSerializer(cameras,many=True)
 
-	return HttpResponse(json.dumps(camera));
+	return HttpResponse(json.dumps(serialized_cameras.data))
 	
 def add_camera_info(request) :
 	#cur_pic = request.GET['cur_pic']
 	description = request.GET['description']
 	store_id= int(request.GET['store_id'])
-	camera=Camera(description = description, store_id = store_id)
+	cur_host = requset.GET['cur_host']
+
+	camera=Camera(description = description, store_id = store_id, cur_host= cur_host)
 	camera.save()
 
 	data = {
@@ -213,6 +222,16 @@ def delete_camera_list(request) :
 
 	
 	return HttpResponse('delete success') #수정 필요 -> 2020-08-25 수정완료
+
+def check_camera_connection(request) :
+	ip = request.GET['camera_ip']
+
+	try :
+		rq = requests.get('https://'+ip+'/test',timeout=5)
+		return HttpResponse("connected")
+	except Exception as e :
+		return HttpResponse("connect failed")
+
 
 #층 정보 관련
 def add_floor_info(request) :
