@@ -144,7 +144,7 @@
 		        </form>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" id="modal_store_add_close_btn" class="btn btn-secondary" data-dismiss="modal" onclick='modal_store_init()'>닫기</button>
+		        <button type="button" id="modal_store_add_close_btn" class="btn btn-secondary" data-dismiss="modal" onClick="modal_store_init()">닫기</button>
 		        <button type="button" id="modal_store_add_btn" data-dismiss="modal" class="btn btn-primary">매장 추가</button>
 		      </div>
 		    </div>
@@ -322,11 +322,17 @@
 			$('#modal_store_add_location').val('');
 		}
 
+		$(document).on('keydown', function(e) {
+				if (e.keyCode == 27) {modal_store_init();}
+			});
+
+
+
 	 	/*검색기능*/
 		$(document).ready(function(){
 			$("#keyword").on("keyup", function() {
 				var value = $(this).val().toLowerCase();
-				$("#tbodyW tr").filter(function() {
+				$("#tbody_store tr").filter(function() {
 					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 				});
 			});
