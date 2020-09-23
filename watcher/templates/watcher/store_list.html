@@ -22,13 +22,13 @@
 <body>
 	<!--내비게이션 바-->
 	<nav class="navbar navbar-expand-lg navbar-light" style="background-color:black;">
-		<a class="navbar-brand" href="#" style="color : white; ">WATCHER</a>
+		<a class="navbar-brand" href="{% url 'watcher:store_info' %}" style="color : white; ">WATCHER</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<div class="navbar-nav">
-				<li><a href="#" style="text-decoration: none;">홈 화면 <span class="sr-only">(current)</span></a></li>
+				<li><a href="#" style="text-decoration: none; color:white;">홈 화면 <span class="sr-only">(current)</span></a></li>
 			</div>
 		 </div>
 	</nav>
@@ -46,7 +46,7 @@
 
 		<!--카메라 리스트 테이블 시작 -->
 		<!--검색창-->
-		<div class="container-fluid" style=""> 
+		<div class="container-fluid"> 
 			
 			<div class="input-group mb-3" style="width:25%; float:right;">
 				<input type="text" id="keyword" class="form-control" placeholder="검색 내용" aria-label="검색 내용" aria-describedby="button-addon2">
@@ -104,7 +104,7 @@
 							<li><h5>윤 렬(YOON RYEOL)</h5></li>
 							</ul>
 						</div>
-						<div class="col-sm-4" ><h4>소개</h4><p></p></div>
+						<div class="col-sm-4" ><h4>소개</h4><p>숭실대학교 프로젝트 팀 정도(正道)</p></div>
 						<div class="col-sm-4"><h4>위치</h4><p>서울특별시 동작구 상도동 숭실대학교</p></div>
 					</div>
 				</div>
@@ -135,10 +135,16 @@
 						  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="modal_store_add_location">
 					</div>
 
+					<div class="input-group input-group-sm mb-3" >
+
+						<input type="file" name="file" id="modal_add_file_name" accept="image/*">
+
+					</div>
+
 		        </form>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" id="modal_store_add_close_btn" class="btn btn-secondary" data-dismiss="modal" onclick='modal_store_init()'>닫기</button>
+		        <button type="button" id="modal_store_add_close_btn" class="btn btn-secondary" data-dismiss="modal" onClick="modal_store_init()">닫기</button>
 		        <button type="button" id="modal_store_add_btn" data-dismiss="modal" class="btn btn-primary">매장 추가</button>
 		      </div>
 		    </div>
@@ -169,6 +175,15 @@
 						</div>
 						  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="modal_store_edit_location">
 					</div>
+					<div class="input-group">
+					  <div class="custom-file">
+					    <input type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+					    <label class="custom-file-label" for="inputGroupFile04"></label>
+					  </div>
+					  <div class="input-group-append">
+					    <button class="btn btn-outline-secondary" type="button" id="inputGroupFileAddon04">Upload</button>
+					  </div>
+					</div>
 
 		        </form>
 		      </div>
@@ -187,18 +202,13 @@
 	function create_store_list(data) {
 		$('#tbody_store').empty();
 		for(var i =0; i < data.length; i++) {
-
-			$('#tbody_store').append('<tr id="tr_store_list_'+data[i].pk+'"><input type="hidden" data-pk="'+data[i].pk+'" data-store_name="'+data[i].store_name+'" data-store_location="'+data[i].store_location+'"><td><a href="store_info/'+data[i].store_id+'/"<i type="button" style="color:white; margin:4px;" class="fa fa-home"></i></a>'+data[i].pk+'</td><td><i class="fa fa-store"></i>'+data[i].store_name+'</td><td>'+data[i].store_location+'</td><td><i type="button" id="td_store_edit_button" data-pk="'+data[i].pk+'" data-store_name="'+data[i].store_name+'" data-store_location="'+data[i].store_location+'" data-toggle="modal" data-target="#modal_store_edit"  style="margin:4px" class="fa fa-edit" ></i><i type="button" id="td_store_delete_button" name="'+data[i].pk+'" style="margin:4px" class="fa fa-trash"></i></td></tr>');
+			create_store_info(data[i]);
 		}
 	}
-		/* 테이블 내 스크롤 */
-		var page = 1;
-		$(window).scroll(function() {
-			if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-				console.log(++page);
-				$("tbody").append('<tr><td>1<i style="margin:4px" class="fa fa-camera"></i></td><td>카메라1</td><td>창가 천장 위</td><td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td></tr>');
-			}
-		});
+
+	function create_store_info(data) {
+		$('#tbody_store').append('<tr id="tr_store_list_'+data.pk+'"><input type="hidden" data-pk="'+data.pk+'" data-store_name="'+data.store_name+'" data-store_location="'+data.store_location+'"><td><a href="store_info/'+data.store_id+'>"<i type="button" style="color:white; margin:4px;" class="fa fa-home"></i></a>'+data.pk+'</td><td><i class="fa fa-store"></i>'+data.store_name+'</td><td>'+data.store_location+'</td><td><i type="button" id="td_store_edit_button" data-pk="'+data.pk+'" data-store_name="'+data.store_name+'" data-store_location="'+data.store_location+'" data-toggle="modal" data-target="#modal_store_edit"  style="margin:4px" class="fa fa-edit" ></i><i type="button" id="td_store_delete_button" name="'+data.pk+'" style="margin:4px" class="fa fa-trash"></i></td></tr>');
+	}
 	
 		/*가게 테이블 리스트 삭제*/
 		$(document).on('click', '#td_store_delete_button', function(e) {
@@ -285,7 +295,7 @@
 					type : 'GET',
 					success: function(data) {
 						console.log("save")
-						$("tbody").append('<tr id="tr_store_list_'+data.pk+'"><input type="hidden" data-pk="'+data.pk+'" data-store_name="'+data.store_name+'" data-store_location="'+data.store_location+'"><td><a href="store_info/'+data.pk+'/"<i type="button" style="margin:4px;" class="fa fa-home"></i></a>'+data.pk+'</td><td><i class="fa fa-store"></i>'+data.store_name+'</td><td>'+data.store_location+'</td><td><i type="button" id="td_store_edit_button" data-pk="'+data.pk+'" data-store_name="'+data.store_name+'" data-store_location="'+data.store_location+'" data-toggle="modal" data-target="#modal_store_edit"  style="margin:4px" class="fa fa-edit" ></i><i type="button" id="td_store_delete_button" name="'+data.pk+'" style="margin:4px" class="fa fa-trash"></i></td></tr>')
+						create_store_info(data);
 					},
 					error: function (error) {
 						alert('error; ' + eval(error));
@@ -312,11 +322,17 @@
 			$('#modal_store_add_location').val('');
 		}
 
+		$(document).on('keydown', function(e) {
+				if (e.keyCode == 27) {modal_store_init();}
+			});
+
+
+
 	 	/*검색기능*/
 		$(document).ready(function(){
 			$("#keyword").on("keyup", function() {
 				var value = $(this).val().toLowerCase();
-				$("tbody tr").filter(function() {
+				$("#tbody_store tr").filter(function() {
 					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 				});
 			});
@@ -328,6 +344,20 @@
   		});
   		$(document).on('mouseenter', 'footer',function(e){
   				$('#footer_copyright>ul').show();
+  		});
+
+
+  		/*이미지 업로드*/
+
+  		$(document).ready(function(){
+  			var filename
+  			$('#modal_add_file_name').on('change',function(){
+  				console.log('fileupload');
+  				$.ajax({
+  					url : "{% url 'watcher:ajax_upload_store_img' %}"
+  					
+  				});
+  			});
   		});
 	</script>
 </script>
