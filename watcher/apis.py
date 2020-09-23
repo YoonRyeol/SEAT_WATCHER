@@ -208,8 +208,8 @@ def add_camera_info(request) :
 def get_camera_info_without_floor(request) :
 	store_id = int(request.GET['store_id'])
 	camera_floor_list = Camera.objects.filter(store_id= store_id, floor_id__isnull= True)
+	camera = camera_floor_list.first()
 
-	camera = camera_floor_list.first();
 	data = serializers.serialize("json",camera_floor_list,fields=('id','cur_pic','description','mac_addr','cur_host','store_id','floor_id'))
 	
 	return HttpResponse(data)
@@ -387,6 +387,11 @@ def save_layout(request):
 def get_seat_inspection_result(request):
 	inspection_result = json.loads(request.POST['input'])
 	for e in inspection_result:
-		Table.objects.filter(pk=e['pk']).update(is_occupied=e['res'])
+		is_occupied = None
+		if e['res'] == 'T':
+			is_occupied = True
+		else:
+			is_occupied = False
+		Table.objects.filter(pk=e['pk']).update(is_occupied=is_occupied)
 
 	return HttpResponse('good')
