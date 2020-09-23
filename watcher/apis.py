@@ -146,6 +146,11 @@ def add_store_list(request) :
 
 	return JsonResponse(data, safe=False)
 
+def upload_store_img(requset) :
+	store_img_name = requset.GET.get('store_img_name')
+
+	return HttpResponse("img good")
+
 
 
 #카메라 정보 관련
@@ -167,11 +172,9 @@ def get_camera_info(request):
 def edit_camera_info(request) :
 	store_id = int(request.GET['store_id'])
 	pk = int(request.GET['pk'])
-	mac_addr = request.GET['mac_addr']
+	mac_addr = request.GET.get('mac_addr')
 	description = request.GET['description']
-	cur_host = request.GET['cur_host']
-
-	print("hello")
+	cur_host = request.GET.get('cur_host')
 
 	camera = Camera.objects.filter(pk=pk)
 	camera.update(mac_addr=mac_addr,description=description,cur_host=cur_host)
@@ -186,7 +189,7 @@ def add_camera_info(request) :
 	#cur_pic = request.GET['cur_pic']
 	description = request.GET['description']
 	store_id= int(request.GET['store_id'])
-	cur_host = request.GET['cur_host']
+	cur_host = request.GET.get('cur_host')
 
 	camera=Camera(description = description, store_id = store_id, cur_host= cur_host)
 	camera.save()
@@ -207,7 +210,6 @@ def get_camera_info_without_floor(request) :
 	camera_floor_list = Camera.objects.filter(store_id= store_id, floor_id__isnull= True)
 
 	camera = camera_floor_list.first();
-
 	data = serializers.serialize("json",camera_floor_list,fields=('id','cur_pic','description','mac_addr','cur_host','store_id','floor_id'))
 	
 	return HttpResponse(data)
@@ -224,7 +226,7 @@ def delete_camera_list(request) :
 	return HttpResponse('delete success') #수정 필요 -> 2020-08-25 수정완료
 
 def check_camera_connection(request) :
-	cur_host = request.GET['cur_host']
+	cur_host = request.GET.get('cur_host')
 
 	try :
 		rq = requests.get('https://'+cur_host+'/test',timeout=5)
@@ -234,7 +236,7 @@ def check_camera_connection(request) :
 
 
 def check_camera_connection_table(request) :
-	cur_host = request.GET['cur_host']
+	cur_host = request.GET.get('cur_host')
 	pk = request.GET['pk']
 
 	try :

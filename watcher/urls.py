@@ -25,6 +25,7 @@ urlpatterns = [
 	path('store/edit_store_info',apis.edit_store_info,name='ajax_edit_store_info'),
 	path('store/get_store_info',apis.get_store_info, name='ajax_get_store_info'),
 	path('store/get_client_store_list',apis_client.get_client_store_list, name='ajax_get_client_store_list'),
+	path('store/upload_store_name',apis.upload_store_img, name='ajax_upload_store_img'),
 	path('camera/add_camera_info',apis.add_camera_info, name='ajax_add_camera_info'),
 	path('camera/get_camera_info',apis.get_camera_info, name='ajax_get_camera_info'),
 	path('camera/edit_camera_info',apis.edit_camera_info, name='ajax_edit_camera_info'),
