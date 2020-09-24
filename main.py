@@ -28,7 +28,7 @@ def initializeResult():
 def save_result_json():
     with open('result.json', 'w') as make_file:
         json.dump(result, make_file)
-        url = 'http://18.219.121.103:8001/api/get_seat_inspection_result'
+        url = 'http://18.225.11.167:8001/api/get_seat_inspection_result'
         send_data = { 'input' : json.dumps(result)}
         print("post :: " + str(result))
         r = requests.post(url, data=send_data)
@@ -126,11 +126,11 @@ while (True):
             #    print(json_data['percentage']['x1'])
 
 
-            status_index = 0
             for elem in data:
                 table_status.append(0)
                     
             for elem in data:
+                status_index = int(elem['pk'])
                 x1 = elem['position']['f_x']
                 x2 = elem['position']['s_x']
                 y1 = elem['position']['f_y']
@@ -159,7 +159,6 @@ while (True):
                     else:
                         table_status[status_index] -= 1
                 print("status is = " + str(table_status[status_index]))
-                status_index += 1
             capture = True
         if(now == "31"):
             capture = False
