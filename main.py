@@ -138,7 +138,7 @@ while (True):
                 print("axis", x1, x2, y1, y2)
                 captured = ROI(x1, x2, y1, y2, elem['pk'])
                 if(is_there_seat(x1, x2, y1, y2, elem['pk'])):
-                    if(table_status[status_index] >= 1):
+                    if True :
                         if(result[status_index]['res'] == "T"):
                             result[status_index]['res'] = "F"
                             save_result_json();
