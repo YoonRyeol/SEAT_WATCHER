@@ -119,25 +119,22 @@ def delete_store_info(request) :
 	return HttpResponse("delete success")
 
 def edit_store_info(request) :
-	print(request.POST)
 	pk = int(request.POST.get('pk'))
 	store_name = request.POST['store_name']
 	store_location = request.POST.get('store_location')
 	picture_name = request.POST.get('picture_name')
 	pic = request.FILES.get('img')
 
-	store = Store.objects.filter(pk=pk)
+	store = Store.objects.get(pk=pk)
 	
-#	if store.picture_name != picture_name :
-#		print("not same")
-#		default.storage.delte('watcher/media/img/'+str(pk)+'/'+store.picture_name)
-#		default_storage.save('watcher/media/img/'+str(pk)+'/'+pic.name, pic)
-#	else :
 	if pic :
-		print("img uploaded")
-		default_storage.save('watcher/media/img/'+str(pk)+'/'+pic.name, pic)
+		default_storage.delete('watcher/static/img/store/'+str(pk)+'/'+store.picture_name)
+		default_storage.save('watcher/static/img/store/'+str(pk)+'/'+pic.name, pic)
 
-	store.update(store_name=store_name,store_location=store_location, picture_name=picture_name)
+	store.store_name = store_name
+	store.store_location = store_location
+	store.picture_name = picture_name
+	store.save()
 
 	stores = Store.objects.all()
 	serialized_stores = StoreSerializer(stores,many=True)
@@ -145,17 +142,18 @@ def edit_store_info(request) :
 	return HttpResponse(json.dumps(serialized_stores.data))
 
 def add_store_list(request) :
-	print(request.POST)
 	store_name = request.POST.get('store_name')
 	store_location = request.POST.get('store_location')
 	picture_name = request.POST.get('picture_name',"modal_cafe_img.jpg")
-	
 	pic = request.FILES.get('img')
-	default_storage.save('img'+ '/' + pic.name, pic)
-	
-	store = Store(store_name = store_name, store_location = store_location, picture_name=picture_name)
+		
+	store = Store(store_name=store_name, store_location=store_location, picture_name=picture_name)
 	store.save()
-	print(store_name)
+
+	if pic :
+		default_storage.save('watcher/media/img/store/'+str(store.pk)+'/'+pic.name, pic)
+		store.picture_name=pic.name
+		store.save()
 	
 	data = {
 		'pk' : store.pk,
@@ -198,6 +196,7 @@ def edit_camera_info(request) :
 
 	camera = Camera.objects.filter(pk=pk)
 	camera.update(mac_addr=mac_addr,description=description,cur_host=cur_host)
+	camera.save() 
 	camera = Camera.objects.get(pk=pk)
 
 	cameras = Camera.objects.filter(store_id=store_id)

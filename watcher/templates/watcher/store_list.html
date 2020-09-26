@@ -192,6 +192,7 @@
 		<!--모달 form 끝-->
 
 <script>
+	var mutex_file = 0;
 
 	/* 가게리스트 만드는 함수*/
 	function create_store_list(data) {
@@ -230,7 +231,15 @@
 				return false;
 			}
 		});
-	
+
+
+		$('#modal_store_edit_picturename').on('change',function(){
+			mutex_file = 1;
+		})
+
+		$('#modal_store_add_picturename').on('change',function(){
+			mutex_file = 1;
+		})
 
 		/*가게 정보 수정 버튼 */
 		$(document).on('click', 'i[name=td_store_edit_button]', function(e){
@@ -245,14 +254,15 @@
 				var pk = $('#modal_store_edit_name').attr('name');
 				var store_name = $('#modal_store_edit_name').val();
 				var store_location = $('#modal_store_edit_location').val();
-
 				var files;
 				var picture_name = $('#td_store_edit_button_'+pk).attr('data-picture_name');
 
-				$('#modal_store_edit_picturename').on('change',function(){
-					files = $('input[name=modal_edit_pic_file')[0].files[0];
+				if(mutex_file) {
+					console.log("mutex changed");
+					files = $('input[name=modal_edit_pic_file')[0].files[0]; 
 					picture_name = files.name;
-				})
+					mutex_file = 0;
+				}
 				
 				console.log("picname : "+picture_name);
 				
@@ -264,7 +274,7 @@
 				formData.append('pk',pk);
 
 
-				console.log("pk"+pk);
+				console.log("pk : "+pk);
 				console.log(formData.getAll('pk'));
 
 				if(confirm("변경사항을 저장 하시겠습니까?")){
@@ -292,22 +302,23 @@
 		/*가게 추가 기능 in 모달 */
 		$(document).on('click', '#modal_store_add_btn', function(e) {
 			var formData = new FormData();
-			var files = $('input[name=modal_add_pic_file')[0].files[0];
+			var files;
 			var store_name = $('#modal_store_add_name').val();
 			var store_location = $('#modal_store_add_location').val();
-			var picture_name = $('#modal_store_add_picturename').val();
+			var picture_name;
 
-			console.log(store_name);
-			console.log(store_location);
-			console.log("picname"+picture_name);
+			if(mutex_file) {
+					console.log("mutex changed");
+					files = $('input[name=modal_add_pic_file')[0].files[0]; 
+					picture_name = files.name;
+					mutex_file = 0;
+			}
 
 			formData.append('csrfmiddlewaretoken','{{ csrf_token }}')
 			formData.append('store_name',store_name);
 			formData.append('store_location',store_location);
 			formData.append('picture_name',picture_name);
-			formData.append('img',files[0]);
-
-			console.log("form :" + formData.getAll());
+			formData.append('img',files);
 
 			if (confirm('정말 추가 하시겠습니까?')) {				
 				
