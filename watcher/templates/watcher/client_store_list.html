@@ -4,7 +4,8 @@
 	<meta charset="uft-8">
 	<meta name="viewprot" content="width=device-width, inital-scale=1, shrinkt-to-fit=no">
 
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
 	
 	<link rel="stylesheet" type="text/css" href="/static/css/footer.css">
 	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
@@ -14,6 +15,9 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/js/bootstrap.min.js" integrity="sha384-XEerZL0cuoUbHE4nZReLT7nx9gQrQreJekYhJD9WNWhH8nEW+0c5qq7aIo2Wl30J" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+	<link rel="stylesheet" type="text/css" href="/static/css/client_store_page.css">
 
 	<title>WATCHER</title>
 </head>
@@ -27,10 +31,24 @@
 			<input style="font-size: 2.6rem; border-top-right-radius: 0.8em; border-top-left-radius: 0.8em; border-bottom-right-radius: 0.8em; border-bottom-left-radius: 0.8em; width:30%; height:50%" id="client_keyword" placeholder="검색" />
 		</nav>
 		<div id="container_store_list" class="container-fluid" style="overflow:scroll; min-height: 100vh;">
-		
+
+			<div class="row" style="border: solid black 1px; margin-left:4%; margin-right:4%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em; margin-bottom:3.5rem;">
+				<div class="col-12" style="height:36vh; padding:0; ">
+					<div class="card" style="height:100%; width:100%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;">
+						<img src="'+path+'" alt="" class="card-img-top" style="height:60%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;">
+						<div class="card-body" style="height:90%;">
+							<div><h1 class="card-title" style="font-size:7rem; display: inline-block;">'+list.store_name+'</h1><i type="button" name="heart_empty_btn" class="far fa-heart fa-6x" style="float:right; padding:2%;"></i></div>
+							<h3 style="display:block; color:gray;">위치 : '+list.store_location+'</h3>
+							<div class="container-fluid" name="card-footer" style="position:absolute; right:0px; bottom:0px; padding-bottom: 2%;">
+								<a href="#" class="btn btn-dark btn-lg" id="next_page_button" data-pk="" style="font-size:4rem; float:right; border-top-right-radius: 0.5em; border-top-left-radius: 0.5em; border-bottom-right-radius: 0.5em; border-bottom-left-radius: 0.5em; padding:1.5%;">방문하기</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			
+			</div>
 		</div>
 
-		
 	</div>
 
 
@@ -50,7 +68,7 @@
 
 	//검색기능
 	$(document).ready(function(){
-		$("#client_keyword").on("keyup", function() {
+		$("#client_keyword").on("keyup", function(e) {
 			var value = $(this).val().toLowerCase();
 			$("#container_store_list > div").filter(function() {
 					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
@@ -58,6 +76,19 @@
 			});
 
 		});
+
+	//찜기능
+	$(document).on('click','i[name=heart_empty_btn]',function(e){
+		console.log("like");
+		$(this).attr('class','fas fa-heart fa-6x');
+		$(this).attr('name', 'heart_btn');
+	});
+
+	$(document).on('click','i[name=heart_btn]',function(e){
+		console.log("changed empty");
+		$(this).attr('class','far fa-heart fa-6x');
+		$(this).attr('name', 'heart_empty_btn');
+	});
 
 	function create_store_info(list){
 		var path;
@@ -70,7 +101,7 @@
 			//path = "/static/img/modal_cafe_img.jpg";
 			console.log("path :" + path);
 		}
-		$('#container_store_list').append('<div class="row" style="border: solid black 1px; margin-left:4%; margin-right:4%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em; margin-bottom:3.5rem;"><div class="col-12" style="height:36vh; padding:0;"><div class="card" style="height:100%; width:100%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><img src="'+path+'" alt="" class="card-img-top" style="height:60%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><div class="card-body" style="height:90%;"><h1 class="card-title" style="font-size:7rem;">'+list.store_name+'</h1><h3 style="color:gray; display:inline-block;">위치 : '+list.store_location+'</h3><a href="#" class="btn btn-dark btn-lg" id="next_page_button" data-pk="'+list.pk+'"style="font-size:3rem; display:inline-block; float:right;">매장 확인</a></div></div></div></div>')
+		$('#container_store_list').append('<div class="row" style="border: solid black 1px; margin-left:4%; margin-right:4%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em; margin-bottom:3.5rem;"><div class="col-12" style="height:36vh; padding:0; "><div class="card" style="height:100%; width:100%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><img src="'+path+'" alt="" class="card-img-top" style="height:60%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><div class="card-body" style="height:90%;"><div><h1 class="card-title" style="font-size:7rem; display: inline-block;">'+list.store_name+'</h1><i type="button" name="heart_empty_btn" class="far fa-heart fa-6x" style="float:right; padding:2%;"></i></div><h3 style="display:block; color:gray;">위치 : '+list.store_location+'</h3><div class="container-fluid" name="card-footer" style="position:absolute; right:0px; bottom:0px; padding-bottom: 2%;"><a href="#" class="btn btn-dark btn-lg" id="next_page_button" data-pk="" style="font-size:4rem; float:right; border-top-right-radius: 0.5em; border-top-left-radius: 0.5em; border-bottom-right-radius: 0.5em; border-bottom-left-radius: 0.5em; padding:1.5%;">방문하기</a></div></div></div></div>')
 		
 	}
 
