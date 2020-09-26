@@ -5,6 +5,10 @@ from django.urls import path, include
 from . import views
 from . import apis
 from . import apis_client
+#이미지 저장위해서 밑에 두줄 추가
+from django.conf import settings 
+from django.conf.urls.static import static
+
 
 app_name ='watcher'
 

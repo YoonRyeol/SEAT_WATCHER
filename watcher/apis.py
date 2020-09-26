@@ -9,6 +9,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from .serializers import *
 from rest_framework.response import Response
+from django.core.files.storage import default_storage #파일 저장 경로
 
 
 def send_seat_data(request):
@@ -114,16 +115,26 @@ def delete_store_info(request) :
 	pk = int(request.GET['pk'])
 
 	store = Store.objects.get(pk=pk)
-	store.delete();
+	store.delete()
 	return HttpResponse("delete success")
 
 def edit_store_info(request) :
-	pk = int(request.GET['pk'])
-	store_name = request.GET['store_name']
-	store_location = request.GET['store_location']
+	pk = int(request.POST.get('pk'))
+	store_name = request.POST['store_name']
+	store_location = request.POST.get('store_location')
+	picture_name = request.POST.get('picture_name')
+	pic = request.FILES.get('img')
 
-	store = Store.objects.filter(pk=pk)
-	store.update(store_name=store_name,store_location=store_location)
+	store = Store.objects.get(pk=pk)
+	
+	if pic :
+		default_storage.delete('watcher/static/img/store/'+str(pk)+'/'+store.picture_name)
+		default_storage.save('watcher/static/img/store/'+str(pk)+'/'+pic.name, pic)
+
+	store.store_name = store_name
+	store.store_location = store_location
+	store.picture_name = picture_name
+	store.save()
 
 	stores = Store.objects.all()
 	serialized_stores = StoreSerializer(stores,many=True)
@@ -131,25 +142,32 @@ def edit_store_info(request) :
 	return HttpResponse(json.dumps(serialized_stores.data))
 
 def add_store_list(request) :
-	store_name = request.GET['store_name']
-	store_location = request.GET['store_location']
-
-	store = Store(store_name = store_name, store_location = store_location)
+	store_name = request.POST.get('store_name')
+	store_location = request.POST.get('store_location')
+	picture_name = request.POST.get('picture_name',"modal_cafe_img.jpg")
+	pic = request.FILES.get('img')
+		
+	store = Store(store_name=store_name, store_location=store_location, picture_name=picture_name)
 	store.save()
-	
 
+	if pic :
+		default_storage.save('watcher/media/img/store/'+str(store.pk)+'/'+pic.name, pic)
+		store.picture_name=pic.name
+		store.save()
+	
 	data = {
 		'pk' : store.pk,
 		'store_name' : store.store_name,
 		'store_location' : store.store_location,
+		'picture_name' : store.picture_name,
 	}
 
 	return JsonResponse(data, safe=False)
 
 def upload_store_img(requset) :
-	store_img_name = requset.GET.get('store_img_name')
-
-	return HttpResponse("img good")
+	picture_name = requset.GET.get('picture_name')
+	print("img_start")
+	return HttpResponse('img good')
 
 
 
@@ -178,6 +196,7 @@ def edit_camera_info(request) :
 
 	camera = Camera.objects.filter(pk=pk)
 	camera.update(mac_addr=mac_addr,description=description,cur_host=cur_host)
+	camera.save() 
 	camera = Camera.objects.get(pk=pk)
 
 	cameras = Camera.objects.filter(store_id=store_id)
@@ -190,6 +209,7 @@ def add_camera_info(request) :
 	description = request.GET['description']
 	store_id= int(request.GET['store_id'])
 	cur_host = request.GET.get('cur_host')
+
 
 	camera=Camera(description = description, store_id = store_id, cur_host= cur_host)
 	camera.save()
@@ -229,7 +249,7 @@ def check_camera_connection(request) :
 	cur_host = request.GET.get('cur_host')
 
 	try :
-		rq = requests.get('https://'+cur_host+'/test',timeout=5)
+		rq = requests.get(cur_host+'/test',timeout=5)
 		return HttpResponse('good')
 	except Exception as e :
 		return HttpResponse('bad')
@@ -240,7 +260,7 @@ def check_camera_connection_table(request) :
 	pk = request.GET['pk']
 
 	try :
-		rq = requests.get('https://'+cur_host+'/test',timeout=5)
+		rq = requests.get(cur_host+'/test',timeout=5)
 		data = {
 			'pk' : pk,
 			'con' : "good",

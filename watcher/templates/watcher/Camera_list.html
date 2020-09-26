@@ -96,7 +96,7 @@
   				</tbody>
   			</table>
   			
-  		</div><!--container-fluid-->
+  		</div><!--container-fluid end-->
   		<!-- 카메라 테이블 끝 -->
 
   		<button style="float :left; margin-top: 1%; margin-left : 1%; margin-bottom : 0.5%" id="add_floor_button" data-toggle="modal" data-target="#modal_floor" type="button" class="btn btn-dark" name="{{store.pk}}">층 추가</button>
@@ -140,13 +140,12 @@
   		</div><!--container-fluid-->
   		<!--가게층 정보 리스트 테이블 끝-->
 
-</div>
+		</div>
 
   	</div><!--wrap-->
 	<!--footer-->
-	<footer >
+	<footer style="padding-top:1%;">
 		<div class="container">
-					<br>
 					<div class="row">
 						<div id="footer_copyright" class="col-sm-4" ><h5>Copyright &copy; 2020</h5>
 							<ul>
@@ -995,6 +994,7 @@
 
 
 		$('#footer_copyright>ul').hide();
+
   		$(document).on('mouseleave', 'footer',function(e){
   				$('#footer_copyright>ul').hide();
   		});
