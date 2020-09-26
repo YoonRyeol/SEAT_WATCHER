@@ -9,6 +9,7 @@ from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 from .serializers import *
 from rest_framework.response import Response
+from django.core.files.storage import default_storage #파일 저장 경로
 
 
 def send_seat_data(request):
@@ -114,16 +115,29 @@ def delete_store_info(request) :
 	pk = int(request.GET['pk'])
 
 	store = Store.objects.get(pk=pk)
-	store.delete();
+	store.delete()
 	return HttpResponse("delete success")
 
 def edit_store_info(request) :
-	pk = int(request.GET['pk'])
-	store_name = request.GET['store_name']
-	store_location = request.GET['store_location']
+	print(request.POST)
+	pk = int(request.POST.get('pk'))
+	store_name = request.POST['store_name']
+	store_location = request.POST.get('store_location')
+	picture_name = request.POST.get('picture_name')
+	pic = request.FILES.get('img')
 
 	store = Store.objects.filter(pk=pk)
-	store.update(store_name=store_name,store_location=store_location)
+	
+#	if store.picture_name != picture_name :
+#		print("not same")
+#		default.storage.delte('watcher/media/img/'+str(pk)+'/'+store.picture_name)
+#		default_storage.save('watcher/media/img/'+str(pk)+'/'+pic.name, pic)
+#	else :
+	if pic :
+		print("img uploaded")
+		default_storage.save('watcher/media/img/'+str(pk)+'/'+pic.name, pic)
+
+	store.update(store_name=store_name,store_location=store_location, picture_name=picture_name)
 
 	stores = Store.objects.all()
 	serialized_stores = StoreSerializer(stores,many=True)
@@ -131,25 +145,31 @@ def edit_store_info(request) :
 	return HttpResponse(json.dumps(serialized_stores.data))
 
 def add_store_list(request) :
-	store_name = request.GET['store_name']
-	store_location = request.GET['store_location']
-
-	store = Store(store_name = store_name, store_location = store_location)
-	store.save()
+	print(request.POST)
+	store_name = request.POST.get('store_name')
+	store_location = request.POST.get('store_location')
+	picture_name = request.POST.get('picture_name',"modal_cafe_img.jpg")
 	
-
+	pic = request.FILES.get('img')
+	default_storage.save('img'+ '/' + pic.name, pic)
+	
+	store = Store(store_name = store_name, store_location = store_location, picture_name=picture_name)
+	store.save()
+	print(store_name)
+	
 	data = {
 		'pk' : store.pk,
 		'store_name' : store.store_name,
 		'store_location' : store.store_location,
+		'picture_name' : store.picture_name,
 	}
 
 	return JsonResponse(data, safe=False)
 
 def upload_store_img(requset) :
-	store_img_name = requset.GET.get('store_img_name')
-
-	return HttpResponse("img good")
+	picture_name = requset.GET.get('picture_name')
+	print("img_start")
+	return HttpResponse('img good')
 
 
 
@@ -191,6 +211,7 @@ def add_camera_info(request) :
 	store_id= int(request.GET['store_id'])
 	cur_host = request.GET.get('cur_host')
 
+
 	camera=Camera(description = description, store_id = store_id, cur_host= cur_host)
 	camera.save()
 
@@ -229,7 +250,7 @@ def check_camera_connection(request) :
 	cur_host = request.GET.get('cur_host')
 
 	try :
-		rq = requests.get('https://'+cur_host+'/test',timeout=5)
+		rq = requests.get(cur_host+'/test',timeout=5)
 		return HttpResponse('good')
 	except Exception as e :
 		return HttpResponse('bad')
@@ -240,7 +261,7 @@ def check_camera_connection_table(request) :
 	pk = request.GET['pk']
 
 	try :
-		rq = requests.get('https://'+cur_host+'/test',timeout=5)
+		rq = requests.get(cur_host+'/test',timeout=5)
 		data = {
 			'pk' : pk,
 			'con' : "good",

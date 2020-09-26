@@ -16,9 +16,8 @@ def get_client_store_list(request) :
 		stores = paginator.page(0)
 	except EmptyPage :
 		stores = paginator.page(paginator.num_pages)
-		print("last")
 		return HttpResponse("end")
-	
+			
 	serialized_stores = StoreSerializer(stores,many=True)
 
 	return HttpResponse(json.dumps(serialized_stores.data))
