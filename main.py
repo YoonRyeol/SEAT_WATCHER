@@ -14,19 +14,23 @@ def initialize():
     print("init....")
     with open('pos_data.json', 'r') as json_file:
         data = json.load(json_file)
+        origin_data = data
+        if(origin_data['is_updated']):
+            origin_data['is_updated'] = False
+        data = data['data']
 
 
     result = []
     table_status = []
     for elem in data:
         result.append({"pk" : elem['pk'], "res" : "F"})
-        elem['flags'] = "F"
         table_status.append(0)
 
     with open('result.json', 'w') as make_file:
         json.dump(result, make_file, indent = 4)
     with open('pos_data.json', 'w') as json_file:
-        json.dump(data, json_file, indent = 4)
+        json.dump(origin_data, json_file, indent = 4)
+    return table_status
         
     
 def updateCheck(data):
@@ -39,7 +43,7 @@ def save_result_json():
         url = 'http://18.219.121.103:8001/api/get_seat_inspection_result'
         send_data = { 'input' : json.dumps(result, indent = 4)}
         print("post :: " + str(result))
-        r = requests.post(url, data=send_data)
+#        r = requests.post(url, data=send_data)
 
 def swap(x1, x2):
     v_swap = 0
@@ -47,7 +51,7 @@ def swap(x1, x2):
         v_swap = x1
         x1 = x2
         x2 = v_swap
-        return x1, x2
+    return x1, x2
 
 def ROI(x1, x2, y1, y2, pk):
     captured = cv2.imread("images/30.jpg", 1)
@@ -110,10 +114,9 @@ def is_there_seat(x1, x2, y1, y2, pk):
         return False
 
 
-table_status = []
 with open('pos_data.json', 'r') as json_file:
     data = json.load(json_file)
-initialize()
+table_status = initialize()
 with open('result.json', 'r') as json_file:
     result = json.load(json_file)
     
@@ -135,10 +138,17 @@ while True:
             cv2.imwrite("images/30.jpg", frame)
             print("detection loop is start....")
             with open('pos_data.json', 'r') as json_file:
-                data = json.load(json_file)                                
+                data = json.load(json_file)
+                origin_data = data
+                data = data['data']
+                
+            with open('result.json', 'r') as json_file:
+                result = json.load(json_file)
+                print("test1", result)
+
             status_index = 0
             for elem in data:
-                if(elem['flags']):
+                if(origin_data['is_updated']):
                     initialize()
                     print('\'pos_data.json\' has been changed... restart loop')
                     break                
@@ -151,12 +161,12 @@ while True:
                 print("axis", x1, x2, y1, y2)
                 captured = ROI(x1, x2, y1, y2, elem['pk'])
                 if(is_there_seat(x1, x2, y1, y2, elem['pk'])):
-                    if(table_status[status_index] >= 1):
-                        if(result[str(elem['pk'])]['res'] == "T"):
-                            result[str(elem['pk'])]['res'] = "F"
-                            save_result_json();
+                    if(table_status[status_index] >= 0):
+                        if(result[status_index]['res'] == "T"):
+                            result[status_index]['res'] = "F"
+                            save_result_json()
                         else:
-                            result[str(elem['pk'])]['res'] = "T"
+                            result[status_index]['res'] = "T"
                             save_result_json();
                             print("table " + str(elem['pk']) + " is diff")
                         table_status[status_index] = 0    
