@@ -1,4 +1,5 @@
 import cv2
+import sys
 import requests
 import numpy as np
 import datetime
@@ -40,11 +41,16 @@ def updateCheck(data):
 def save_result_json():
     with open('result.json', 'w') as make_file:
         json.dump(result, make_file, indent = 4)
-        url = 'http://18.219.121.103:8001/api/get_seat_inspection_result'
+        url = 'http://3.21.102.124:8001/api/get_seat_inspection_result'
         send_data = { 'input' : json.dumps(result, indent = 4)}
         print("post :: " + str(result))
-#        r = requests.post(url, data=send_data)
-
+        try :
+            r = requests.post(url, data=send_data, timeout = 3)
+        except :
+            print()
+            print("=====AWS Server is not working=====")
+            print()
+        
 def swap(x1, x2):
     v_swap = 0
     if(x1 > x2):
@@ -85,14 +91,12 @@ def is_there_seat(x1, x2, y1, y2, pk):
             elif(captured.item(y,x,0) <= origin.item(y,x,0) and origin.item(y,x,0) != 0):
                 avg += captured.item(y,x,0) / float(origin.item(y,x,0))
                 
-#            print("avg 1 : " + str(avg))
 
             if(captured.item(y,x,1) >= origin.item(y,x,1) and captured.item(y,x,1) != 0):
                 avg += origin.item(y,x,1) / float(captured.item(y,x,1))
             elif(captured.item(y,x,1) <= origin.item(y,x,1) and origin.item(y,x,1) != 0):
                 avg += captured.item(y,x,1) / float(origin.item(y,x,1))
 
- #           print("avg 2 : " + str(avg))
 
             if(captured.item(y,x,2) >= origin.item(y,x,2) and captured.item(y,x,2) != 0):
                 avg += origin.item(y,x,2) / float(captured.item(y,x,2))
@@ -101,9 +105,8 @@ def is_there_seat(x1, x2, y1, y2, pk):
 
 
             avg = avg / 3.0
-            if(avg <=0.75):
+            if(avg <=0.85):
                 cnt_correct += 1
-#                print("avg isssss : " + str(avg))
                 
     print("pk is =", pk)
     print("average is = " + str(cnt_correct / float((spot[1] * spot[0]))))
@@ -133,19 +136,19 @@ while True:
         cv2.imshow('cam', frame)
         if not os.path.isfile("images/origin.jpg"):
             cv2.imwrite("images/origin.jpg", frame)
+            initialize()
             time.sleep(2)
         if((now == "00" or now == "20" or now == "40") and capture != True) :
             cv2.imwrite("images/30.jpg", frame)
             print("detection loop is start....")
             with open('pos_data.json', 'r') as json_file:
                 data = json.load(json_file)
+
                 origin_data = data
                 data = data['data']
                 
             with open('result.json', 'r') as json_file:
                 result = json.load(json_file)
-                print("test1", result)
-
             status_index = 0
             for elem in data:
                 if(origin_data['is_updated']):
@@ -158,10 +161,9 @@ while True:
                 y2 = elem['position']['s_y']
                 x1, x2 = swap(x1, x2)
                 y1, y2 = swap(y1, y2)
-                print("axis", x1, x2, y1, y2)
                 captured = ROI(x1, x2, y1, y2, elem['pk'])
                 if(is_there_seat(x1, x2, y1, y2, elem['pk'])):
-                    if(table_status[status_index] >= 0):
+                    if(table_status[status_index] >= 2):
                         if(result[status_index]['res'] == "T"):
                             result[status_index]['res'] = "F"
                             save_result_json()
@@ -175,23 +177,32 @@ while True:
                         table_status[status_index] += 1
                         
                 else:
-                    if(table_status[status_index] <= -1):
+                    if(table_status[status_index] <= -2):
                         print("table " + str(elem['pk']) + " is same")
                         cv2.imwrite("images/origin_"+str(elem['pk'])+".jpg", captured)
                         table_status[status_index] = 0
                     else:
                         table_status[status_index] -= 1
-                print("status is = " + str(table_status[status_index]))
+                print("status is = " + str(table_status[status_index]) +"\n")
                 status_index += 1
             capture = True
         if(now == "31"):
             capture = False
         if cv2.waitKey(1) & 0xFF == 27 :
+            print(os.path.isfile("images/30.jpg"))
+            print("delete images....")
+            if(os.path.isfile("images/30.jpg")):                
+                for elem in result :
+                    print(elem)
+                    print("images/origin_"+str(elem['pk'])+".jpg")
+                    os.remove("images/origin_"+str(elem['pk'])+".jpg")
+                    os.remove("images/captured_"+str(elem['pk'])+".jpg")
+                os.remove("images/30.jpg")
+            os.remove("images/origin.jpg")
             break
             
     # Break the loop
     else:
         break
-
 cap.release()
 cv2.destroyAllWindows()
