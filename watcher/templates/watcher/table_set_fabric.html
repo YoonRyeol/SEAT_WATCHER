@@ -61,8 +61,14 @@
                                     <button class='btn btn-primary' id='get_picture'>
                                         <span class="fas fa-images"></span>
                                     </button>
-                                    <span class="input-group-text" id="basic-addon1">삭제</span>
+                                    <button class='btn btn-primary' id='vision_api_but'>
+                                        <i class="far fa-eye"></i>
+                                    </button>
+
                                     <div class="input-group-append">
+                                        <span class="input-group-text" id="basic-addon1">
+                                            <i class="fas fa-trash"></i>
+                                        </span>
                                         <div class="input-group-text">
                                             <input type="checkbox" id='is_delete'
                                                 aria-label="Checkbox for following text input">
@@ -128,10 +134,13 @@
     var id = 0;
     var canvas = this.__canvas = new fabric.Canvas('c');
     var picture_addr = '/static/img/' + '{{picture_name}}'
+    var cur_pic_name = '{{picture_name}}';
     fabric.Image.fromURL(picture_addr, imgObj => {
         canvas.setBackgroundImage(imgObj, canvas.renderAll.bind(canvas), {
             opacity: 1,
-            strech: true
+            strech: true,
+            width:IMAGE_WIDTH,
+            height:IMAGE_HEIGHT
         });
     });
     canvas.selection = false
@@ -145,17 +154,22 @@
             url: '{% url "watcher:get_file_from_cam" %}',
             type: 'POST',
             data: {
+                'camera_pk' : {{camera_pk}},
                 'host_addr': '{{cam_cur_host}}',
                 'csrfmiddlewaretoken': "{{ csrf_token }}",
             },
             success: function (data) {
-                var file_path = data
+                var file_path = data.path
+                var file_name = data.pic_name
+                cur_pic_name = file_name
                 fabric.Image.fromURL(file_path, imgObj => {
                     canvas.setBackgroundImage(imgObj, canvas.renderAll.bind(canvas), {
                         opacity: 1,
-                        strech: true
+                        strech: true,
+                        width:IMAGE_WIDTH,
+                        height:IMAGE_HEIGHT
                     });
-                    alert('사진이 변경되었습니다.\n' + file_path)
+                    alert('사진이 변경되었습니다.\n' + file_name)
                 });
 
             },
@@ -386,9 +400,9 @@
                 'seat_data': input_data,
                 'before_pk_list': before_pk_list,
                 'camera_pk': {{ camera_pk }},
-        'store_pk' : {{ store_pk }},
-        'picture_name' : '{{picture_name}}',
-        'csrfmiddlewaretoken' : "{{csrf_token}}"
+                'store_pk' : {{ store_pk }},
+                'picture_name' : cur_pic_name,
+                'csrfmiddlewaretoken' : "{{csrf_token}}"
             },
         success: function (data) {
             if (data == 'connection error') {
@@ -425,6 +439,28 @@
             Add(_left = left, _top = top, _width = width, _height = height, _scaleX = 1, _scaleY = 1, _pk = cur_data.id)
 
         }
+    });
+
+    $(document).on('click', '#vision_api_but', function(e){
+        $.ajax({
+            url:'{% url "watcher:localize_object" %}',
+            type:'POST',
+            data:{
+                'csrfmiddlewaretoken':"{{ csrf_token }}",
+                'pic_name' : cur_pic_name
+            },
+            success:function(data){
+                let object_data = JSON.parse(data);
+                for(let i=0; i<object_data.length; i++){
+                    let object = object_data[i];
+                    let left = object.x*IMAGE_WIDTH;
+                    let top = object.y*IMAGE_HEIGHT;
+                    let width = object.width*IMAGE_WIDTH;
+                    let height = object.height*IMAGE_HEIGHT;
+                    Add(_left = left, _top = top, _width = width, _height = height)
+                }
+            }
+        });
     });
 
 </script>
