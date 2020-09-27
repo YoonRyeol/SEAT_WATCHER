@@ -89,7 +89,11 @@ def send_seat_data(request):
 	
 	cam_get_seat_info = '/'.join([camera.cur_host, 'get_seat_info'])
 	try:
-		response = requests.post(cam_get_seat_info, data={'seat_data':json.dumps(to_cam_data_list)}, timeout=5)
+		output_data = {
+			'is_updated' : True,
+			'data' : to_cam_data_list
+		}
+		response = requests.post(cam_get_seat_info, data={'seat_data':json.dumps(output_data, indent=4)}, timeout=5)
 	except Exception:
 		return HttpResponse('connection error')
 	if response.text != 'good':
@@ -112,9 +116,8 @@ def get_store_info(request) :
 	return JsonResponse(json.dumps(store_info))
 def delete_store_info(request) :
 	pk = int(request.GET['pk'])
-
 	store = Store.objects.get(pk=pk)
-	store.delete();
+	store.delete()
 	return HttpResponse("delete success")
 
 def edit_store_info(request) :
