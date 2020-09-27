@@ -134,9 +134,11 @@
 						</div>
 						  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="modal_store_add_location">
 					</div>
-
-					<div class="input-group input-group-sm mb-3" >
-						<input type="file" name="modal_add_pic_file" id="modal_store_add_picturename" accept="image/*">
+					<div class="input-group">
+					  <div class="custom-file">
+					    <input type="file" class="custom-file-input" name="modal_add_pic_file" id="modal_store_add_filename" aria-describedby="inputGroupFileAddon04" accept="image/*">
+					    <label class="custom-file-label" for="modal_store_add_filename">Choose file</label>
+					  </div>
 					</div>
 
 		        </form>
@@ -173,11 +175,12 @@
 						</div>
 						  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="modal_store_edit_location">
 					</div>
-					  
-					  <div class="input-group input-group-sm mb-3" >
-						<input type="file" name="modal_edit_pic_file" id="modal_store_edit_picturename" accept="image/*">
+					<div class="input-group">
+					  <div class="custom-file">
+					    <input type="file" class="custom-file-input" name="modal_edit_pic_file" id="modal_store_edit_filename" aria-describedby="inputGroupFileAddon04" accept="image/*">
+					    <label class="custom-file-label" for="modal_store_edit_filename">Choose file</label>
 					  </div>
-					
+					</div>
 
 		        </form>
 		      </div>
@@ -192,7 +195,29 @@
 		<!--모달 form 끝-->
 
 <script>
+	//모달에서 파일이 업로드되면 1로 바뀜
 	var mutex_file = 0;
+
+	$('#modal_store_edit_filename').on('change',function(){
+		mutex_file = 1;
+	})
+
+	$('#modal_store_add_fileename').on('change',function(){
+		mutex_file = 1;
+	})
+
+	//모달에서 파일업로드 이름 표시되게 하는 기능
+	document.querySelector('#modal_store_add_filename').addEventListener('change',function(e){
+		var fileName = document.getElementById("modal_store_add_filename").files[0].name;
+		var nextSibling = e.target.nextElementSibling
+		nextSibling.innerText = fileName
+	})
+
+	document.querySelector('#modal_store_edit_filename').addEventListener('change',function(e){
+		var fileName = document.getElementById("modal_store_edit_filename").files[0].name;
+		var nextSibling = e.target.nextElementSibling
+		nextSibling.innerText = fileName
+	})
 
 	/* 가게리스트 만드는 함수*/
 	function create_store_list(data) {
@@ -232,15 +257,6 @@
 			}
 		});
 
-
-		$('#modal_store_edit_picturename').on('change',function(){
-			mutex_file = 1;
-		})
-
-		$('#modal_store_add_picturename').on('change',function(){
-			mutex_file = 1;
-		})
-
 		/*가게 정보 수정 버튼 */
 		$(document).on('click', 'i[name=td_store_edit_button]', function(e){
 			$('#modal_store_edit_label').text($(this).attr('data-store_name'));
@@ -261,6 +277,7 @@
 					console.log("mutex changed");
 					files = $('input[name=modal_edit_pic_file')[0].files[0]; 
 					picture_name = files.name;
+					console.log(picture_name);
 					mutex_file = 0;
 				}
 				

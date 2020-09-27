@@ -5,10 +5,6 @@ from django.urls import path, include
 from . import views
 from . import apis
 from . import apis_client
-#이미지 저장위해서 밑에 두줄 추가
-from django.conf import settings 
-from django.conf.urls.static import static
-
 
 app_name ='watcher'
 
@@ -48,7 +44,8 @@ urlpatterns = [
 	path('cam_picture/<int:camera_pk>', views.cam_picture, name='cam_picture'),
 	path('api/save_layout', apis.save_layout, name='save_layout'),
 	path('client',views.client_store_list,name='client_store_list'),
-	path('api/localize_object', apis.localize_objects, name='localize_object')
+	path('api/localize_object', apis.localize_objects, name='localize_object'),
+	path('client/search',apis_client.search_client_store_list, name='ajax_search_client_store_list'),
  ]
 
 
