@@ -44,6 +44,7 @@ urlpatterns = [
 	path('cam_picture/<int:camera_pk>', views.cam_picture, name='cam_picture'),
 	path('api/save_layout', apis.save_layout, name='save_layout'),
 	path('client',views.client_store_list,name='client_store_list'),
+	path('client/search',apis_client.search_client_store_list, name='ajax_search_client_store_list'),
  ]
 
 
