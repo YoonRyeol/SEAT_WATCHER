@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .serializers import *
 from rest_framework.response import Response
 from django.core.files.storage import default_storage #파일 저장 경로
+from google.cloud import vision
 
 
 def send_seat_data(request):
@@ -25,6 +26,10 @@ def send_seat_data(request):
 	store = Store.objects.get(pk=store_pk)
 	picture_name = request.POST['picture_name']
 	real_data = json.loads(string_data)
+	"""
+	camera data set
+	"""
+	Camera.objects.filter(pk=camera_pk).update(cur_pic=picture_name)
 	"""
 	real data format
 	{
@@ -363,14 +368,21 @@ def get_file_from_cam(request):
 	"""
 	Todo : 카메라 pk, 가게 pk -> 카메라에 cur_pic 이름 저장
 	"""
+	cur_time = timezone.now().strftime("%Y%m%d%H%M%S")
+	camera_pk = request.POST['camera_pk']
 	cur_host = request.POST['host_addr']
 	target_addr = '/'.join([cur_host, 'send_image'])
+	cur_pic_name = cur_time+str(camera_pk)
 	response = requests.get(target_addr, stream=True)
 	if response.status_code == 200:
-		with open('watcher/static/img/test.jpg', 'wb') as f:
+		with open('watcher/static/img/'+cur_pic_name+'.jpg', 'wb') as f:
 			for chunk in response:
 				f.write(chunk)
-	return HttpResponse('/static/img/test.jpg')
+	
+	return JsonResponse({
+		'path' : '/static/img/'+ cur_pic_name + '.jpg',
+		'pic_name' : cur_pic_name + '.jpg'
+	})
 
 
 def save_layout(request):
@@ -418,3 +430,31 @@ def get_seat_inspection_result(request):
 		Table.objects.filter(pk=e['pk']).update(is_occupied=is_occupied)
 
 	return HttpResponse('good')
+
+def localize_objects(request):
+	pic_name = request.POST['pic_name']
+	client = vision.ImageAnnotatorClient()
+	path = 'watcher/static/img/'+pic_name
+
+	with open(path, 'rb') as image_file:
+		content = image_file.read()
+	image = vision.types.Image(content=content)
+    
+	objects = client.object_localization(image=image).localized_object_annotations
+
+	output_data = []
+
+	target_data = ['Table', 'Tableware']
+
+	for object_ in objects:
+		if object_.name in target_data:
+			vertex_list = object_.bounding_poly.normalized_vertices
+			data = {
+				'x' : vertex_list[0].x,
+				'y' : vertex_list[0].y,
+				'width' : abs(vertex_list[0].x - vertex_list[1].x),
+				'height' : abs(vertex_list[0].y - vertex_list[3].y)
+			}
+			output_data.append(data)
+	
+	return HttpResponse(json.dumps(output_data))
