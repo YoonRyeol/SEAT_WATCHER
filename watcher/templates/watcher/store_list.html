@@ -22,13 +22,13 @@
 <body>
 	<!--내비게이션 바-->
 	<nav class="navbar navbar-expand-lg navbar-light" style="background-color:black;">
-		<a class="navbar-brand" href="#" style="color : white; ">WATCHER</a>
+		<a class="navbar-brand" href="{% url 'watcher:store_info' %}" style="color : white; ">WATCHER</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<div class="navbar-nav">
-				<li><a href="#" style="text-decoration: none;">홈 화면 <span class="sr-only">(current)</span></a></li>
+				<li><a href="#" style="text-decoration: none; color:white;">홈 화면 <span class="sr-only">(current)</span></a></li>
 			</div>
 		 </div>
 	</nav>
@@ -46,7 +46,7 @@
 
 		<!--카메라 리스트 테이블 시작 -->
 		<!--검색창-->
-		<div class="container-fluid" style=""> 
+		<div class="container-fluid"> 
 			
 			<div class="input-group mb-3" style="width:25%; float:right;">
 				<input type="text" id="keyword" class="form-control" placeholder="검색 내용" aria-label="검색 내용" aria-describedby="button-addon2">
@@ -75,13 +75,13 @@
 				<tbody id ="tbody_store">
 				{% for list in store_list %}
 				<tr id="tr_store_list_{{list.pk}}">
-					<input type="hidden" data-pk="{{list.pk}}" data-store_name="{{list.store_name}}" data-store_location="{{list.store_location}}">
+					<input type="hidden" data-pk="{{list.pk}}" data-store_name="{{list.store_name}}" data-store_location="{{list.store_location}}" data-picture_name="{{list.picture_name}}">
 					<td>
 						<a href ="store_info/{{list.pk}}/"><i type="button" style="color:white; margin:4px;" class="fa fa-home" ></i></a>{{list.pk}}
 					</td>
 					<td><i class="fa fa-store"></i>{{list.store_name}}</td>
 					<td>{{list.store_location}}</td>
-					<td><i type="button" id="td_store_edit_button" data-pk="{{list.pk}}" data-store_name="{{list.store_name}}" data-store_location="{{list.store_location}}" data-toggle="modal" data-target="#modal_store_edit"  style="margin:4px" class="fa fa-edit" ></i><i type="button" id="td_store_delete_button" name="{{list.pk}}" style="margin:4px" class="fa fa-trash"></i></td>
+					<td><i type="button" id="td_store_edit_button_{{list.pk}}" name="td_store_edit_button" data-pk="{{list.pk}}" data-store_name="{{list.store_name}}" data-store_location="{{list.store_location}}" data-picture_name="{{list.picture_name}}" data-toggle="modal" data-target="#modal_store_edit"  style="margin:4px" class="fa fa-edit" ></i><i type="button" id="td_store_delete_button" name="{{list.pk}}" style="margin:4px" class="fa fa-trash"></i></td>
 				</tr>
 				{% endfor %}
   				</tbody>
@@ -104,7 +104,7 @@
 							<li><h5>윤 렬(YOON RYEOL)</h5></li>
 							</ul>
 						</div>
-						<div class="col-sm-4" ><h4>소개</h4><p></p></div>
+						<div class="col-sm-4" ><h4>소개</h4><p>숭실대학교 프로젝트 팀 정도(正道)</p></div>
 						<div class="col-sm-4"><h4>위치</h4><p>서울특별시 동작구 상도동 숭실대학교</p></div>
 					</div>
 				</div>
@@ -121,7 +121,7 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <form id = "modal_store_add_form">
+		        <form method="post" id = "modal_store_add_form">
 		          <div class="input-group input-group-sm mb-3" >
 			  			<div class="input-group-prepend" style="width : 18%;">
 						    <span class="input-group-text" style="display:block; width:100%; text-align: center;">매장 이름</span>
@@ -135,10 +135,14 @@
 						  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="modal_store_add_location">
 					</div>
 
+					<div class="input-group input-group-sm mb-3" >
+						<input type="file" name="modal_add_pic_file" id="modal_store_add_picturename" accept="image/*">
+					</div>
+
 		        </form>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" id="modal_store_add_close_btn" class="btn btn-secondary" data-dismiss="modal" onclick='modal_store_init()'>닫기</button>
+		        <button type="button" id="modal_store_add_close_btn" class="btn btn-secondary" data-dismiss="modal" onClick="modal_store_init()">닫기</button>
 		        <button type="button" id="modal_store_add_btn" data-dismiss="modal" class="btn btn-primary">매장 추가</button>
 		      </div>
 		    </div>
@@ -156,7 +160,7 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <form id = "modal_store_edit_form">
+		        <form method="post" id="modal_store_edit_form">
 		        	<div class="input-group input-group-sm mb-3" >
 		        		<div class="input-group-prepend" style="width : 18%;">
 						    <span class="input-group-text" style="display:block; width:100%; text-align: center;">매장 이름</span>
@@ -169,6 +173,11 @@
 						</div>
 						  <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="modal_store_edit_location">
 					</div>
+					  
+					  <div class="input-group input-group-sm mb-3" >
+						<input type="file" name="modal_edit_pic_file" id="modal_store_edit_picturename" accept="image/*">
+					  </div>
+					
 
 		        </form>
 		      </div>
@@ -183,22 +192,19 @@
 		<!--모달 form 끝-->
 
 <script>
+	var mutex_file = 0;
+
 	/* 가게리스트 만드는 함수*/
 	function create_store_list(data) {
 		$('#tbody_store').empty();
 		for(var i =0; i < data.length; i++) {
-
-			$('#tbody_store').append('<tr id="tr_store_list_'+data[i].pk+'"><input type="hidden" data-pk="'+data[i].pk+'" data-store_name="'+data[i].store_name+'" data-store_location="'+data[i].store_location+'"><td><a href="store_info/'+data[i].store_id+'/"<i type="button" style="color:white; margin:4px;" class="fa fa-home"></i></a>'+data[i].pk+'</td><td><i class="fa fa-store"></i>'+data[i].store_name+'</td><td>'+data[i].store_location+'</td><td><i type="button" id="td_store_edit_button" data-pk="'+data[i].pk+'" data-store_name="'+data[i].store_name+'" data-store_location="'+data[i].store_location+'" data-toggle="modal" data-target="#modal_store_edit"  style="margin:4px" class="fa fa-edit" ></i><i type="button" id="td_store_delete_button" name="'+data[i].pk+'" style="margin:4px" class="fa fa-trash"></i></td></tr>');
+			create_store_info(data[i]);
 		}
 	}
-		/* 테이블 내 스크롤 */
-		var page = 1;
-		$(window).scroll(function() {
-			if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-				console.log(++page);
-				$("tbody").append('<tr><td>1<i style="margin:4px" class="fa fa-camera"></i></td><td>카메라1</td><td>창가 천장 위</td><td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td></tr>');
-			}
-		});
+
+	function create_store_info(data) {
+		$('#tbody_store').append('<tr id="tr_store_list_'+data.pk+'"><input type="hidden" data-pk="'+data.pk+'" data-store_name="'+data.store_name+'" data-store_location="'+data.store_location+'" data-picture_name="'+data.picture_name+'"><td><a href="store_info/'+data.pk+'/""><i type="button" style="color:white; margin:4px;" class="fa fa-home"></i></a>'+data.pk+'</td><td><i class="fa fa-store"></i>'+data.store_name+'</td><td>'+data.store_location+'</td><td><i type="button" id="td_store_edit_button_'+data.pk+'" name="td_store_edit_button" data-pk="'+data.pk+'" data-store_name="'+data.store_name+'" data-store_location="'+data.store_location+'" data-picture_name="'+data.picture_name+'" data-toggle="modal" data-target="#modal_store_edit"  style="margin:4px" class="fa fa-edit" ></i><i type="button" id="td_store_delete_button" name="'+data.pk+'" style="margin:4px" class="fa fa-trash"></i></td></tr>');
+	}
 	
 		/*가게 테이블 리스트 삭제*/
 		$(document).on('click', '#td_store_delete_button', function(e) {
@@ -225,10 +231,18 @@
 				return false;
 			}
 		});
-	
+
+
+		$('#modal_store_edit_picturename').on('change',function(){
+			mutex_file = 1;
+		})
+
+		$('#modal_store_add_picturename').on('change',function(){
+			mutex_file = 1;
+		})
 
 		/*가게 정보 수정 버튼 */
-		$(document).on('click', '#td_store_edit_button', function(e){
+		$(document).on('click', 'i[name=td_store_edit_button]', function(e){
 			$('#modal_store_edit_label').text($(this).attr('data-store_name'));
 			$('#modal_store_edit_name').val($(this).attr('data-store_name'));
 			$('#modal_store_edit_name').attr('name',$(this).attr('data-pk'));
@@ -236,20 +250,41 @@
 		});
 			/*가게 정보 수정 모달에서 저장버튼*/
 			$(document).on('click', '#modal_store_edit_btn',function(e) {
+				var formData = new FormData();
 				var pk = $('#modal_store_edit_name').attr('name');
 				var store_name = $('#modal_store_edit_name').val();
 				var store_location = $('#modal_store_edit_location').val();
+				var files;
+				var picture_name = $('#td_store_edit_button_'+pk).attr('data-picture_name');
+
+				if(mutex_file) {
+					console.log("mutex changed");
+					files = $('input[name=modal_edit_pic_file')[0].files[0]; 
+					picture_name = files.name;
+					mutex_file = 0;
+				}
+				
+				console.log("picname : "+picture_name);
+				
+				formData.append('csrfmiddlewaretoken','{{ csrf_token }}');
+				formData.append('store_name',store_name);
+				formData.append('store_location',store_location);
+				formData.append('picture_name',picture_name);
+				formData.append('img',files);
+				formData.append('pk',pk);
+
+
+				console.log("pk : "+pk);
+				console.log(formData.getAll('pk'));
 
 				if(confirm("변경사항을 저장 하시겠습니까?")){
 					$.ajax({
 						url : "{% url 'watcher:ajax_edit_store_info' %}",
-						type : 'GET',
+						type : 'POST',
 						dataType : 'json',
-						data : {
-							'pk' : pk,
-							'store_name' : store_name,
-							'store_location' : store_location,
-						},
+						contentType : false,
+						processData : false,
+						data : formData,
 						success : function(data) {
 							create_store_list(data);
 						},
@@ -266,26 +301,38 @@
 
 		/*가게 추가 기능 in 모달 */
 		$(document).on('click', '#modal_store_add_btn', function(e) {
+			var formData = new FormData();
+			var files;
 			var store_name = $('#modal_store_add_name').val();
 			var store_location = $('#modal_store_add_location').val();
-			console.log(store_name);
-			console.log(store_location);
+			var picture_name;
 
-			if (confirm('정말 추가 하시겠습니까?')) {
+			if(mutex_file) {
+					console.log("mutex changed");
+					files = $('input[name=modal_add_pic_file')[0].files[0]; 
+					picture_name = files.name;
+					mutex_file = 0;
+			}
 
-				console.log(store_location);
-				console.log(store_name);
+			formData.append('csrfmiddlewaretoken','{{ csrf_token }}')
+			formData.append('store_name',store_name);
+			formData.append('store_location',store_location);
+			formData.append('picture_name',picture_name);
+			formData.append('img',files);
+
+			if (confirm('정말 추가 하시겠습니까?')) {				
+				
 				$.ajax({
 					url: "{% url 'watcher:ajax_add_store_list' %}",
-					dataType : "json",
-					data: {
-						'store_name' : store_name,
-						'store_location' : store_location,
-					},
-					type : 'GET',
+					contentType : false,
+					processData : false,
+					dataType:'json',
+					type : 'POST',
+					data : formData,
 					success: function(data) {
 						console.log("save")
-						$("tbody").append('<tr id="tr_store_list_'+data.pk+'"><input type="hidden" data-pk="'+data.pk+'" data-store_name="'+data.store_name+'" data-store_location="'+data.store_location+'"><td><a href="store_info/'+data.pk+'/"<i type="button" style="margin:4px;" class="fa fa-home"></i></a>'+data.pk+'</td><td><i class="fa fa-store"></i>'+data.store_name+'</td><td>'+data.store_location+'</td><td><i type="button" id="td_store_edit_button" data-pk="'+data.pk+'" data-store_name="'+data.store_name+'" data-store_location="'+data.store_location+'" data-toggle="modal" data-target="#modal_store_edit"  style="margin:4px" class="fa fa-edit" ></i><i type="button" id="td_store_delete_button" name="'+data.pk+'" style="margin:4px" class="fa fa-trash"></i></td></tr>')
+						console.log("pk :"+data.pk)
+						create_store_info(data);
 					},
 					error: function (error) {
 						alert('error; ' + eval(error));
@@ -312,11 +359,17 @@
 			$('#modal_store_add_location').val('');
 		}
 
+		$(document).on('keydown', function(e) {
+				if (e.keyCode == 27) {modal_store_init();}
+			});
+
+
+
 	 	/*검색기능*/
 		$(document).ready(function(){
 			$("#keyword").on("keyup", function() {
 				var value = $(this).val().toLowerCase();
-				$("tbody tr").filter(function() {
+				$("#tbody_store tr").filter(function() {
 					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
 				});
 			});
@@ -328,6 +381,29 @@
   		});
   		$(document).on('mouseenter', 'footer',function(e){
   				$('#footer_copyright>ul').show();
+  		});
+
+
+  		/*이미지 업로드*/
+
+  		$(document).ready(function(){
+  			var picture_name
+  			$('#modal_store_add_picturename').on('change',function(){
+  				console.log('fileupload');
+  				$.ajax({
+  					url : "{% url 'watcher:ajax_upload_store_img' %}",
+  					Type : 'GET',
+  					data : {
+  						'picture_name' : picture_name,
+  					},
+					success: function(data) {
+						console.log(data);
+					},
+					error: function (error) {
+						alert('이미지저장실패' + eval(error));
+					}
+  				});
+  			});
   		});
 	</script>
 </script>
