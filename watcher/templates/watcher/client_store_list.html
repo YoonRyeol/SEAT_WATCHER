@@ -32,19 +32,22 @@
 			
 			<div class="input-group mb-3" style="height:80%; min-width:18%; width:35%; float:right; padding:2%;">
 				<input type="text" id="client_search_keyword" class="form-control" placeholder="검색 내용" aria-label="검색 내용" aria-describedby="button-addon2" style="font-size: 2.6rem; height:100%;">
-				<div class="input-group-append" style="background-color: black; border-top-right-radius: 0.3em; border-bottom-right-radius: 0.3em; min-width:18%; width:18%;" align="center">
+				<!--<div class="input-group-append" style="background-color: black; border-top-right-radius: 0.3em; border-bottom-right-radius: 0.3em; min-width:18%; width:18%;" align="center">
 					<i type="button" id="client_search_btn" class="fa fa-search fa-2x fa-fw" style="padding:1%; width:100%; color:white; height:100%; position:relative; top:0.4rem;"></i>
+				</div>-->
+				<div class="input-group-append" style="width:15%; height:100%">
+					 	<button class="btn btn-dark btn-outline-secondary" type="button" id="button-addon2" style="padding:1%; width:100%; color:white; max-height:100%; font-size:1.3vh;" >&#8981;</button>
 				</div>
 			</div>
 		</nav>
 		<div id="container_store_list" class="container-fluid" style="overflow:scroll; min-height: 100vh;">
-			
-			<!--<div class="row" style="border: solid black 1px; margin-left:4%; margin-right:4%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em; margin-bottom:3.5rem;">
+			<!--
+			<div class="row" style="border: solid black 1px; margin-left:4%; margin-right:4%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em; margin-bottom:3.5rem;">
 				<div class="col-12" style="height:36vh; padding:0; ">
 					<div class="card" style="height:100%; width:100%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;">
 						<img src="'+path+'" alt="" class="card-img-top" style="height:60%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;">
 						<div class="card-body" style="height:90%;">
-							<div><h1 class="card-title" style="font-size:7rem; display: inline-block;">'+list.store_name+'</h1><i type="button" name="heart_empty_btn" class="far fa-heart fa-6x" style="float:right; padding:2%;"></i></div>
+							<div><h1 class="card-title" style="font-size:7rem; display: inline-block; background-color:white; ">'+list.store_name+'</h1><button class="btn" style="background-color:white; display: inline-block; float:right;"><i class="fas fa-heart fa-6x"> </i></button></div>
 							<h3 style="display:block; color:gray;">위치 : '+list.store_location+'</h3>
 							<div class="container-fluid" name="card-footer" style="position:absolute; right:0px; bottom:0px; padding-bottom: 2%;">
 								<a href="#" class="btn btn-dark btn-lg" id="next_page_button" data-pk="" style="font-size:4rem; float:right; border-top-right-radius: 0.5em; border-top-left-radius: 0.5em; border-bottom-right-radius: 0.5em; border-bottom-left-radius: 0.5em; padding:1.5%;">방문하기</a>
@@ -52,8 +55,8 @@
 						</div>
 					</div>
 				</div>
-			
 			</div>-->
+			
 		</div>
 
 	</div>
@@ -62,8 +65,9 @@
 	<nav class="navbar fixed-bottom navbar-light bg-dark" style="position:sticky; bottom:0; height:11%; margin-top:1rem;">
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-6" id="bottom_home" style="display:block; text-align: center;"><a style="color: white; text-decoration:none" href="#" ><i class="fa fa-home fa-6x" id="bottom_home_btn" name="bottom_home_btn_active" type="button"></i><h1>홈</h1></a></div>
-				<div class="col-6" id="bottom_liked" style="display:block; text-align: center;"><a style="color: white; text-decoration:none" href="#" ><i class="fa fa-heart fa-4x" id="bottom_liked_btn" type="button"></i><h1>찜</h1></a></div>
+				<div class="col-6" id="bottom_home" style="display:block; text-align: center;"><a style="color: white; text-decoration:none" href="#" >
+					<button class="btn" ><i class="fa fa-home fa-6x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:white;"></i></button><h1>홈</h1></a></div>
+				<div class="col-6" id="bottom_liked" style="display:block; text-align: center;"><a style="color: white; text-decoration:none" href="#" ><button class="btn"><i class="fa fa-heart fa-4x" id="bottom_liked_btn" style="color:white;" ></i></button><h1>찜</h1></a></div>
 			
 			</div>
 		</div>
@@ -243,7 +247,7 @@
 		else {
 			path = "/static/img/store/"+list.pk+"/"+list.picture_name;
 		}
-		$('#container_store_list').append('<div class="row" id="store_row_'+list.pk+'" name="store" data-pk="'+list.pk+'" style="border: solid black 1px; margin-left:4%; margin-right:4%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em; margin-bottom:3.5rem;"><div class="col-12" style="height:36vh; padding:0; "><div class="card" style="height:100%; width:100%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><img src="'+path+'" alt="" class="card-img-top" style="height:60%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><div class="card-body" style="height:90%;"><div><h1 class="card-title" style="font-size:7rem; display: inline-block;">'+list.store_name+'</h1><i type="button" id="store_heart_'+list.pk+'" name="heart_empty_btn" class="far fa-heart fa-6x" data-pk="'+list.pk+'" style="color:red; float:right; padding:2%;"></i></div><h3 style="display:block; color:gray;" >위치 : '+list.store_location+'</h3><div class="container-fluid" name="card-footer" style="position:absolute; right:0px; bottom:0px; padding-bottom: 2%;"><a href="#" class="btn btn-dark btn-lg" id="next_page_button" data-pk="'+list.pk+'" style="font-size:4rem; float:right; border-top-right-radius: 0.5em; border-top-left-radius: 0.5em; border-bottom-right-radius: 0.5em; border-bottom-left-radius: 0.5em; padding:1.5%;">방문하기</a></div></div></div></div>')
+		$('#container_store_list').append('<div class="row" id="store_row_'+list.pk+'" name="store" data-pk="'+list.pk+'" style="border: solid black 1px; margin-left:4%; margin-right:4%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em; margin-bottom:3.5rem;"><div class="col-12" style="height:36vh; padding:0; "><div class="card" style="height:100%; width:100%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><img src="'+path+'" alt="" class="card-img-top" style="height:60%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><div class="card-body" style="height:90%;"><div><h1 class="card-title" style="font-size:7rem; display: inline-block;">'+list.store_name+'</h1><button class="btn" style="float:right; background-color:white; display:inline-block;"><i id="store_heart_'+list.pk+'" name="heart_empty_btn" class="far fa-heart fa-6x" data-pk="'+list.pk+'" style="color:red; padding:2%;"></i></button></div><h3 style="display:block; color:gray;" >위치 : '+list.store_location+'</h3><div class="container-fluid" name="card-footer" style="position:absolute; right:0px; bottom:0px; padding-bottom: 2%;"><a href="#" class="btn btn-dark btn-lg" id="next_page_button" data-pk="'+list.pk+'" style="font-size:4rem; float:right; border-top-right-radius: 0.5em; border-top-left-radius: 0.5em; border-bottom-right-radius: 0.5em; border-bottom-left-radius: 0.5em; padding:1.5%;">방문하기</a></div></div></div></div></div>')
 		
 	}
 
