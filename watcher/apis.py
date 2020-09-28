@@ -205,7 +205,6 @@ def edit_camera_info(request) :
 
 	camera = Camera.objects.filter(pk=pk)
 	camera.update(mac_addr=mac_addr,description=description,cur_host=cur_host)
-	camera.save() 
 	camera = Camera.objects.get(pk=pk)
 
 	cameras = Camera.objects.filter(store_id=store_id)
@@ -270,10 +269,16 @@ def check_camera_connection_table(request) :
 
 	try :
 		rq = requests.get(cur_host+'/test',timeout=5)
-		data = {
-			'pk' : pk,
-			'con' : "good",
-		}
+		if rq.text == 'No Connected Service Found':
+			data = {
+				'pk' : pk,
+				'con' : "bad",
+			}
+		else:
+			data = {
+				'pk' : pk,
+				'con' : 'good'
+			}
 		return JsonResponse(data)
 	except Exception as e :
 		data = {
