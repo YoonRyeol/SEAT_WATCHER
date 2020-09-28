@@ -45,6 +45,7 @@ urlpatterns = [
 	path('api/save_layout', apis.save_layout, name='save_layout'),
 	path('client',views.client_store_list,name='client_store_list'),
 	path('client/search',apis_client.search_client_store_list, name='ajax_search_client_store_list'),
+	path('client/liked',apis_client.client_liked_list,name='ajax_client_liked_list'),
  ]
 
 
