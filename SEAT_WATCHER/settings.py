@@ -123,3 +123,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIR = [os.path.join(BASE_DIR, 'static')]
+
+REMOTE_IT_DEVELOPER_KEY = "QTlCQ0YxNDItNDc3Qy00REE0LTkxNTAtMjhFNUJDODlENkU5"
+
+REMOTE_IT_PASSWORD = "ryeol9119!"
+
+REMOTE_IT_USERNAME = "yunyul3@gmail.com"
