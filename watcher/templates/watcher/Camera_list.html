@@ -694,6 +694,7 @@
 						}
 						else {
 							$('.td_camera_'+data.pk).html('<i style="margin:4px" class="fa fa-eye-slash"></i>');	
+							update_cam_addr(data.pk)
 						}
 					},
 				});
@@ -702,7 +703,7 @@
 
 		function setInterval_camera_connection_table(fn,t){
 			fn();
-			return setInterval(fn(),t);
+			return setInterval(fn,t);
 		}
 		var connection_loop = setInterval_camera_connection_table(camera_connection_table,36000);
 

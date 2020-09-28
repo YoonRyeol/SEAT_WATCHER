@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import mimetypes
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -123,6 +124,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIR = [os.path.join(BASE_DIR, 'static')]
+mimetypes.add_type("images/svg+xml", ".svg", True)
 
 REMOTE_IT_DEVELOPER_KEY = "QTlCQ0YxNDItNDc3Qy00REE0LTkxNTAtMjhFNUJDODlENkU5"
 
