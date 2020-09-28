@@ -713,7 +713,7 @@
 					url : "{% url 'watcher:ajax_check_camera_connection_table' %}",
 					type : 'GET',
 					data : {
-						'camera_ip' : cur_host,
+						'cur_host' : cur_host,
 						'pk' : pk,
 					},success : function(data) {
 						console.log(data);
@@ -722,6 +722,7 @@
 						}
 						else {
 							$('.td_camera_'+data.pk).html('<i style="margin:4px" class="fa fa-eye-slash"></i>');	
+							update_cam_addr(data.pk);
 						}
 					},
 				});
@@ -1001,6 +1002,27 @@
   		$(document).on('mouseenter', 'footer',function(e){
   				$('#footer_copyright>ul').show();
   		});
+
+		function update_cam_addr(camera_pk){
+			console.log('camera_pk is ' + camera_pk)
+			$.ajax({
+				url:"{% url 'watcher:update_cam_addr' %}",
+				type:'POST',
+				data:{
+					'csrfmiddlewaretoken' : "{{ csrf_token }}",
+					'camera_pk' : camera_pk
+				},
+				success:function(data){
+					if(data == 'camera_mac_addr_failure'){
+
+					}
+					else if(data == 'update_success'){
+						$('.td_camera_'+camera_pk).html('<i style="margin:4px" class="fa fa-eye"></i>');
+					}
+				}
+			});
+		}
+
 	</script>
 
 

@@ -11,7 +11,8 @@ from .serializers import *
 from rest_framework.response import Response
 from django.core.files.storage import default_storage #파일 저장 경로
 from google.cloud import vision
-
+from django.conf import settings
+import traceback
 
 def send_seat_data(request):
 	"""
@@ -265,7 +266,7 @@ def check_camera_connection(request) :
 
 def check_camera_connection_table(request) :
 	cur_host = request.GET.get('cur_host')
-	pk = request.GET['pk']
+	pk = int(request.GET['pk'])
 
 	try :
 		rq = requests.get(cur_host+'/test',timeout=5)
@@ -458,3 +459,57 @@ def localize_objects(request):
 			output_data.append(data)
 	
 	return HttpResponse(json.dumps(output_data))
+
+def update_cam_addr(request):
+	camera_pk = int(request.POST['camera_pk'])
+	camera = Camera.objects.get(pk=camera_pk)
+	camera_mac_addr = camera.mac_addr
+
+	if bool(camera_mac_addr) == False:
+		return HttpResponse('camera_mac_addr_failure')
+
+	developerkey =  settings.REMOTE_IT_DEVELOPER_KEY
+
+	headers = {
+		'developerkey' : developerkey
+	}
+
+	body = {
+		'password' : settings.REMOTE_IT_PASSWORD,
+		'username' : settings.REMOTE_IT_USERNAME
+	}
+
+	url = 'https://api.remot3.it/apv/v27/user/login'
+
+	response = requests.post(url, data=json.dumps(body), headers=headers)
+	response_body = response.json()
+
+	if response_body['status'] == 'false':
+		return HttpResponse('connection_failure')
+
+	token = response_body['token']
+
+	headers = {
+    	"developerkey":developerkey,
+	    "token":token
+	}
+
+	body = {
+    	"deviceaddress": camera_mac_addr,
+    	"wait":"true",
+	}
+
+	url = "https://api.remot3.it/apv/v27/device/connect"
+
+	response = requests.post(url, data=json.dumps(body), headers=headers)
+	response_body = response.json()
+
+	if response_body['status'] == 'false':
+		return HttpResponse('addr_update_failure')
+	
+	camera.cur_host = response_body['connection']['proxy']
+	camera.save()
+
+	return HttpResponse('update_success')
+
+
