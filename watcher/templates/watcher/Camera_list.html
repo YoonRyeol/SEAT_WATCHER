@@ -672,7 +672,7 @@
 				});
 		}
 		//카메라 연결 테스트 확인 
-		$(document).ready(function(){
+		function camera_connection_table() {
 			var camera_list = new Array(); 
 			var cur_host;
 			var pk;
@@ -698,37 +698,15 @@
 					},
 				});
 			}
-		});
+		}
 
-			$(document).ready(setInterval(function(){
-			var camera_list = new Array(); 
-			var cur_host;
-			var pk;
+		function setInterval_camera_connection_table(fn,t){
+			fn();
+			return setInterval(fn(),t);
+		}
+		var connection_loop = setInterval_camera_connection_table(camera_connection_table,36000);
 
-			camera_list = $('#tbody_camera').find("tr > input");
-			for( var i=0 ; i < camera_list.length ; i++) {
-				cur_host = camera_list[i].dataset.cur_host;
-				pk = camera_list[i].dataset.pk;
-				$.ajax({
-					url : "{% url 'watcher:ajax_check_camera_connection_table' %}",
-					type : 'GET',
-					data : {
-						'cur_host' : cur_host,
-						'pk' : pk,
-					},success : function(data) {
-						console.log(data);
-						if(data.con == 'good') {
-							$('.td_camera_'+data.pk).html('<i style="margin:4px" class="fa fa-eye"></i>');
-						}
-						else {
-							$('.td_camera_'+data.pk).html('<i style="margin:4px" class="fa fa-eye-slash"></i>');	
-							update_cam_addr(data.pk);
-						}
-					},
-				});
-			}
-		},36000));
-
+	
 
 
 		/* floor 추가 modal 버튼 */

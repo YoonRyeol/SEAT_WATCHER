@@ -40,7 +40,7 @@
 		<!--	<input style="font-size: 2.6rem; border-top-right-radius: 0.8em; border-top-left-radius: 0.8em; border-bottom-right-radius: 0.8em; border-bottom-left-radius: 0.8em; width:30%; height:50%" id="client_keyword" placeholder="검색" />-->
 		</nav>
 		<div id="container_store_list" class="container-fluid" style="overflow:scroll; min-height: 100vh;">
-			<!--<div class="row" style="border: solid black 1px; margin-left:4%; margin-right:4%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em; margin-bottom:3.5rem;">
+			<div class="row" style="border: solid black 1px; margin-left:4%; margin-right:4%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em; margin-bottom:3.5rem;">
 				<div class="col-12" style="height:36vh; padding:0; ">
 					<div class="card" style="height:100%; width:100%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;">
 						<img src="'+path+'" alt="" class="card-img-top" style="height:60%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;">
@@ -54,7 +54,7 @@
 					</div>
 				</div>
 			
-			</div>-->
+			</div>
 		</div>
 
 	</div>
@@ -63,8 +63,8 @@
 	<nav class="navbar fixed-bottom navbar-light bg-dark" style="position:sticky; bottom:0; height:11%; margin-top:1rem;">
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-6" style="display:block; text-align: center;"><a style="color: white;" href="#" ><i class="fa fa-home fa-5x"></i><h1>홈</h1></a></div>
-				<div class="col-6" style="display:block; text-align: center;"><a style="color: white;" href="#" ><i class="fa fa-heart fa-5x"></i><h1>찜</h1></a></div>
+				<div class="col-6" id="bottom_home" style="display:block; text-align: center;"><a style="color: white; text-decoration:none" href="#" ><i class="fa fa-home fa-6x" id="bottom_home_btn" type="button"></i><h1>홈</h1></a></div>
+				<div class="col-6" id="bottom_liked" style="display:block; text-align: center;"><a style="color: white; text-decoration:none" href="#" ><i class="fa fa-heart fa-4x" id="bottom_liked_btn" type="button"></i><h1>찜</h1></a></div>
 			
 			</div>
 		</div>
@@ -75,11 +75,22 @@
 <script>
 
 	var page = 1;
+	//var liked_list = $('i[name="heart_btn"]');
+	var liked_list = $('row');
+	var liked_list_pk = new Array();
+
+	$(document).ready(function(e){
+		liked_list = $('i[name="heart_btn"]');		
+		for(var i =0; i<liked_list.length; i++){
+			liked_list_pk = liked_list[i].dataset.pk;
+		}
+
+	});
 	//검색기능
 	var search_keyword;
 
 	$(document).ready(function(e) {
-		$('#client_search_keyword').keydown(function(e){
+		$('#client_search_keywords').keydown(function(e){
 			if(e.keyCode==13) {
 				search_keyword = $(this).val();
 				console.log("enter");
@@ -94,10 +105,11 @@
 						'search_keyword' : search_keyword,
 					},
 					success : function(data) {
-							$('#container_store_list').empty();
+						$('#container_store_list').empty();
 						for(var i=0; i<data.length; i++) {
 							create_store_info(data[i]);
 						}
+						page = page+1;
 					},
 
 				})
@@ -111,12 +123,78 @@
 		$(this).attr('class','fas fa-heart fa-6x');
 		$(this).attr('name', 'heart_btn');
 	});
-
 	$(document).on('click','i[name=heart_btn]',function(e){
 		console.log("changed empty");
 		$(this).attr('class','far fa-heart fa-6x');
 		$(this).attr('name', 'heart_empty_btn');
 	});
+
+
+	//좋아요한 리스트
+	$(document).on('click','i[name="heart_empty_btn"]',function(e){
+		liked_list = $('row');
+
+		console.log("list:"+liked_list.length);
+		liked_list_pk = new Array();
+
+		for(var i = 0; i<liked_list.length; i++){
+			//liked_list_pk = liked_list[i].dataset.pk;
+			//console.log("pk : "+liked_list_pk);
+			console.log(liked_list[i]);
+		}
+	});
+
+	$(document).on('click','i[name="heart_btn"]',function(e){
+		liked_list = $('i[name="heart_btn"]');
+
+		console.log("list:"+liked_list.length);
+		liked_list_pk = new Array();
+
+		for(var i = 0; i<liked_list.length; i++){
+			liked_list_pk = liked_list[i].dataset.pk;
+			console.log("pk : "+liked_list_pk);
+		}
+	});
+
+	//하단 메뉴 선택시 활성화 표시
+	var store_list;
+
+	$(document).on('click', '#bottom_home', function(e) {
+		console.log("click home");
+		$('#bottom_home_btn').attr('style','display:block; text-align:center; ');
+		$('#bottom_home_btn').attr('class','fa fa-home fa-6x')
+
+		$('#bottom_liked_btn').attr('class','fa fa-heart fa-4x');
+	});
+
+	$(document).on('click', '#bottom_liked', function(e) {
+		console.log("click liked");
+		$('#bottom_liked_btn').attr('style','display:block; text-align:center;');
+		$('#bottom_liked_btn').attr('class','fa fa-heart fa-6x')
+		
+		$('#bottom_home_btn').attr('class','fa fa-home fa-4x');
+
+		$.ajax({
+			url: "{% url 'watcher:ajax_client_liked_list' %}",
+			type : 'GET',
+			data :{
+				'pk' : liked_list_pk,
+
+			},
+			success : function(data){
+				$('#container_store_list').empty();
+
+				for(var i=0; i<data.length; i++) {
+					create_store_info(data);
+				}
+			},
+		})
+
+
+	});
+
+	//스크롤 위치 기억
+
 
 	//가게 목록 생성 함수
 
@@ -131,7 +209,7 @@
 			//path = "/static/img/modal_cafe_img.jpg";
 			console.log("path :" + path);
 		}
-		$('#container_store_list').append('<div class="row" style="border: solid black 1px; margin-left:4%; margin-right:4%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em; margin-bottom:3.5rem;"><div class="col-12" style="height:36vh; padding:0; "><div class="card" style="height:100%; width:100%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><img src="'+path+'" alt="" class="card-img-top" style="height:60%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><div class="card-body" style="height:90%;"><div><h1 class="card-title" style="font-size:7rem; display: inline-block;">'+list.store_name+'</h1><i type="button" name="heart_empty_btn" class="far fa-heart fa-6x" style="color:red; float:right; padding:2%;"></i></div><h3 style="display:block; color:gray;" >위치 : '+list.store_location+'</h3><div class="container-fluid" name="card-footer" style="position:absolute; right:0px; bottom:0px; padding-bottom: 2%;"><a href="#" class="btn btn-dark btn-lg" id="next_page_button" data-pk="'+list.pk+'" style="font-size:4rem; float:right; border-top-right-radius: 0.5em; border-top-left-radius: 0.5em; border-bottom-right-radius: 0.5em; border-bottom-left-radius: 0.5em; padding:1.5%;">방문하기</a></div></div></div></div>')
+		$('#container_store_list').append('<div class="row" style="border: solid black 1px; margin-left:4%; margin-right:4%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em; margin-bottom:3.5rem;"><div class="col-12" style="height:36vh; padding:0; "><div class="card" style="height:100%; width:100%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><img src="'+path+'" alt="" class="card-img-top" style="height:60%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><div class="card-body" style="height:90%;"><div><h1 class="card-title" style="font-size:7rem; display: inline-block;">'+list.store_name+'</h1><i type="button" name="heart_empty_btn" class="far fa-heart fa-6x" data-pk="'+list.pk+'" style="color:red; float:right; padding:2%;"></i></div><h3 style="display:block; color:gray;" >위치 : '+list.store_location+'</h3><div class="container-fluid" name="card-footer" style="position:absolute; right:0px; bottom:0px; padding-bottom: 2%;"><a href="#" class="btn btn-dark btn-lg" id="next_page_button" data-pk="'+list.pk+'" style="font-size:4rem; float:right; border-top-right-radius: 0.5em; border-top-left-radius: 0.5em; border-bottom-right-radius: 0.5em; border-bottom-left-radius: 0.5em; padding:1.5%;">방문하기</a></div></div></div></div>')
 		
 	}
 
@@ -167,7 +245,6 @@
 	});
 
 	//이후 스크롤이 일정범위 벗어나면 5개씩 추가로 가져옴
-	var page_end = 0;
 	window.onscroll = function(e) {
 		var keyword = $('#client_search_keyword').val();
 
@@ -188,11 +265,13 @@
 	    });
     };
 
+    //매장 방문버튼 클릭시 페이지 이동
 	$(document).on('click', '#next_page_button', function(e){
 		let target_pk = $(e.target).data('pk')
 		console.log($(e.target).data('pk'))
 		location.href="/client_page/" + target_pk
 	});
 
+	
 </script>
 </html>
