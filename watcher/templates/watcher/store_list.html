@@ -51,7 +51,7 @@
 			<div class="input-group mb-3" style="width:25%; float:right;">
 				<input type="text" id="keyword" class="form-control" placeholder="검색 내용" aria-label="검색 내용" aria-describedby="button-addon2">
 				<div class="input-group-append" style="background-color: #343a40; border-top-right-radius: 0.3em; border-bottom-right-radius: 0.3em; min-width:18%; width:18%;">
-					<i type="button" id="button-addon2" class="fa fa-search fa-lg fa-fw" style="display:block; width:100%; padding-top:10px; color:white;"></i>
+					<i  id="button-addon2" class="fa fa-search fa-lg fa-fw" style="display:block; width:100%; padding-top:10px; color:white;"></i>
 				</div>
 			</div>
 			
@@ -77,11 +77,11 @@
 				<tr id="tr_store_list_{{list.pk}}">
 					<input type="hidden" data-pk="{{list.pk}}" data-store_name="{{list.store_name}}" data-store_location="{{list.store_location}}" data-picture_name="{{list.picture_name}}">
 					<td>
-						<a href ="store_info/{{list.pk}}/"><i type="button" style="color:white; margin:4px;" class="fa fa-home" ></i></a>{{list.pk}}
+						<a href ="store_info/{{list.pk}}/"><i style="color:white; margin:4px;" class="fa fa-home" ></i></a>{{list.pk}}
 					</td>
 					<td><i class="fa fa-store"></i>{{list.store_name}}</td>
 					<td>{{list.store_location}}</td>
-					<td><i type="button" id="td_store_edit_button_{{list.pk}}" name="td_store_edit_button" data-pk="{{list.pk}}" data-store_name="{{list.store_name}}" data-store_location="{{list.store_location}}" data-picture_name="{{list.picture_name}}" data-toggle="modal" data-target="#modal_store_edit"  style="margin:4px" class="fa fa-edit" ></i><i type="button" id="td_store_delete_button" name="{{list.pk}}" style="margin:4px" class="fa fa-trash"></i></td>
+					<td><i id="td_store_edit_button_{{list.pk}}" name="td_store_edit_button" style="padding-left:5%;" data-pk="{{list.pk}}" data-store_name="{{list.store_name}}" data-store_location="{{list.store_location}}" data-picture_name="{{list.picture_name}}" data-toggle="modal" data-target="#modal_store_edit"  style="margin:4px" class="fa fa-edit" ></i><i id="td_store_delete_button" name="{{list.pk}}" style="margin:4px; padding-left:10%;" class="fa fa-trash"></i></td>
 				</tr>
 				{% endfor %}
   				</tbody>
@@ -145,7 +145,7 @@
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" id="modal_store_add_close_btn" class="btn btn-secondary" data-dismiss="modal" onClick="modal_store_init()">닫기</button>
-		        <button type="button" id="modal_store_add_btn" data-dismiss="modal" class="btn btn-primary">매장 추가</button>
+		        <button type="button" id="modal_store_add_btn" data-dismiss="modal" onClick="modal_store_init()" class="btn btn-primary">매장 추가</button>
 		      </div>
 		    </div>
 		  </div>
@@ -228,7 +228,7 @@
 	}
 
 	function create_store_info(data) {
-		$('#tbody_store').append('<tr id="tr_store_list_'+data.pk+'"><input type="hidden" data-pk="'+data.pk+'" data-store_name="'+data.store_name+'" data-store_location="'+data.store_location+'" data-picture_name="'+data.picture_name+'"><td><a href="store_info/'+data.pk+'/""><i type="button" style="color:white; margin:4px;" class="fa fa-home"></i></a>'+data.pk+'</td><td><i class="fa fa-store"></i>'+data.store_name+'</td><td>'+data.store_location+'</td><td><i type="button" id="td_store_edit_button_'+data.pk+'" name="td_store_edit_button" data-pk="'+data.pk+'" data-store_name="'+data.store_name+'" data-store_location="'+data.store_location+'" data-picture_name="'+data.picture_name+'" data-toggle="modal" data-target="#modal_store_edit"  style="margin:4px" class="fa fa-edit" ></i><i type="button" id="td_store_delete_button" name="'+data.pk+'" style="margin:4px" class="fa fa-trash"></i></td></tr>');
+		$('#tbody_store').append('<tr id="tr_store_list_'+data.pk+'"><input type="hidden" data-pk="'+data.pk+'" data-store_name="'+data.store_name+'" data-store_location="'+data.store_location+'" data-picture_name="'+data.picture_name+'"><td><a href="store_info/'+data.pk+'/""><i style="color:white; margin:4px;" class="fa fa-home"></i></a>'+data.pk+'</td><td><i class="fa fa-store"></i>'+data.store_name+'</td><td>'+data.store_location+'</td><td><i id="td_store_edit_button_'+data.pk+'" style="padding-left:5%;" name="td_store_edit_button" data-pk="'+data.pk+'" data-store_name="'+data.store_name+'" data-store_location="'+data.store_location+'" data-picture_name="'+data.picture_name+'" data-toggle="modal" data-target="#modal_store_edit"  style="margin:4px" class="fa fa-edit" ></i><i id="td_store_delete_button" name="'+data.pk+'" style="margin:4px padding-left:10%;" class="fa fa-trash"></i></td></tr>');
 	}
 	
 		/*가게 테이블 리스트 삭제*/

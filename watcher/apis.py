@@ -254,7 +254,7 @@ def delete_camera_list(request) :
 	return HttpResponse('delete success') #수정 필요 -> 2020-08-25 수정완료
 
 def check_camera_connection(request) :
-	cur_host = request.GET.get('cur_host')
+	cur_host = request.POST.get('cur_host')
 
 	try :
 		rq = requests.get(cur_host+'/test',timeout=5)
@@ -264,8 +264,8 @@ def check_camera_connection(request) :
 
 
 def check_camera_connection_table(request) :
-	cur_host = request.GET.get('cur_host')
-	pk = int(request.GET['pk'])
+	cur_host = request.POST.get('cur_host')
+	pk = int(request.POST['pk'])
 
 	try :
 		rq = requests.get(cur_host+'/test',timeout=5)

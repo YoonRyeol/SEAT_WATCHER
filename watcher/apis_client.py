@@ -7,9 +7,10 @@ import json
 from django.db.models import Q
 
 def get_client_store_list(request) :
-	pages = request.GET.get('page',1)
+	pages = request.GET.get('page',0)
 	keyword = request.GET.get('search_keyword',"None")
 
+	print(pages)
 	if keyword == "None" :
 		stores = Store.objects.all()
 	else :
@@ -23,11 +24,17 @@ def get_client_store_list(request) :
 		stores = paginator.page(0)
 	except EmptyPage :
 		stores = paginator.page(paginator.num_pages)
+		print("end page")
 		return HttpResponse("end")
 
 	serialized_stores = StoreSerializer(stores,many=True)
+	pages = int(pages) +int(1)
+	data ={
+		'st' : serialized_stores.data,
+		'page' : pages
+	}
 
-	return HttpResponse(json.dumps(serialized_stores.data))
+	return JsonResponse(data)
 
 
 def search_client_store_list(request) :
@@ -40,7 +47,7 @@ def search_client_store_list(request) :
 	try :
 		stores = paginator.page(pages)
 	except PageNotAnInteger :
-		stores = paginator.page(0)
+		stores = paginator.page(1)
 	except EmptyPage :
 		stores = paginator.page(paginator.num_pages)
 		return HttpResponse("end")

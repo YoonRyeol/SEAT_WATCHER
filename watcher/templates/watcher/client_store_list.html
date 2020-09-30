@@ -56,7 +56,7 @@
 					</div>
 				</div>
 			</div>-->
-			
+
 		</div>
 
 	</div>
@@ -95,6 +95,7 @@
 	var pk_list = new Array();
 
 	$(document).ready(function(e){
+		if(!(myStorage_arry)) return;
 		for(var i=0; i<myStorage_arry.length;i++){
 			pk_list.push(myStorage_arry[i]);
 			console.log("pk_list :"+pk_list[i]);
@@ -118,8 +119,8 @@
 					},
 					success : function(data) {
 						$('#container_store_list').empty();
-						for(var i=0; i<data.length; i++) {
-							create_store_info(data[i]);
+						for(var i=0; i<data.st.length; i++) {
+							create_store_info(data.st[i]);
 						}
 						page = page+1;
 					},
@@ -200,7 +201,7 @@
 		store_list=[];
 		mutex_liked = 0;
 	});
-
+	
 	$(document).on('click', '#bottom_liked', function(e) {
 	
 		$('#client_search_keyword').attr('id','client_liked_keyword');
@@ -222,6 +223,11 @@
 				'pk_list[]' : myStorage_arry,
 			},
 			success : function(data){
+				if(data === "end") {
+					console.log(data);
+					return;
+				}
+
 				for(var i=0; i<data.length;i++){
 					create_store_info(data[i]);
 					empty_heart_click(data[i].pk);
@@ -242,6 +248,9 @@
 	function create_store_info(list){
 		var path;
 		if(list.picture_name == "modal_cafe_img.jpg" ){
+			path = "/static/img/store/modal_cafe_img.jpg";
+		}
+		else if(list.picture_name == "undefined"){
 			path = "/static/img/store/modal_cafe_img.jpg";
 		}
 		else {
@@ -278,18 +287,19 @@
 				'search_keyword' : search_keyword,
 			},
 			success : function(data) {
+				console.log("ajax page");
+				for(var i = 0; i < data.st.length; i++) {
+					create_store_info(data.st[i]);
 
-				for(var i = 0; i < data.length; i++) {
-					create_store_info(data[i]);
-
-					if(find_number(data[i].pk)){
-						empty_heart_click(data[i].pk);
+					if(find_number(data.st[i].pk)){
+						empty_heart_click(data.st[i].pk);
 					}
 					else {
-						console.log("false : "+data[i].pk);
+						console.log("false : "+data.st[i].pk);
 					}
 				}
-				page = page+1;
+				console.log("page plus : "+page);
+				page = data.page;
 			},
 
 		});
@@ -297,7 +307,7 @@
 
 	$(document).ready(function(){
 		if(page==1){
-			console.log("page : "+page);
+			console.log("first page : "+page);
 			if(mutex_liked) return;
 			store_pagination();
 		}
@@ -316,8 +326,9 @@
 	    	//console.log("innerHeight : " + window.innerHeight);
 	    	//console.log("scrollY : " + window.scrollY);
 	    	//console.log(element.offsetHeight);
-	    	
-	    	if((window.innerHeight + window.scrollY) >= element.offsetHeight) {
+
+	    	if((window.innerHeight + window.scrollY) >= element.offsetHeight && page>1) {
+	    		//console.log("page:"+page);
 	    		store_pagination();
 	    	}//if end
 	    });
