@@ -5,13 +5,18 @@
 		top:1.5rem;
 	}
 }
-@media screen and (min-width:530px){
+@media screen (max-width:320px){
+		#client_search_btn{
+		top:1.1rem;
+	}
+}
+@media screen and (max-width:530px){
 	*{
 	}
 	
 	.input-group-append {
 	}
 	#client_search_btn {
-		top:20%;
+		top:0.4rem;
 	}
 }

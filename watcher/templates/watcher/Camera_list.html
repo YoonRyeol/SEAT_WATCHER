@@ -577,7 +577,6 @@
 			
 			if (confirm('정말 추가 하시겠습니까?')) {
 
-				
 				console.log(camera_description);
 				console.log("{{store_id}}");
 				$.ajax({
@@ -708,8 +707,6 @@
 		var connection_loop = setInterval_camera_connection_table(camera_connection_table,36000);
 
 	
-
-
 		/* floor 추가 modal 버튼 */
 		$(document).on('click', '#add_floor_button',function(e) {
 			var list = $('#tbody_camera > tr > input[data-floor_id=None]'); //카메라리스트 중에 floor_id가 배정 안된 카메라목록
@@ -718,7 +715,7 @@
 			console.log("start");
 			create_unused_camera_table(list,"add");
 		});
-
+		
 		$(document).on('click', '#modal_floor_add_btn', function(e) {
 			var store_id = "{{store.pk}}"
 			var floor_name = $('#modal_floor_add_name').val();
@@ -914,6 +911,7 @@
 							if(element.floor_id === null){element.floor_id = "None"}
 							if(element.mac_addr === null){element.mac_addr = "None"}
 						});
+						
 						$('#tbody_camera').empty();
 						for(var i =0; i < data.length; i++){create_camera_info(data[i]);}
 

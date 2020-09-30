@@ -50,11 +50,13 @@ def search_client_store_list(request) :
 	return HttpResponse(json.dumps(serialized_stores.data))
 
 
-def client_liked_list(requset) :
-	pk_list = request.GET.getlist('pk[]')
+def client_liked_list(request) :
+	pk_list = request.GET.getlist('pk_list[]')
+	stores = Store.objects.none()
+
 
 	for pk in pk_list :
-		stores.union(Store.objects.filter(pk=pk))
+		stores = stores | Store.objects.filter(pk=pk)
 
 	serialized_stores = StoreSerializer(stores,many=True)
 
