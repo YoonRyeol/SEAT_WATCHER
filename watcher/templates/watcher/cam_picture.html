@@ -19,7 +19,9 @@
     fabric.Image.fromURL(picture_addr, imgObj => {
             canvas.setBackgroundImage(imgObj, canvas.renderAll.bind(canvas), {
                 opacity: 1,
-                strech: true
+                strech: true,
+                width:IMAGE_WIDTH,
+                height:IMAGE_HEIGHT
         });
     });
 

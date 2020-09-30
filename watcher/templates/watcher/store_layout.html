@@ -190,8 +190,9 @@
       var top = cur_data.layout_f_y * IMAGE_HEIGHT
       var width = Math.abs((cur_data.layout_s_x - cur_data.layout_f_x) * IMAGE_WIDTH)
       var height = Math.abs((cur_data.layout_s_y - cur_data.layout_f_y) * IMAGE_HEIGHT)
-      Add(_left = left, _top = top, _width = width, _height = height, _scaleX = 1, _scaleY = 1, _pk = cur_data.id)
+      Add(_left = left, _top = top, _width = width, _height = height, _scaleX = 1, _scaleY = 1, _pk = cur_data.id, _is_elec=cur_data.is_elec)
     }
+    console.log(get_objects())
   });
 
 
@@ -222,10 +223,13 @@
     var target_tr = $(this).closest('tr');
     var target_hidden = $(target_tr).find('input[type="hidden"]')
     var target_pk = $(target_hidden).data('pk') * 1
+    var target_is_elec = $(target_hidden).data('is_elec') == 'True' ? true : false;
     $('.card-body[pic_name="' + target_pic_name + '"').find('#deployed_table_list > tbody:last-child').append(target_tr)
     $(this).html('<i class="far fa-trash-alt"></i>')
     $(this).attr('id', 'delete_rec_btn')
-    Add(_left = 100, _top = 50, _width = 100, _height = 100, _scaleX = 1, _scaleY = 1, _pk = target_pk)
+    Add(_left = 100, _top = 50, _width = 100, _height = 100, _scaleX = 1, _scaleY = 1, _pk = target_pk, _is_elec=target_is_elec)
+    console.log(get_objects())
+
   });
 
   $(document).on('click', '#delete_rec_btn', function (e) {
@@ -288,7 +292,7 @@
   }
 
 
-  function Add(_left = 100, _top = 50, _width = 100, _height = 100, _scaleX = 1, _scaleY = 1, _pk = null) {
+  function Add(_left = 100, _top = 50, _width = 100, _height = 100, _scaleX = 1, _scaleY = 1, _pk = null, _is_elec=false) {
     console.log('_pk : ' + _pk)
     var rect = new fabric.Rect({
 
@@ -304,6 +308,8 @@
     });
 
     var id_text = _pk + ''
+    if(_is_elec)
+      id_text += '\u26A1';
 
     var text = new fabric.Text(id_text, {
       fontSize: 30,
