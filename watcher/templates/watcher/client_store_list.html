@@ -283,6 +283,7 @@
 			url : "{% url 'watcher:ajax_get_client_store_list' %}",
 			dataType: 'json',
 			type :'GET',
+			async :false,
 			data : {
 				'page' : page,
 				'search_keyword' : search_keyword,

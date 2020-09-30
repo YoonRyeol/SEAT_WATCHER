@@ -33,7 +33,8 @@ def get_client_store_list(request) :
 	pages = int(pages) +int(1)
 	data ={
 		'st' : serialized_stores.data,
-		'page' : pages
+		'page' : pages,
+		'msg' : "good",
 	}
 
 	return JsonResponse(data)
