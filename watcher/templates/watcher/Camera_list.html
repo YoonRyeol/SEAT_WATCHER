@@ -59,7 +59,7 @@
 			<div class="input-group mb-3" style="width:25%; float:right;">
 				<input type="text" id="keyword_camera" class="form-control" placeholder="검색 내용" aria-label="검색 내용" aria-describedby="button-addon2">
 				<div class="input-group-append" style="background-color: #343a40; border-top-right-radius: 0.3em; border-bottom-right-radius: 0.3em; min-width:18%; width:18%;">
-					<i type="button" id="button-addon2" class="fa fa-search fa-lg fa-fw" style="display:block; width:100%; padding-top:10px; color:white;"></i>
+					<i id="camera_table_search_btn" class="fa fa-search fa-lg fa-fw" style="display:block; width:100%; padding-top:10px; color:white;"></i>
 				</div>
 			</div>
 		</div>
@@ -88,7 +88,7 @@
 						<td class="td_camera_{{list.pk}}"> </td>
   						<td>{{list.mac_addr}}</td>
   						<td>{{list.description}}</td>
-  						<td><i type="button" name="{{list.pk}}" data-toggle="modal" data-target="#modal_camera_edit" style="margin:4px" class="fa fa-edit" id="td_camera_edit_button"><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px" class="fa fa-trash" name= "{{list.pk}}" id="td_camera_delete_button"></i></td>
+  						<td><i name="{{list.pk}}" data-toggle="modal" data-target="#modal_camera_edit" style="margin:4px; padding-left:5%;" class="fa fa-edit" id="td_camera_edit_button"></i><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px; padding-left:10%;" class="fa fa-trash" name= "{{list.pk}}" id="td_camera_delete_button"></i></td>
   					</tr>
   					{% endfor %}
   					
@@ -105,7 +105,7 @@
 			<div class="input-group mb-3" style="width:25%; float:right; padding-top:1%;">
 				<input type="text" id="keyword_floor" class="form-control" placeholder="검색 내용" aria-label="검색 내용" aria-describedby="button-addon2">
 				<div class="input-group-append" style="background-color: #343a40; border-top-right-radius: 0.3em; border-bottom-right-radius: 0.3em; min-width:18%; width:18%;">
-					<i type="button" id="button-addon2" class="fa fa-search fa-lg fa-fw" style="display:block; width:100%; padding-top:10px; color:white;"></i>
+					<i id="floor_table_search_btn" class="fa fa-search fa-lg fa-fw" style="display:block; width:100%; padding-top:10px; color:white;"></i>
 				</div>
 			</div>
 		</div>
@@ -129,7 +129,7 @@
 						<td class="clickable" onclick='move_page(this)' link="layout/{{list.pk}}">{{list.floor_num}}</td>
   						<td>{{list.name}}</td>
   						<td>{{list.description}}</td>
-  						<td><i type="button" name="{{list.pk}}" data-toggle="modal" data-target="#modal_floor_edit"  style="margin:4px" class="fa fa-edit" id="td_floor_edit_button"><input type="hidden" name= "{{list.pk}}"></i><i type="button" style="margin:4px" class="fa fa-trash" name= "{{list.pk}}" id="td_floor_delete_button"></i></td>
+  						<td><i name="{{list.pk}}" data-toggle="modal" data-target="#modal_floor_edit"  style="margin:4px; padding-left:5%;" class="fa fa-edit" id="td_floor_edit_button"><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px; padding-left:10%;" class="fa fa-trash" name= "{{list.pk}}" id="td_floor_delete_button"></i></td>
   					</tr>
   					{% endfor %}
   					
@@ -414,7 +414,7 @@
 
 		/*카메라 리스트 생성 ,추가 함수*/
 		function create_camera_info(data) {
-			$('#tbody_camera').append('<tr id="tr_list_'+data.pk+'"><input type="hidden" data-pk="'+data.pk+'" data-cur_pic="'+data.cur_pic+'" data-mac_addr="'+data.mac_addr+'" data-cur_host="'+data.cur_host+'" data-description="'+data.description+'" data-store_id="'+data.store_id+'" data-floor_id="'+data.floor_id+'"><td class="clickable" onclick="move_page(this)" link="camera/'+data.pk+'"><i style="margin:4px;" class="fa fa-camera"></i><a style="margin:4px; color:white;" href= "camera/'+data.pk+'">'+data.pk+'</a></td><td><i style="margin:4px" class="fa fa-eye"></i></td><td>'+data.mac_addr+'</td><td>'+data.description+'</td><td><i type="button" name="'+data.pk+'" data-toggle="modal" data-target="#modal_camera_edit"  style="margin:4px" class="fa fa-edit" id="td_camera_edit_button"><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px" class="fa fa-trash" name= "'+data.pk+'" id="td_camera_delete_button"></i></td></tr>');
+			$('#tbody_camera').append('<tr id="tr_list_'+data.pk+'"><input type="hidden" data-pk="'+data.pk+'" data-cur_pic="'+data.cur_pic+'" data-mac_addr="'+data.mac_addr+'" data-cur_host="'+data.cur_host+'" data-description="'+data.description+'" data-store_id="'+data.store_id+'" data-floor_id="'+data.floor_id+'"><td class="clickable" onclick="move_page(this)" link="camera/'+data.pk+'"><i style="margin:4px;" class="fa fa-camera"></i><a style="margin:4px; color:white;" href= "camera/'+data.pk+'">'+data.pk+'</a></td><td><i style="margin:4px" class="fa fa-eye"></i></td><td>'+data.mac_addr+'</td><td>'+data.description+'</td><td><i  name="'+data.pk+'" data-toggle="modal" data-target="#modal_camera_edit"  style="margin:4px; padding-left:5%;" class="fa fa-edit" id="td_camera_edit_button"><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px; padding-left:10%;" class="fa fa-trash" name= "'+data.pk+'" id="td_camera_delete_button"></i></td></tr>');
 		}
 
 		/*floor 모달에서 카메라가 배정되는 floor_id를 수정해주는 함수 */
@@ -453,7 +453,7 @@
 
 		/* floor 리스트 추가 함수 */
 		function create_floor_info(data) {
-			$('#tbody_floor').append('<tr id="tr_list_'+data.pk+'" data-store="'+data.store_id+'"><input type="hidden" data-pk="'+data.pk+'" data-name="'+data.name+'" data-num="'+data.floor_num+'" data-store_id="'+data.store_id+'" data-description="'+data.description+'" ><td id="c_num_'+data.pk+'">'+data.floor_num+'</td><td>'+data.name+'</td><td>'+data.description+'</td><td><i type="button" name="'+data.pk+'" data-toggle="modal" data-target="#modal_floor_edit"  style="margin:4px" class="fa fa-edit" id="td_floor_edit_button"><input type="hidden" name="'+data.pk+'"></i><i type="button" style="margin:4px" class="fa fa-trash" name="'+data.pk+'" id="td_floor_delete_button"></i></td></tr>');
+			$('#tbody_floor').append('<tr id="tr_list_'+data.pk+'" data-store="'+data.store_id+'"><input type="hidden" data-pk="'+data.pk+'" data-name="'+data.name+'" data-num="'+data.floor_num+'" data-store_id="'+data.store_id+'" data-description="'+data.description+'" ><td id="c_num_'+data.pk+'">'+data.floor_num+'</td><td>'+data.name+'</td><td>'+data.description+'</td><td><i name="'+data.pk+'" data-toggle="modal" data-target="#modal_floor_edit" style="margin:4px; padding-left:5%;" class="fa fa-edit" id="td_floor_edit_button"><input type="hidden" name="'+data.pk+'"></i><i style="margin:4px padding-left:10%; " class="fa fa-trash" name="'+data.pk+'" id="td_floor_delete_button"></i></td></tr>');
 
 		
 		}
@@ -661,8 +661,9 @@
 
 				$.ajax({
 					url: "{% url 'watcher:ajax_check_camera_connection' %}",
-					type : 'GET',
+					type : 'POST',
 					data : {
+						'csrfmiddlewaretoken' : "{{csrf_token}}",
 						'cur_host' : cur_host,
 					},
 					success : function(data) {
@@ -680,10 +681,12 @@
 			for( var i=0 ; i < camera_list.length ; i++) {
 				cur_host = camera_list[i].dataset.cur_host;
 				pk = camera_list[i].dataset.pk;
+				
 				$.ajax({
 					url : "{% url 'watcher:ajax_check_camera_connection_table' %}",
-					type : 'GET',
+					type : 'POST',
 					data : {
+						'csrfmiddlewaretoken' : "{{csrf_token}}",
 						'cur_host' : cur_host,
 						'pk' : pk,
 					},success : function(data) {
