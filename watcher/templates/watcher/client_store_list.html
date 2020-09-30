@@ -274,9 +274,10 @@
 	}
 
 	//페이지 네이션 구현 부분
+	var page_end=0;
 	function store_pagination() {
 		if(mutex_liked)return;
-		var temp;
+		if(page_end) return;
 
 		$.ajax({
 			url : "{% url 'watcher:ajax_get_client_store_list' %}",
@@ -287,8 +288,14 @@
 				'search_keyword' : search_keyword,
 			},
 			success : function(data) {
-				console.log("ajax page");
+				if(data.msg == "end") {
+					console.log("page endd");
+					page_end=1;
+					return;
+				}
+
 				for(var i = 0; i < data.st.length; i++) {
+					console.log("data length : "+ data.st.length);
 					create_store_info(data.st[i]);
 
 					if(find_number(data.st[i].pk)){
