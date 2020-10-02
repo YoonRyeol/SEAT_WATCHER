@@ -3,9 +3,15 @@
     <link rel="stylesheet" type="img" href="/static/img/bolt-solid.svg">
 
 <style>
+        .cafe_entire_status{
+            animation-name: fade-in;
+            animation-duration: 1s;
+            animation-timing-function: ease-in;
+            animation-direction: normal;
+        }
         .normal {
             position: relative;
-            left: 50%;
+            left: 43%;
             top: 20px;
             width: 150px;
             height: 50px;
@@ -24,7 +30,17 @@
             }
 
             to {
-                left: 50%;
+                left: 43%;
+                opacity: 100%;
+            }
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0%;
+            }
+
+            to {
                 opacity: 100%;
             }
         }
@@ -32,12 +48,22 @@
 </head>
 
 <body>
-
-    <div class='counter' data-count="{{occupied_table_count}}" data-max="{{all_table_count}}" style='font-size:30px; text-align: center;'>0/{{all_table_count}}</div>
-    <div class='my-3'>
-        <div class="normal"><i class="fas fa-bolt fa-2x" style="color:#ffff00"></i>{{elec_occupied}}/{{elec_all}}</div>
+    <div class='mt-3' style="margin: 5%;"></div>
+    <h1 class='display-4 cafe_entire_status' style='text-align: center;'>&#129321;{{store.store_name}} 좌석 현황이예요.</h1>
+    <br/>
+    <h1 class='display-5 cafe_entire_status' style='text-align: center;'>&#x2615; 현재 카페의 좌석 현황은 아래와 같아요.</h1>
+    <h1 class='counter display-1 cafe_entire_status' data-count="{{occupied_table_count}}" data-max="{{all_table_count}}" style='text-align: center;'>0/{{all_table_count}}</h1>
+    <br/>
+    <h1 class='display-5 cafe_entire_status' style='text-align: center;'>&#9889;  전기사용 가능한 좌석 현황은 아래와 같아요.</h1>
+    <div style="margin-bottom:3%">
+        <h1 class="normal display-1">{{elec_occupied}}/{{elec_all}}</h1>
+        <div class="normal"></div>
     </div>
-    <div class='container-fluid'>
+    <br/>
+    <h1 class='display-5 cafe_entire_status' style='text-align: center;'>아래의 좌석 배치도로 비어있는 자리를 확인해보세요~</h1>
+    <h1 class='display-5 cafe_entire_status' style='text-align: center;'>&#128071;&#128071;&#128071;&#128071;&#128071;</h1>
+    <br/>
+    <div class='container-fluid cafe_entire_status'>
     <div class='layout'>
         <div class="card text-center">
             <div class="card-header">

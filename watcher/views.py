@@ -92,6 +92,9 @@ def client_store_list(request) :
 	return render(request, 'watcher/client_store_list.html',{"store_list" : store_list})
 
 def client_page(request, store_pk=None):
+	store = None
+	if store_pk != None:
+		store = Store.objects.get(pk=int(store_pk))
 	all_table_count = Table.objects.filter(store__pk=store_pk).count()
 	occupied_table_count = Table.objects.filter(store__pk=store_pk, is_occupied=True).count()
 	elec_all = Table.objects.filter(store__pk=store_pk, is_elec=True).count()
@@ -114,6 +117,7 @@ def client_page(request, store_pk=None):
 
 
 	return render(request, 'watcher/client_page.html', {
+														'store' : store,
 														'all_table_count':all_table_count,
 														'occupied_table_count':occupied_table_count,
 														'floor_list' : floor_list,
