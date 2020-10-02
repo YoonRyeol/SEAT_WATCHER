@@ -1,4 +1,4 @@
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, FileResponse
 from watcher.models import *
 import requests
 import json
@@ -397,7 +397,6 @@ def save_layout(request):
 	floor_pk = int(request.POST['floor_pk'])
 	floor = Floor.objects.get(pk=floor_pk)
 	cur_pk_list = []
-
 	for datum in layout_pos_data:
 		save_datum = {
 			'floor':floor,
@@ -406,7 +405,7 @@ def save_layout(request):
 			'layout_s_x':datum['s_x'],
 			'layout_s_y':datum['s_y']
 		}
-		Table.objects.filter(pk=datum['pk']).update(**save_datum)
+		Table.objects.filter(pk=int(datum['pk'])).update(**save_datum)
 		cur_pk_list.append(datum['pk'])
 
 	
@@ -516,5 +515,3 @@ def update_cam_addr(request):
 	camera.save()
 
 	return HttpResponse('update_success')
-
-

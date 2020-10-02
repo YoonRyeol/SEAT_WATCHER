@@ -163,6 +163,8 @@
 
 //        var id_text = _pk + ''
         var id_text = ''
+        if(_is_elec)
+            id_text += '\u26A1'
 
         var text = new fabric.Text(id_text, {
             fontSize: 30,
