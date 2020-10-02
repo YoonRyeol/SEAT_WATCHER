@@ -145,7 +145,7 @@
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" id="modal_store_add_close_btn" class="btn btn-secondary" data-dismiss="modal" onClick="modal_store_init()">닫기</button>
-		        <button type="button" id="modal_store_add_btn" data-dismiss="modal" onClick="modal_store_init()" class="btn btn-primary">매장 추가</button>
+		        <button type="button" id="modal_store_add_btn" data-dismiss="modal" class="btn btn-primary">매장 추가</button>
 		      </div>
 		    </div>
 		  </div>
@@ -228,7 +228,7 @@
 	}
 
 	function create_store_info(data) {
-		$('#tbody_store').append('<tr id="tr_store_list_'+data.pk+'"><input type="hidden" data-pk="'+data.pk+'" data-store_name="'+data.store_name+'" data-store_location="'+data.store_location+'" data-picture_name="'+data.picture_name+'"><td><a href="store_info/'+data.pk+'/""><i style="color:white; margin:4px;" class="fa fa-home"></i></a>'+data.pk+'</td><td><i class="fa fa-store"></i>'+data.store_name+'</td><td>'+data.store_location+'</td><td><i id="td_store_edit_button_'+data.pk+'" style="padding-left:5%;" name="td_store_edit_button" data-pk="'+data.pk+'" data-store_name="'+data.store_name+'" data-store_location="'+data.store_location+'" data-picture_name="'+data.picture_name+'" data-toggle="modal" data-target="#modal_store_edit"  style="margin:4px" class="fa fa-edit" ></i><i id="td_store_delete_button" name="'+data.pk+'" style="margin:4px padding-left:10%;" class="fa fa-trash"></i></td></tr>');
+		$('#tbody_store').append('<tr id="tr_store_list_'+data.pk+'"><input type="hidden" data-pk="'+data.pk+'" data-store_name="'+data.store_name+'" data-store_location="'+data.store_location+'" data-picture_name="'+data.picture_name+'"><td><a href="store_info/'+data.pk+'/""><i style="color:white; margin:4px;" class="fa fa-home"></i></a>'+data.pk+'</td><td><i class="fa fa-store"></i>'+data.store_name+'</td><td>'+data.store_location+'</td><td><i id="td_store_edit_button_'+data.pk+'" style="padding-left:5%;" name="td_store_edit_button" data-pk="'+data.pk+'" data-store_name="'+data.store_name+'" data-store_location="'+data.store_location+'" data-picture_name="'+data.picture_name+'" data-toggle="modal" data-target="#modal_store_edit"  style="margin:4px" class="fa fa-edit" ></i><i id="td_store_delete_button" name="'+data.pk+'" style="margin:4px; padding-left:10%;" class="fa fa-trash"></i></td></tr>');
 	}
 	
 		/*가게 테이블 리스트 삭제*/
@@ -324,6 +324,9 @@
 			var store_location = $('#modal_store_add_location').val();
 			var picture_name;
 
+			console.log("store_name :"+store_name);
+			console.log("store_location :"+store_location);
+
 			if(mutex_file) {
 					console.log("mutex changed");
 					files = $('input[name=modal_add_pic_file')[0].files[0]; 
@@ -350,6 +353,7 @@
 						console.log("save")
 						console.log("pk :"+data.pk)
 						create_store_info(data);
+						modal_store_init();
 					},
 					error: function (error) {
 						alert('error; ' + eval(error));
