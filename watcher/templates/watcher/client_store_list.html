@@ -78,7 +78,6 @@
 <script>
 
 	var page = 1;
-	var start_liked_count =0;
 
 	//좋아요 눌린 상점 목록
 	var store_liked_list = $('div[name="store_row_liked"]');
@@ -119,8 +118,12 @@
 					},
 					success : function(data) {
 						$('#container_store_list').empty();
-						for(var i=0; i<data.st.length; i++) {
-							create_store_info(data.st[i]);
+						for(var i=0; i<data.length; i++) {
+							create_store_info(data[i]);
+							if(find_number(data[i].pk)) {
+								console.log("find_number")
+								empty_heart_click(data[i].pk);
+							}
 						}
 						page = page+1;
 					},
@@ -264,9 +267,9 @@
 
 
 	function find_number(pk){
-		for(var i=start_liked_count; i < pk_list.length; i++ ) {
+		for(var i=0; i < pk_list.length; i++ ) {
 			if(pk_list[i] == pk) {
-				start_liked_count++;
+				//start_liked_count++;
 				return true;
 			}		
 		}
@@ -274,10 +277,9 @@
 	}
 
 	//페이지 네이션 구현 부분
-	var page_end=0;
+
 	function store_pagination() {
 		if(mutex_liked)return;
-		if(page_end) return;
 
 		$.ajax({
 			url : "{% url 'watcher:ajax_get_client_store_list' %}",
@@ -290,8 +292,6 @@
 			},
 			success : function(data) {
 				if(data.msg == "end") {
-					console.log("page endd");
-					page_end=1;
 					return;
 				}
 
@@ -312,6 +312,7 @@
 
 		});
 	}
+
 
 	$(document).ready(function(){
 		if(page==1){
