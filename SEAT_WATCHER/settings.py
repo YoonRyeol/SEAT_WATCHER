@@ -81,7 +81,7 @@ DATABASES = {
         'NAME': 'project_alpha_db',
         'USER': 'root',
         'PASSWORD': 'tellme',
-        'HOST': '3.23.20.154',
+        'HOST': os.environ['MYSQL_HOST'],
         'PORT': '3306',
     }
 }
