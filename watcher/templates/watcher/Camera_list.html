@@ -79,6 +79,7 @@
 				
 				<tbody id="tbody_camera" name="{{store.pk}}"> <!--store_id 저장-->
 					{% for list in camera_list%}
+
 					<tr id="tr_list_{{list.pk}}">
 						<input type="hidden" data-pk="{{list.pk}}" data-cur_pic="{{list.cur_pic}}" data-mac_addr="{{list.mac_addr}}" data-cur_host="{{list.cur_host}}" data-description="{{list.description}}" data-store_id="{{list.store_id}}" data-floor_id="{{list.floor_id}}">
 						<td class="clickable" onclick='move_page(this)' link="camera/{{list.pk}}">
@@ -99,7 +100,7 @@
   		</div><!--container-fluid end-->
   		<!-- 카메라 테이블 끝 -->
 
-  		<button style="float :left; margin-top: 1%; margin-left : 1%; margin-bottom : 0.5%" id="add_floor_button" data-toggle="modal" data-target="#modal_floor" type="button" class="btn btn-dark" name="{{store.pk}}">층 추가</button>
+  		<button style="float :left; margin-top: 1%; margin-left : 1%; margin-bottom : 0.5%" id="add_floor_button" data-toggle="modal" data-target="#modal_floor_add" type="button" class="btn btn-dark" name="{{store.pk}}">층 추가</button>
 
   		<div class="container-fluid" style=""> 
 			<div class="input-group mb-3" style="width:25%; float:right; padding-top:1%;">
@@ -255,7 +256,7 @@
 		</div>
 
 		<!--floor add btn 모달 -->
-		<div class="modal fade" id="modal_floor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal fade" id="modal_floor_add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 		  <div class="modal-dialog" role="document" style="height:90%;">
 		    <div class="modal-content" style="height:90%;">
 		      <div class="modal-header">
@@ -264,7 +265,7 @@
 		          <span aria-hidden="true">&times;</span>
 		        </button>
 		      </div>
-		      <div class="modal-body">
+		      <div class="modal-body" style="height:63%;">
 		        <form">
 		        	<div class="input-group input-group-sm mb-3" >
 			  			<div class="input-group-prepend" style="width : 13%;">
@@ -285,11 +286,12 @@
 						 <textarea class="form-control" id="modal_floor_add_description" style="resize:none;"></textarea>
 					</div>
 		      		
-		      		<div class="container-fluid" style="padding:0;" >
-		      			<div style="border : solid gray 1px; float:left; width:45%; height :300px; max-height:300px; display:inline-block; overflow: scroll;">
+		      		<div class="container-fluid" style="padding:0; height:63%;" >
+		      			<div style="border : solid gray 1px; float:left; width:206.7px; height :100%; display:inline-block; overflow: auto;">
 		      				<table class="table table-bordered table-hover" id="modal_floor_add_camera_list_left" style="border : none;">
 		      					<thead class="thead-light" >
 		      						<tr >
+		      							<td style="background-color: #e9ecef; position:sticky; top:0;" class="td-sm"></td>
 		      							<td style="background-color: #e9ecef; position:sticky; top:0;" class="td-sm">#</td>
 		      							<td style="background-color: #e9ecef; position:sticky; top:0;" class="td-sm">설명</td>
 		      						</tr>
@@ -298,14 +300,15 @@
 		      					</tbody>
 		      				</table>
 		      			</div>
-		      			<div style="min-width:1%;  max-width: 10%; width: 200px; min-height:300px; display: inline-block;">
+		      			<div style="min-width:1%;  max-width: 10%; width: 200px; height:100%; display: inline-block;">
 		      				<i id="modal_floor_arrow_right_btn" type="button" class="fa fa-arrow-right" onclick='move_modal_floor_unused_used(0)' style="display: block; float: left; position:absolute; top:55%; left:49%;"></i>
 		      				<i id="modal_floor_arrow_left_btn" type="button" class="fa fa-arrow-left" onclick='move_modal_floor_used_unused(0)' style="display: block; float:left; position:absolute; top:65%; left:49%;" ></i>
 		      			</div>
-		      				<div style="border : solid gray 1px; float:right; width:45%; height :300px; max-height:300px; display:inline-block; overflow: scroll;">
+		      				<div style="border : solid gray 1px; float:right; width:45%; height :100%; display:inline-block; overflow: scroll;">
 		      				<table class="table table-bordered table-hover" id="modal_floor_add_camera_list_right" style="border : none;">
 		      					<thead class="thead-light" >
 		      						<tr>
+		      							<td style="background-color: #e9ecef; position:sticky; top:0;" class="td-sm"></td>
 		      							<td style="background-color: #e9ecef; position:sticky; top:0;" class="td-sm">#</td>
 		      							<td style="background-color: #e9ecef; position:sticky; top:0;" class="td-sm">설명</td>
 		      						</tr>
@@ -327,6 +330,81 @@
 		</div>
 
 		<!-- floor edit btn 모달-->
+		<div class="modal fade" id="modal_floor_edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" role="document" style="height:90%;">
+		    <div class="modal-content" style="height:90%;">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="exampleModalLabel"></h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body" style="height:63%;">
+		        <form">
+		        	<div class="input-group input-group-sm mb-3" >
+			  			<div class="input-group-prepend" style="width : 13%;">
+						    <span class="input-group-text" style="display:block; width:100%; text-align: center;"> 층 이름</span>
+						</div>
+						  <input id="modal_floor_edit_name" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" >
+					</div>
+					<div class="input-group input-group-sm mb-3" >
+			  			<div class="input-group-prepend" style="width : 13%;">
+						    <span class="input-group-text" style="display:block; width:100%; text-align:center;" > 층 </span>
+						</div>
+						  <input id="modal_floor_edit_num" type="number" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+					</div>
+					<div class="input-group input-group-sm mb-3">
+			  			<div class="input-group-prepend" style="width : 13%; text-align: center;">
+						    <span class="input-group-text" style="display:block; width:100%; padding-top:11px; text-align: center;" > 설명</span>
+						</div>
+						 <textarea class="form-control" id="modal_floor_edit_description" style="resize:none;"></textarea>
+					</div>
+		      		
+		      		<div class="container-fluid" style="padding:0; height:63%;" >
+		      			<div style="border : solid gray 1px; float:left; width:206.7px; height :100%; display:inline-block; overflow: auto;">
+		      				<table class="table table-bordered table-hover" id="modal_floor_edit_camera_list_left" style="border : none;">
+		      					<thead class="thead-light" >
+		      						<tr >
+		      							<td style="background-color: #e9ecef; position:sticky; top:0;" class="td-sm"></td>
+		      							<td style="background-color: #e9ecef; position:sticky; top:0;" class="td-sm">#</td>
+		      							<td style="background-color: #e9ecef; position:sticky; top:0;" class="td-sm">설명</td>
+		      						</tr>
+		      					</thead>
+		      					<tbody name="modal_floor_edit_tbody_unused_camera">
+		      					</tbody>
+		      				</table>
+		      			</div>
+		      			<div style="min-width:1%;  max-width: 10%; width: 200px; height:100%; display: inline-block;">
+		      				<i id="modal_floor_arrow_right_btn" type="button" class="fa fa-arrow-right" onclick='move_modal_floor_unused_used(1)' style="display: block; float: left; position:absolute; top:55%; left:49%;"></i>
+		      				<i id="modal_floor_arrow_left_btn" type="button" class="fa fa-arrow-left" onclick='move_modal_floor_used_unused(1)' style="display: block; float:left; position:absolute; top:65%; left:49%;" ></i>
+		      			</div>
+		      				<div style="border : solid gray 1px; float:right; width:45%; height :100%; display:inline-block; overflow: scroll;">
+		      				<table class="table table-bordered table-hover" id="modal_floor_edit_camera_list_right" style="border : none;">
+		      					<thead class="thead-light" >
+		      						<tr>
+		      							<td style="background-color: #e9ecef; position:sticky; top:0;" class="td-sm"></td>
+		      							<td style="background-color: #e9ecef; position:sticky; top:0;" class="td-sm">#</td>
+		      							<td style="background-color: #e9ecef; position:sticky; top:0;" class="td-sm">설명</td>
+		      						</tr>
+		      					</thead>
+		      					<tbody name="modal_floor_edit_tbody_used_camera">
+		      					</tbody>
+		      				</table>
+		      			</div>
+		      		</div>
+
+		        </form>
+		      </div>
+		      <div class="modal-footer">
+		        <button id="modal_floor_edit_close_btn" onclick="modal_floor_init('edit')" type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+		        <button id ="modal_floor_edit_btn" type="button" data-dismiss="modal" class="btn btn-primary"> 추가</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+
+		<!--
 		<div class="modal fade" id="modal_floor_edit" tabindex="-1" role="dialog" aria-labelledby="modal_floor_edit_label" aria-hidden="true">∂
 		  <div class="modal-dialog" role="document" style="height:90%;">
 		    <div class="modal-content" style="height:90%;">
@@ -336,7 +414,7 @@
 		          <span aria-hidden="true">&times;</span>
 		        </button>
 		      </div>
-		      <div class="modal-body">
+		      <div class="modal-body" style="height:63%;">
 		        <form>
 		        	<div class="input-group input-group-sm mb-3" >
 			  			<div class="input-group-prepend" style="width : 13%;">
@@ -356,11 +434,13 @@
 						</div>
 						 <textarea class="form-control" id="modal_floor_edit_description" style="resize:none;"></textarea>
 					</div>
-		      		<div class="container-fluid" style="padding:0;" >
-		      			<div style="border : solid gray 1px; float:left; width:45%; height :300px; max-height:300px; display:inline-block; overflow: scroll;">
+		      				      		
+		      				      		<div class="container-fluid" style="padding:0; height:63%;" >
+		      			<div style="border : solid gray 1px; float:left; width:206.7px; height :100%; display:inline-block; overflow: auto;">
 		      				<table class="table table-bordered table-hover" id="modal_floor_edit_camera_list_left" style="border : none;">
 		      					<thead class="thead-light" >
-		      						<tr>
+		      						<tr >
+		      							<td style="background-color: #e9ecef; position:sticky; top:0;" class="td-sm"></td>
 		      							<td style="background-color: #e9ecef; position:sticky; top:0;" class="td-sm">#</td>
 		      							<td style="background-color: #e9ecef; position:sticky; top:0;" class="td-sm">설명</td>
 		      						</tr>
@@ -369,20 +449,20 @@
 		      					</tbody>
 		      				</table>
 		      			</div>
-		      			<div style="min-width:1%;  max-width: 10%; width: 200px; min-height:300px; display: inline-block;">
-		      				<i id="modal_floor_arrow_right_btn_2" type="button" class="fa fa-arrow-right" onclick='move_modal_floor_unused_used(1)' style="display: block; float: left; position:absolute; top:55%; left:49%;"></i>
-		      				<i id="modal_floor_arrow_left_btn_2" type="button" class="fa fa-arrow-left" onclick='move_modal_floor_used_unused(1)' style="display: block; float:left; position:absolute; top:65%; left:49%;" ></i>
+		      			<div style="min-width:1%;  max-width: 10%; width: 200px; height:100%; display: inline-block;">
+		      				<i id="modal_floor_arrow_right_btn" type="button" class="fa fa-arrow-right" onclick='move_modal_floor_unused_used(0)' style="display: block; float: left; position:absolute; top:55%; left:49%;"></i>
+		      				<i id="modal_floor_arrow_left_btn" type="button" class="fa fa-arrow-left" onclick='move_modal_floor_used_unused(0)' style="display: block; float:left; position:absolute; top:65%; left:49%;" ></i>
 		      			</div>
-		      				<div style="border : solid gray 1px; float:right; width:45%; height :300px; max-height:300px; display:inline-block; overflow: scroll;">
+		      				<div style="border : solid gray 1px; float:right; width:45%; height :100%; display:inline-block; overflow: scroll;">
 		      				<table class="table table-bordered table-hover" id="modal_floor_edit_camera_list_right" style="border : none;">
 		      					<thead class="thead-light" >
-		      						<tr style="background-color:black;">
+		      						<tr>
+		      							<td style="background-color: #e9ecef; position:sticky; top:0;" class="td-sm"></td>
 		      							<td style="background-color: #e9ecef; position:sticky; top:0;" class="td-sm">#</td>
 		      							<td style="background-color: #e9ecef; position:sticky; top:0;" class="td-sm">설명</td>
 		      						</tr>
 		      					</thead>
 		      					<tbody name="modal_floor_edit_tbody_used_camera">
-
 		      					</tbody>
 		      				</table>
 		      			</div>
@@ -397,6 +477,7 @@
 		    </div>
 		  </div>
 		</div>
+	-->
 		<!--모달 form 끝-->
 
 
@@ -453,7 +534,7 @@
 
 		/* floor 리스트 추가 함수 */
 		function create_floor_info(data) {
-			$('#tbody_floor').append('<tr id="tr_list_'+data.pk+'" data-store="'+data.store_id+'"><input type="hidden" data-pk="'+data.pk+'" data-name="'+data.name+'" data-num="'+data.floor_num+'" data-store_id="'+data.store_id+'" data-description="'+data.description+'" ><td id="c_num_'+data.pk+'">'+data.floor_num+'</td><td>'+data.name+'</td><td>'+data.description+'</td><td><i name="'+data.pk+'" data-toggle="modal" data-target="#modal_floor_edit" style="margin:4px; padding-left:5%;" class="fa fa-edit" id="td_floor_edit_button"><input type="hidden" name="'+data.pk+'"></i><i style="margin:4px padding-left:10%; " class="fa fa-trash" name="'+data.pk+'" id="td_floor_delete_button"></i></td></tr>');
+			$('#tbody_floor').append('<tr id="table_floor_tr_'+data.pk+'" data-store="'+data.store_id+'"><input type="hidden" data-pk="'+data.pk+'" data-name="'+data.name+'" data-num="'+data.floor_num+'" data-store_id="'+data.store_id+'" data-description="'+data.description+'" ><td id="c_num_'+data.pk+'">'+data.floor_num+'</td><td>'+data.name+'</td><td>'+data.description+'</td><td><i name="'+data.pk+'" data-toggle="modal" data-target="#modal_floor_edit" style="margin:4px; padding-left:5%;" class="fa fa-edit" id="td_floor_edit_button"><input type="hidden" name="'+data.pk+'"></i><i style="margin:4px; padding-left:10%; " class="fa fa-trash" name="'+data.pk+'" id="td_floor_delete_button"></i></td></tr>');
 
 		
 		}
@@ -465,12 +546,15 @@
 			for( var i =0 ; i<list.length ; i++){
 				console.log("in");
 				console.log(list[i].dataset.pk);
-				if(flag === "add") {
-					$('tbody[name=modal_floor_add_tbody_unused_camera]').append('<tr data-pk="'+list[i].dataset.pk+'"><td class="td-sm"><input type="checkbox" data-pk="'+list[i].dataset.pk+'" name="unused_camera" style="margin:1%;" >'+list[i].dataset.pk+'</label></td><td class="td-sm">'+list[i].dataset.description+'</td><tr>');
+				$('tbody[name=modal_floor_'+flag+'_tbody_unused_camera]').append('<tr data-pk="'+list[i].dataset.pk+'"><td clsdd="td-sm"><input type="checkbox" data-pk="'+list[i].dataset.pk+'" name="unused_camera" style="margin:1%;" ></label></td><td class="td-sm">'+list[i].dataset.pk+'</td><td class="td-sm" style="height:49px; overflow:scroll;">'+list[i].dataset.description+'</td><tr>');
+
+				/*if(flag === "add") {
+					$('tbody[name=modal_floor_add_tbody_unused_camera]').append('<tr data-pk="'+list[i].dataset.pk+'"><td clsdd="td-sm"><input type="checkbox" data-pk="'+list[i].dataset.pk+'" name="unused_camera" style="margin:1%;" ></label></td><td class="td-sm">'+list[i].dataset.pk+'</td><td class="td-sm">'+list[i].dataset.description+'</td><tr>');
 				}
 				else if( flag === "edit") {
 					$('tbody[name=modal_floor_edit_tbody_unused_camera]').append('<tr data-pk="'+list[i].dataset.pk+'"><td class="td-sm"><input type="checkbox" name="unused_camera" style="margin:1%;" >'+list[i].dataset.pk+'</label></td><td class="td-sm">'+list[i].dataset.description+'</td><tr>');
 				}
+				*/
 			}
 		}
 
@@ -482,12 +566,18 @@
 			for( var i =0 ; i<list.length ; i++){
 				console.log("in");
 				console.log(list[i].dataset.pk);
-				$('tbody[name=modal_floor_edit_tbody_used_camera]').append('<tr data-pk="'+list[i].dataset.pk+'"><td class="td-sm"><input type="checkbox" name="used_camera" style="margin:1%;" >'+list[i].dataset.pk+'</label></td><td class="td-sm">'+list[i].dataset.description+'</td><tr>');
+				$('tbody[name=modal_floor_edit_tbody_used_camera]').append('<tr data-pk="'+list[i].dataset.pk+'"><td class="td-sm"><input type="checkbox" name="used_camera" style="margin:1%;" ></label></td><td class="td-sm">'+list[i].dataset.pk+'</td><td class="td-sm">'+list[i].dataset.description+'</td><tr>');
 			}
 		}
 
 
 /*자바스크립트 함수 끝 */
+	/*카메라 추가 모달 초기화 */
+	function modal_camera_init() {
+			$('#modal_camera_add_description').val('');
+			$('#modal_camera_add_mac_addr').val('');
+			$('#modal_camera_add_curhost').val('');
+		}
 
 	/* 카메라 목록 테이블 검색기능 */
 		$(document).ready(function(){
@@ -573,12 +663,14 @@
 		$(document).on('click', '#modal_camera_add_btn', function(e) {
 			var cur_host = $('#modal_camera_add_curhost').val();
 			var camera_description = $('#modal_camera_add_description').val();
-			var store_id = "{{store.pk}}"
+			var store_id = "{{store.pk}}";
+			var mac_addr = $('#modal_camera_add_curhost').val();
 			
 			if (confirm('정말 추가 하시겠습니까?')) {
-
+				modal_camera_init();
 				console.log(camera_description);
 				console.log("{{store_id}}");
+				modal_camera_init();
 				$.ajax({
 					url: "{% url 'watcher:ajax_add_camera_info' %}",
 					dataType : "json",
@@ -586,6 +678,7 @@
 						'description' : camera_description,
 						'store_id' : store_id,
 						'cur_host' : cur_host,
+						'mac_addr' : mac_addr,
 					},
 					type : 'GET',
 					success: function(data) {
@@ -667,6 +760,7 @@
 						'cur_host' : cur_host,
 					},
 					success : function(data) {
+						console.log(data);
 						alert(data)
 					},
 				});
@@ -734,7 +828,7 @@
 					camera_list.push(camera_checked[i].dataset.pk);
 				}
 				jQuery.ajaxSettings.traditional = true;
-
+				modal_floor_init('add');
 				$.ajax({
 					url : "{% url 'watcher:ajax_add_floor_info' %}",
 					dataType : "json",
@@ -820,7 +914,7 @@
 						},
 						success : function(data){
 							console.log("floor_info delete success")
-							$('#tr_list_'+floor_id).remove();
+							$('#table_floor_tr_'+floor_id).remove();
 							$.each(data, function(index,element) {
 							if(element.floor_id === null){element.floor_id = "None"}
 							if(element.mac_addr === null){element.mac_addr = "None"}
@@ -894,8 +988,9 @@
 					console.log("unused : "+camera_unused[i].dataset.pk);
 				}	
 
-				jQuery.ajaxSettings.traditional = true;
 
+
+				jQuery.ajaxSettings.traditional = true;
 				$.ajax({
 					url : "{% url 'watcher:ajax_edit_floor_camera_list' %}",
 					dataType : 'json',
@@ -944,11 +1039,6 @@
 				}
 			});
 
-		function modal_camera_init() {
-			$('#modal_camera_add_description').val('');
-			$('#modal_camera_add_mac_addr').val('');
-			$('#modal_camera_add_curhost').val('');
-		}
 
 		function modal_floor_init(type) {
 

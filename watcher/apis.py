@@ -217,9 +217,10 @@ def add_camera_info(request) :
 	description = request.GET['description']
 	store_id= int(request.GET['store_id'])
 	cur_host = request.GET.get('cur_host')
+	mac_addr = request.GET.get('mac_addr')
 
 
-	camera=Camera(description = description, store_id = store_id, cur_host= cur_host)
+	camera=Camera(description = description, store_id = store_id, cur_host= cur_host, mac_addr=mac_addr)
 	camera.save()
 
 	data = {
@@ -258,7 +259,8 @@ def check_camera_connection(request) :
 
 	try :
 		rq = requests.get(cur_host+'/test',timeout=5)
-		return HttpResponse('good')
+		if rq.text != 'ok' :
+			return HttpResponse('bad')
 	except Exception as e :
 		return HttpResponse('bad')
 
@@ -269,7 +271,7 @@ def check_camera_connection_table(request) :
 
 	try :
 		rq = requests.get(cur_host+'/test',timeout=5)
-		if rq.text == 'No Connected Service Found':
+		if rq.text != 'ok' :
 			data = {
 				'pk' : pk,
 				'con' : "bad",
