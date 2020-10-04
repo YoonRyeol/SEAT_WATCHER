@@ -451,6 +451,7 @@
             },
             success:function(data){
                 let object_data = JSON.parse(data);
+                alert(`탁자 감지가 끝났습니다.\n 총 ${object_data.length} 개의 탁자가 감지되었습니다.`);
                 for(let i=0; i<object_data.length; i++){
                     let object = object_data[i];
                     let left = object.x*IMAGE_WIDTH;
