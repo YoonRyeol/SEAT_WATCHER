@@ -61,10 +61,10 @@ def send_seat_data(request):
 		to_cam_data = {}
 
 		target_data = {
-			'pic_f_x' : elem['position']['f_x'],
-			'pic_f_y' : elem['position']['f_y'],
-			'pic_s_x' : elem['position']['s_x'],
-			'pic_s_y' : elem['position']['s_y'],
+			'pic_f_x' : round(elem['position']['f_x'],2),
+			'pic_f_y' : round(elem['position']['f_y'],2),
+			'pic_s_x' : round(elem['position']['s_x'],2),
+			'pic_s_y' : round(elem['position']['s_y'],2),
 			'is_elec' : elem['is_elec'],
 			'capacity' : elem['capacity'],
 			'camera' : camera,
