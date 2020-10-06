@@ -264,8 +264,12 @@ def check_camera_connection(request) :
 	except Exception as e :
 		return HttpResponse('bad')
 
+	return HttpResponse ('good')
 
-def check_camera_connection_table(request) :
+
+
+
+def check_camera_connection_row(request) :
 	cur_host = request.POST.get('cur_host')
 	pk = int(request.POST['pk'])
 
