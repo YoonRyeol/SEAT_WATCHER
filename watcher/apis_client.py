@@ -61,16 +61,16 @@ def search_client_store_list(request) :
 
 
 def client_liked_list(request) :
-	pk_list = request.GET.getlist('pk_list[]')
+	pk_list = request.GET.getlist('pk_list[]','')
 	stores = Store.objects.none()
 
-
-	for pk in pk_list :
-		stores = stores | Store.objects.filter(pk=pk)
-
-	serialized_stores = StoreSerializer(stores,many=True)
-
-	return HttpResponse(json.dumps(serialized_stores.data))
+	if pk_list :
+		for pk in pk_list :
+			stores = stores | Store.objects.filter(pk=pk)
+		serialized_stores = StoreSerializer(stores,many=True)
+		return HttpResponse(json.dumps(serialized_stores.data))
+	else :
+		return HttpResponse("None")
 
 
 
