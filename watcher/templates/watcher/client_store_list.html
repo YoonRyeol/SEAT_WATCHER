@@ -75,6 +75,10 @@
 	var myStorage_arry = JSON.parse(output);
 	var pk_list = new Array();
 
+	//스크롤 위치
+	var scroll_loc_home = 0;
+	var scroll_loc_liked  = 0;
+
 	$(document).ready(function(e){
 		if(!(myStorage_arry)) return;
 		for(var i=0; i<myStorage_arry.length;i++){
@@ -116,6 +120,33 @@
 		});
 	});
 
+	//스크롤 위치 기억
+	/*
+	function scroll_loc_save(type) {
+		console.log("scroll save");
+
+		if(type == "home")
+			scroll_loc_home= $('#container_store_list').offset().top;
+		else
+			scroll_loc_liked = $('#container_store_list').offset().top;
+
+		console.log("scoll loc : "+$(document).scrollTop());
+
+		return false;
+	}
+	function scroll_loc_show(type) {
+		if(type == "home") {
+			$('#container_store_list').animate({scrollTop: scroll_loc_home}, 500);
+			console.log("scroll home show : " + scroll_loc_home);
+		}
+		else {
+			$('body').animate({scrollTop: scroll_loc_liked}, 500);
+			$('#container_store_list').animate({scrollTop: scroll_loc_liked}, 500);
+			console.log("scroll liked show : " + scroll_loc_liked);
+		}
+		return false;
+	}
+	*/
 	/* 좋아요한 가게리스트 검색시 */
 		$(document).on("keyup", "#client_liked_keyword", function(e){
 			var value = $(this).val().toLowerCase();
@@ -127,12 +158,13 @@
 		});
 
 	//가게 하트 클릭시
+
 	function empty_heart_click(pk){
 		$('#store_heart_'+pk).attr('class','fas fa-heart fa-6x');
 		$('#store_heart_'+pk).attr('name', 'heart_btn');
 		$('#store_row_'+pk).attr('name','store_row_liked');
 
-		if(pk_list.indexOf(pk)>=0) {
+		if(findNumber(pk)) {
 			console.log("pk "+pk+" includes");
 		
 		}
@@ -194,12 +226,48 @@
 		$('#bottom_home_btn').attr('name','bottom_home_btn_active');
 		$('#bottom_liked_btn').attr('name','bottom_like_btn'); 
 		
-
-		console.log("store_list: "+ store_list.length);
+		scroll_loc_save("liked");
 		$('#container_store_list').empty();
+
+		for(var i =1; i < page; i++) {
+			$.ajax({
+				url : "{% url 'watcher:ajax_get_client_store_list' %}",
+				dataType: 'json',
+				type :'GET',
+				async :false,
+				data : {
+					'page' : i,
+					'search_keyword' : search_keyword,
+				},
+				success : function(data) {
+					if(data.msg == "end") {
+						return;
+					}
+
+					for(var i = 0; i < data.st.length; i++) {
+						console.log("data length : "+ data.st.length);
+						create_store_info(data.st[i]);
+
+						if(findNumber(data.st[i].pk)){
+							empty_heart_click(data.st[i].pk);
+						}
+						else {
+							console.log("false : "+data.st[i].pk);
+						}
+					}
+					console.log("page plus : "+page);
+					page = data.page;
+					
+				},
+
+			});
+		}
+		console.log("store_list: "+ store_list.length);
+		/*$('#container_store_list').empty();
 		for(var i=0; i<store_list.length; i++){
 			$('#container_store_list').append(store_list[i]);
-		}
+		}*/
+		scroll_loc_show("home");
 		store_list=[];
 		mutex_liked = 0;
 	});
@@ -215,6 +283,8 @@
 		$('#bottom_home_btn').attr('name','bottom_like_btn_active'); 
 
 		store_list=$('#container_store_list').find('.row');
+		
+		scroll_loc_save("home");
 		$('#container_store_list').empty();
 
 		$.ajax({
@@ -234,6 +304,7 @@
 					create_store_info(data[i]);
 					empty_heart_click(data[i].pk);
 				}
+				scroll_loc_show("liked");
 			},
 
 
@@ -242,7 +313,6 @@
 
 	});
 
-	//스크롤 위치 기억
 
 
 	//가게 목록 생성 함수
@@ -265,10 +335,9 @@
 
 
 
-	function find_number(pk){
+	function findNumber(pk){
 		for(var i=0; i < pk_list.length; i++ ) {
 			if(pk_list[i] == pk) {
-				//start_liked_count++;
 				return true;
 			}		
 		}
@@ -298,7 +367,7 @@
 					console.log("data length : "+ data.st.length);
 					create_store_info(data.st[i]);
 
-					if(find_number(data.st[i].pk)){
+					if(findNumber(data.st[i].pk)){
 						empty_heart_click(data.st[i].pk);
 					}
 					else {
