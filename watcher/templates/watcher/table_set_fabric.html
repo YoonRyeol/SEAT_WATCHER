@@ -135,6 +135,10 @@
     var picture_addr = '/static/img/' + '{{picture_name}}'
     var cur_pic_name = '{{picture_name}}';
     fabric.Image.fromURL(picture_addr, imgObj => {
+        if(imgObj._element == null){
+            alert('사진을 가져올 수 없습니다!');
+            return;
+        }
         canvas.setBackgroundImage(imgObj, canvas.renderAll.bind(canvas), {
             opacity: 1,
             strech: true,
@@ -162,6 +166,10 @@
                 var file_name = data.pic_name
                 cur_pic_name = file_name
                 fabric.Image.fromURL(file_path, imgObj => {
+                    if(imgObj._element == null){
+                        alert('사진을 가져올 수 없습니다!');
+                        return;
+                    }
                     canvas.setBackgroundImage(imgObj, canvas.renderAll.bind(canvas), {
                         opacity: 1,
                         strech: true,
@@ -170,10 +178,10 @@
                     });
                     alert('사진이 변경되었습니다.\n' + file_name)
                 });
-
+                
             },
             error: function (JQeuryXHR, textStatus, errorThrown) {
-                alert(errorThrown)
+                alert(errorThrown);
             }
         })
     });
@@ -459,6 +467,9 @@
                     let height = object.height*IMAGE_HEIGHT;
                     Add(_left = left, _top = top, _width = width, _height = height)
                 }
+            },
+            error:function(){
+                alert('해당 기능 수행중 오류가 발생했습니다!');
             }
         });
     });
