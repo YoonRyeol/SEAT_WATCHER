@@ -226,7 +226,7 @@
 		$('#bottom_home_btn').attr('name','bottom_home_btn_active');
 		$('#bottom_liked_btn').attr('name','bottom_like_btn'); 
 		
-		scroll_loc_save("liked");
+		
 		$('#container_store_list').empty();
 
 		for(var i =1; i < page; i++) {
@@ -267,7 +267,7 @@
 		for(var i=0; i<store_list.length; i++){
 			$('#container_store_list').append(store_list[i]);
 		}*/
-		scroll_loc_show("home");
+		
 		store_list=[];
 		mutex_liked = 0;
 	});
@@ -284,7 +284,7 @@
 
 		store_list=$('#container_store_list').find('.row');
 		
-		scroll_loc_save("home");
+		
 		$('#container_store_list').empty();
 
 		$.ajax({
@@ -304,7 +304,7 @@
 					create_store_info(data[i]);
 					empty_heart_click(data[i].pk);
 				}
-				scroll_loc_show("liked");
+				
 			},
 
 
