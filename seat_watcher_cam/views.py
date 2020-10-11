@@ -2,12 +2,16 @@ from django.shortcuts import render
 from django.http import HttpResponse, FileResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+import os
 
 def connect_test(request):
     return HttpResponse('ok')
 
 def send_image(request):
-    f = open('images/30.jpg', 'rb')
+    if not os.path.isfile("images/captured.jpg"):
+        f = open('images/origin.jpg', 'rb')
+    else:
+        f = open('images/captured.jpg', 'rb')
     return FileResponse(f)
 
 def send_result(request):

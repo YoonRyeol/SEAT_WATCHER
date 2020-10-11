@@ -13,7 +13,7 @@ from matplotlib import pyplot as plt
 capture = False
 
 def initialize():
-    print("init....")
+    print("Json file will be initialize....")
     with open('pos_data.json', 'r') as json_file:
         data = json.load(json_file)
         origin_data = data
@@ -23,25 +23,25 @@ def initialize():
 
 
     result = []
-    table_status = []
+    table_state = []
     for elem in data:
         result.append({"pk" : elem['pk'], "res" : "F"})
-        table_status.append(0)
+        table_state.append(0)
 
     with open('result.json', 'w') as make_file:
         json.dump(result, make_file, indent = 4)
     with open('pos_data.json', 'w') as json_file:
         json.dump(origin_data, json_file, indent = 4)
-    return table_status
+    return table_state
         
     
 def save_result_json():
     with open('result.json', 'w') as make_file:
         json.dump(result, make_file, indent = 4)
-        url = 'http://3.21.102.124:8001/api/get_seat_inspection_result'
+        url = 'http://3.131.93.23:8001/api/get_seat_inspection_result'
         send_data = { 'input' : json.dumps(result, indent = 4)}
         try :
-            r = requests.post(url, data=send_data, timeout = 3)
+            r = requests.post(url, data=send_data, timeout = 5)
         except :
             print("\n=====AWS Server is not working=====\n")
         
@@ -66,12 +66,26 @@ def ROI(x1, x2, y1, y2, pk):
         cv2.imwrite("images/origin_"+str(pk)+".jpg", origin)
     return captured
     
+def rgb2hsv(img):
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    hist = cv2.calcHist([hsv], [0,1], None, [180, 256], [0, 180, 0, 256])
+    cv2.normalize(hist, hist, 0, 1, cv2.NORM_MINMAX)
+    return hist
+    
+    
+def compareHist(origin, captured):
+    hist_origin = rgb2hsv(origin)
+    hist_captured = rgb2hsv(captured)
+    result = cv2.compareHist(hist_origin, hist_captured, cv2.HISTCMP_CORREL)
+    print("Pixel value histogram similarity : " + str(result))
+    return result
 
 def is_there_seat(x1, x2, y1, y2, pk):
     origin = cv2.imread("images/origin_"+str(pk)+".jpg", 1)
     captured = cv2.imread("images/captured_"+str(pk)+".jpg", 1)
-    cv2.imshow("origin", origin)
-    cv2.imshow("cap", captured)
+    result_compare = compareHist(origin, captured)
+#    cv2.imshow("origin", origin)
+#    cv2.imshow("cap", captured)
     spot = [int(origin.shape[0]), int(origin.shape[1])]
     cnt_correct = 0
     avg = 0.0
@@ -79,10 +93,13 @@ def is_there_seat(x1, x2, y1, y2, pk):
     test_list = []
     index_list = []
     test_index = 0
+#   print(spot[0], spot[1], captured.shape[0], captured.shape[1], origin.shape[0], origin.shape[1])
     #calculate average diffrence of RGB pixel value between origin and captured picture
     for y in range(0, spot[0]):
         for x in range(0, spot[1]):
             avg = 0.0
+            if(y >= spot[0] or x >= spot[1]) :
+                break;
             if(captured.item(y,x,0) >= origin.item(y,x,0) and captured.item(y,x,0) != 0):
                 avg += origin.item(y,x,0) / float(captured.item(y,x,0))
             elif(captured.item(y,x,0) <= origin.item(y,x,0) and origin.item(y,x,0) != 0):
@@ -105,15 +122,15 @@ def is_there_seat(x1, x2, y1, y2, pk):
             test_list.append(avg)
             index_list.append(test_index)
             test_index += 1
-            if(avg <=0.88):
+            if(avg <=0.90):
                 cnt_correct += 1
-    print("pk is =", pk)
-    print("average is = " + str(test_sum / float((spot[1] * spot[0]))))
-    print("average is = " + str(cnt_correct / float((spot[1] * spot[0]))))
+    print("Table's pk is =", pk)
+    print("The average of  similarity of each pixel in image is = " + str(test_sum / float((spot[1] * spot[0]))))
+    print("The change rate of capture image versus original image is = " + str(cnt_correct / float((spot[1] * spot[0]))))
 #    plt.plot(index_list, test_list)
 #    plt.show()
-    #if rate of pixel has low similarity is large than 30%, that table status is changed. 
-    if(cnt_correct / float((spot[1] * spot[0])) >= 0.2):
+    #if rate of pixel has low similarity is large than 30%, that table state is changed. 
+    if((cnt_correct / float((spot[1] * spot[0])) >= 0.20) and result_compare < 0.95):
         return True
     else:
         return False
@@ -124,11 +141,12 @@ def detect():
             data = json.load(json_file)
             origin_data = data
             data = data['data']
-    status_index = 0
+    state_index = 0
     for elem in data:
         if(origin_data['is_updated']):
             initialize()
             print('\'pos_data.json\' has been changed... restart loop')
+            os.remove("images/origin.jpg")
             break                
         x1 = elem['position']['f_x']
         x2 = elem['position']['s_x']
@@ -138,51 +156,60 @@ def detect():
         y1, y2 = swap(y1, y2)
         captured = ROI(x1, x2, y1, y2, elem['pk'])
         if(is_there_seat(x1, x2, y1, y2, elem['pk'])):
-            if(table_status[status_index] >= 1):
-                if(result[status_index]['res'] == "T"):
-                    result[status_index]['res'] = "F"
+            if(table_state[state_index] >= 2):
+                if(result[state_index]['res'] == "F"):
+                    result[state_index]['res'] = "T"
+                    print("DETECT : Table " + str(elem['pk']) + " is in use")
                     save_result_json()
-                else:
-                    result[status_index]['res'] = "T"
-                    save_result_json();
-                    print("table " + str(elem['pk']) + " is diff")
-                table_status[status_index] = 0    
-                cv2.imwrite("images/origin_"+str(elem['pk'])+".jpg", captured)
+                table_state[state_index] = 0    
             else:
-                table_status[status_index] += 1
+                table_state[state_index] += 1
                 
         else:
-            if(table_status[status_index] <= -1):
-                print("table " + str(elem['pk']) + " is same")
+            if(table_state[state_index] <= -2):
+                if(result[state_index]['res'] == "T"):
+                    result[state_index]['res'] = "F"
+                    print("DETECT : Table " + str(elem['pk']) + " is not in use")
+                    save_result_json()
+                else:
+                    print("Table " + str(elem['pk']) + "'s state has not changed")
+                table_state[state_index] = 0    
                 cv2.imwrite("images/origin_"+str(elem['pk'])+".jpg", captured)
-                table_status[status_index] = 0
             else:
-                table_status[status_index] -= 1
-        print("status is = " + str(table_status[status_index]) +"\n")
-        status_index += 1    
+                table_state[state_index] -= 1
+        print("Table " + str(elem['pk']) +"'s state is = " + str(table_state[state_index]) +"\n")
+        state_index += 1    
 
 
 with open('pos_data.json', 'r') as json_file:
     data = json.load(json_file)
-table_status = initialize()
+table_state = initialize()
 with open('result.json', 'r') as json_file:
     result = json.load(json_file)
-    
+if os.path.isfile("images/origin.jpg"):
+    os.remove("images/origin.jpg")
+
 cap = cv2.VideoCapture(0)
 #frame_width = int(cap.get(3))
 #frame_height = int(cap.get(4))
-    
+isInit = False
+cntIsInit = 0
+isInitFlag = False
 while True:
     now = datetime.datetime.now().strftime("%S")
     now = str(now)
     ret, frame = cap.read()
+    if(cntIsInit <= 10):
+        cntIsInit += 1
+    if(cntIsInit == 10):
+        isInit = True
     if ret :
         cv2.imshow('cam', frame)
-        if not os.path.isfile("images/origin.jpg"):
+        if isInit:
             cv2.imwrite("images/origin.jpg", frame)
-            initialize()
-            time.sleep(2)
-        if((now == "00" or now == "20" or now == "40") and capture != True) :
+            isInit = False
+            isInitFlag = True
+        if((now == "00" or now == "20" or now == "40") and capture != True and isInitFlag == True) :
             cv2.imwrite("images/captured.jpg", frame)
             detect()
             capture = True
