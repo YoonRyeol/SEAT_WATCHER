@@ -127,7 +127,7 @@
 					{% for list in floor_list%}
 					<tr id="table_floor_tr_{{list.pk}}" data-store_id="{{store.pk}}">
 						<input type="hidden" data-pk="{{list.pk}}" data-name="{{list.name}}" data-num="{{list.floor_num}}" data-store_id="{{list.store_id}}" data-description="{{list.description}}" >
-						<td class="clickable" onclick='move_page(this)' link="layout/{{list.pk}}">{{list.floor_num}}</td>
+						<td class="clickable" onclick='move_page(this)' link="layout/{{list.pk}}" id="c_num_{{data.pk}}">{{list.floor_num}}</td>
   						<td>{{list.name}}</td>
   						<td>{{list.description}}</td>
   						<td><i name="{{list.pk}}" data-toggle="modal" data-target="#modal_floor_edit"  style="margin:4px; padding-left:5%;" class="fa fa-edit" id="td_floor_edit_button"><input type="hidden" name= "{{list.pk}}"></i><i style="margin:4px; padding-left:10%;" class="fa fa-trash" name= "{{list.pk}}" id="td_floor_delete_button"></i></td>
@@ -456,9 +456,7 @@
 
 		/* floor 리스트 추가 함수 */
 		function create_floor_info(data) {
-			$('#tbody_floor').append('<tr id="table_floor_tr_'+data.pk+'" data-store="'+data.store_id+'"><input type="hidden" data-pk="'+data.pk+'" data-name="'+data.name+'" data-num="'+data.floor_num+'" data-store_id="'+data.store_id+'" data-description="'+data.description+'" ><td id="c_num_'+data.pk+'">'+data.floor_num+'</td><td>'+data.name+'</td><td>'+data.description+'</td><td><i name="'+data.pk+'" data-toggle="modal" data-target="#modal_floor_edit" style="margin:4px; padding-left:5%;" class="fa fa-edit" id="td_floor_edit_button"><input type="hidden" name="'+data.pk+'"></i><i style="margin:4px; padding-left:10%; " class="fa fa-trash" name="'+data.pk+'" id="td_floor_delete_button"></i></td></tr>');
-
-		
+			$('#tbody_floor').append('<tr id="table_floor_tr_'+data.pk+'" data-store="'+data.store_id+'"><input type="hidden" data-pk="'+data.pk+'" data-name="'+data.name+'" data-num="'+data.floor_num+'" data-store_id="'+data.store_id+'" data-description="'+data.description+'" ><td class="clickable" onclick="move_page(this)" link="layout/'+data.pk+'" id="c_num_'+data.pk+'">'+data.floor_num+'</td><td>'+data.name+'</td><td>'+data.description+'</td><td><i name="'+data.pk+'" data-toggle="modal" data-target="#modal_floor_edit" style="margin:4px; padding-left:5%;" class="fa fa-edit" id="td_floor_edit_button"><input type="hidden" name="'+data.pk+'"></i><i style="margin:4px; padding-left:10%; " class="fa fa-trash" name="'+data.pk+'" id="td_floor_delete_button"></i></td></tr>');
 		}
 
 		/*floor 모달에서 floor_pk가 정해지지 않은 카메라 목록*/
