@@ -45,13 +45,13 @@ def send_seat_data(request):
 	"""
 	cam_host = camera.cur_host
 	cam_addr_test = '/'.join([cam_host, 'test'])
-
-	try:
-		response = requests.get(cam_addr_test, timeout=5)
-	except Exception:
-		return HttpResponse('connection error')
-	if response.text != 'ok':
-		return HttpResponse('connection error2')
+	if cam_host != 'test':
+		try:
+			response = requests.get(cam_addr_test, timeout=5)
+		except Exception:
+			return HttpResponse('connection error')
+		if response.text != 'ok':
+			return HttpResponse('connection error2')
 	
 	cur_pk_list = []
 
@@ -95,16 +95,17 @@ def send_seat_data(request):
 	"""
 	
 	cam_get_seat_info = '/'.join([camera.cur_host, 'get_seat_info'])
-	try:
-		output_data = {
-			'is_updated' : True,
-			'data' : to_cam_data_list
-		}
-		response = requests.post(cam_get_seat_info, data={'seat_data':json.dumps(output_data, indent=4)}, timeout=5)
-	except Exception:
-		return HttpResponse('connection error')
-	if response.text != 'good':
-		return HttpResponse('connection error2')
+	if cam_host != 'test':
+		try:
+			output_data = {
+				'is_updated' : True,
+				'data' : to_cam_data_list
+			}
+			response = requests.post(cam_get_seat_info, data={'seat_data':json.dumps(output_data, indent=4)}, timeout=5)
+		except Exception:
+			return HttpResponse('connection error')
+		if response.text != 'good':
+			return HttpResponse('connection error2')
 
 	return HttpResponse('good')
 
