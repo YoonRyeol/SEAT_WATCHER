@@ -107,7 +107,7 @@
 						$('#container_store_list').empty();
 						for(var i=0; i<data.length; i++) {
 							create_store_info(data[i]);
-							if(find_number(data[i].pk)) {
+							if(findNumber(data[i].pk)) {
 								console.log("find_number")
 								empty_heart_click(data[i].pk);
 							}

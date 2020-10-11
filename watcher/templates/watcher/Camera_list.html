@@ -407,7 +407,7 @@
 		var page = 1;
 		$(window).scroll(function() {
 			if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-				console.log(++page);
+				++page;
 				$("tbody").append('<tr><td>1<i style="margin:4px" class="fas fa-camera"></i></td><td>카메라1</td><td>창가 천장 위</td><td><i style="margin:4px" class="fa fa-edit"></i><i style="margin:4px" class="fa fa-trash"></i></td></tr>');
 			}
 		});
@@ -433,12 +433,12 @@
 				},success : function(data) {
 					console.log("SUCCESS");
 					var k = 0;
-					//console.log(data.length);
+					
 					$.each(data, function(index,element) {
 						if(element.floor_id === null){element.floor_id = "None"}
 						if(element.mac_addr === null) {element.mac_addr = "None"}
 					});
-					//console.log("data_length:"+data.length);
+					
 					$('#tbody_camera').empty();
 					for(var i =0; i < data.length; i++){create_camera_info(data[i]);}
 					camera_connection_table();
@@ -464,10 +464,10 @@
 		/*floor 모달에서 floor_pk가 정해지지 않은 카메라 목록*/
 		function create_unused_camera_table(list,flag) {
 			$('tbody[name=modal_floor_'+flag+'tbody_unused_camera]').empty();
-			//console.log("start make unused_caemra_list");
+			
 			for( var i =0 ; i<list.length ; i++){
-				//console.log("in");
-				//console.log(list[i].dataset.pk);
+			
+				
 				$('tbody[name=modal_floor_'+flag+'_tbody_unused_camera]').append('<tr data-pk="'+list[i].dataset.pk+'"><td clsdd="td-sm"><input type="checkbox" data-pk="'+list[i].dataset.pk+'" name="unused_camera" style="margin:1%;" ></label></td><td class="td-sm">'+list[i].dataset.pk+'</td><td class="td-sm" style="height:49px; overflow:scroll;">'+list[i].dataset.description+'</td><tr>');
 			}
 		}
@@ -476,10 +476,10 @@
 
 		function create_used_camera_table(list) {
 			$('tbody[name=modal_floor_edit_tbody_used_camera]').empty();
-			//console.log("start");
+		
 			for( var i =0 ; i<list.length ; i++){
-			//	console.log("in");
-			//	console.log(list[i].dataset.pk);
+		
+		
 				$('tbody[name=modal_floor_edit_tbody_used_camera]').append('<tr data-pk="'+list[i].dataset.pk+'"><td class="td-sm"><input type="checkbox" name="used_camera" style="margin:1%;" ></label></td><td class="td-sm">'+list[i].dataset.pk+'</td><td class="td-sm">'+list[i].dataset.description+'</td><tr>');
 			}
 		}
@@ -581,9 +581,6 @@
 			var mac_addr = $('#modal_camera_add_mac_addr').val();
 			
 			if (confirm('정말 추가 하시겠습니까?')) {
-				modal_camera_init();
-				//console.log(camera_description);
-				//console.log("{{store_id}}");
 				modal_camera_init();
 				$.ajax({
 					url: "{% url 'watcher:ajax_add_camera_info' %}",
