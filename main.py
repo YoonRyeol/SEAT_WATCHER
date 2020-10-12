@@ -146,7 +146,6 @@ def detect():
         if(origin_data['is_updated']):
             initialize()
             print('\'pos_data.json\' has been changed... restart loop')
-            os.remove("images/origin.jpg")
             break                
         x1 = elem['position']['f_x']
         x2 = elem['position']['s_x']
@@ -187,7 +186,8 @@ table_state = initialize()
 with open('result.json', 'r') as json_file:
     result = json.load(json_file)
 if os.path.isfile("images/origin.jpg"):
-    os.remove("images/origin.jpg")
+    for file in os.listdir("images"):
+        os.remove("images/"+file)
 
 cap = cv2.VideoCapture(0)
 #frame_width = int(cap.get(3))
@@ -205,12 +205,11 @@ while True:
         isInit = True
     if(isInit and os.path.isfile("images/origin.jpg") != True):
         cv2.imwrite("images/origin.jpg", frame)
+        isInit = False
+        isInitFlag = True
+
     if ret :
         cv2.imshow('cam', frame)
-        if isInit:
-            cv2.imwrite("images/origin.jpg", frame)
-            isInit = False
-            isInitFlag = True
         if((now == "00" or now == "20" or now == "40") and capture != True and isInitFlag == True) :
             cv2.imwrite("images/captured.jpg", frame)
             detect()
