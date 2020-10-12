@@ -11,6 +11,7 @@ from matplotlib import pyplot as plt
 
 
 capture = False
+make_new_origin = True
 
 def initialize():
     print("Json file will be initialize....")
@@ -60,10 +61,11 @@ def ROI(x1, x2, y1, y2, pk):
     captured = captured[spot1[0]:spot2[0], spot1[1]:spot2[1]]
     cv2.imwrite("images/captured_"+str(pk)+".jpg", captured)
 
-    if os.path.isfile("images/origin_"+str(pk)+".jpg") is not True:
+    if make_new_origin:
         origin = cv2.imread("images/origin.jpg", 1)
         origin = origin[spot1[0]:spot2[0], spot1[1]:spot2[1]]
         cv2.imwrite("images/origin_"+str(pk)+".jpg", origin)
+        make_new_origin = False
     return captured
     
 def rgb2hsv(img):
@@ -147,6 +149,7 @@ def detect():
             initialize()
             print('\'pos_data.json\' has been changed... restart loop')
             os.remove("images/origin.jpg")
+            make_new_origin = True
             break                
         x1 = elem['position']['f_x']
         x2 = elem['position']['s_x']
@@ -188,6 +191,7 @@ with open('result.json', 'r') as json_file:
     result = json.load(json_file)
 if os.path.isfile("images/origin.jpg"):
     os.remove("images/origin.jpg")
+    make_new_origin = True
 
 cap = cv2.VideoCapture(0)
 #frame_width = int(cap.get(3))
@@ -225,6 +229,7 @@ while True:
                     os.remove("images/captured_"+str(elem['pk'])+".jpg")
                 os.remove("images/captured.jpg")
             os.remove("images/origin.jpg")
+            make_new_origin = True
             break
             
     # Break the loop
