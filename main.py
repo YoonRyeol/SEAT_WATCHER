@@ -199,11 +199,11 @@ while True:
     now = datetime.datetime.now().strftime("%S")
     now = str(now)
     ret, frame = cap.read()
-    if(cntIsInit <= 10):
+    if(cntIsInit <= 100):
         cntIsInit += 1
-    if(cntIsInit == 10):
+    if(cntIsInit == 100):
         isInit = True
-    if(isInit and os.path.isfile("images/origin.jpg")):
+    if(isInit and os.path.isfile("images/origin.jpg") != True):
         cv2.imwrite("images/origin.jpg", frame)
     if ret :
         cv2.imshow('cam', frame)
