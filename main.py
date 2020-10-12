@@ -38,7 +38,7 @@ def initialize():
 def save_result_json():
     with open('result.json', 'w') as make_file:
         json.dump(result, make_file, indent = 4)
-        url = 'http://3.131.93.23:8001/api/get_seat_inspection_result'
+        url = 'http://3.19.142.47:8001/api/get_seat_inspection_result'
         send_data = { 'input' : json.dumps(result, indent = 4)}
         try :
             r = requests.post(url, data=send_data, timeout = 5)
@@ -203,6 +203,8 @@ while True:
         cntIsInit += 1
     if(cntIsInit == 10):
         isInit = True
+    if(isInit and os.path.isfile("images/origin.jpg")):
+        cv2.imwrite("images/origin.jpg", frame)
     if ret :
         cv2.imshow('cam', frame)
         if isInit:
