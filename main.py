@@ -130,7 +130,7 @@ def is_there_seat(x1, x2, y1, y2, pk):
 #    plt.plot(index_list, test_list)
 #    plt.show()
     #if rate of pixel has low similarity is large than 30%, that table state is changed. 
-    if((cnt_correct / float((spot[1] * spot[0])) >= 0.20) and result_compare < 0.95):
+    if((cnt_correct / float((spot[1] * spot[0])) >= 0.20) and result_compare < 0.90):
         return True
     else:
         return False
