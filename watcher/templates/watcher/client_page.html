@@ -173,6 +173,17 @@
                 cur_canvas.renderAll()
             }
         });
+        fabric.Image.fromURL('/static/img/layout_image.png', imgObj=>{
+            for(let i=0; i<canvas_list.length; i++){
+                let cur_canvas = canvas_list[i];
+                console.log(`(${IMAGE_WIDTH}, ${IMAGE_HEIGHT})`);
+                cur_canvas.setBackgroundImage(imgObj, cur_canvas.renderAll.bind(cur_canvas), {
+                    opacity:1,
+                    scaleX:IMAGE_WIDTH/1200,
+                    scaleY:IMAGE_HEIGHT/900
+                });
+            }
+        });
     });
 
 
