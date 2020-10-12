@@ -14,6 +14,10 @@ capture = False
 
 def initialize():
     print("Json file will be initialize....")
+    if os.path.isfile("images/origin.jpg"):
+        for file in os.listdir("images"):
+            os.remove("images/"+file)
+
     with open('pos_data.json', 'r') as json_file:
         data = json.load(json_file)
         origin_data = data
@@ -23,6 +27,7 @@ def initialize():
 
 
     result = []
+    global table_state
     table_state = []
     for elem in data:
         result.append({"pk" : elem['pk'], "res" : "F"})
@@ -60,7 +65,7 @@ def ROI(x1, x2, y1, y2, pk):
     captured = captured[spot1[0]:spot2[0], spot1[1]:spot2[1]]
     cv2.imwrite("images/captured_"+str(pk)+".jpg", captured)
 
-    if os.path.isfile("images/origin.jpg"):
+    if os.path.isfile("images/origin_"+str(pk)+".jpg") is not True:
         origin = cv2.imread("images/origin.jpg", 1)
         origin = origin[spot1[0]:spot2[0], spot1[1]:spot2[1]]
         cv2.imwrite("images/origin_"+str(pk)+".jpg", origin)
@@ -93,6 +98,12 @@ def is_there_seat(x1, x2, y1, y2, pk):
     test_list = []
     index_list = []
     test_index = 0
+    
+#    captured = cv2.bilateralFilter(captured, 5, 75, 75)
+#    origin = cv2.bilateralFilter(origin, 5, 75, 75)
+#    cv2.imshow("t1", origin)
+#    cv2.imshow("t2", captured)
+    
 #   print(spot[0], spot[1], captured.shape[0], captured.shape[1], origin.shape[0], origin.shape[1])
     #calculate average diffrence of RGB pixel value between origin and captured picture
     for y in range(0, spot[0]):
@@ -131,9 +142,11 @@ def is_there_seat(x1, x2, y1, y2, pk):
 #    plt.show()
     #if rate of pixel has low similarity is large than 30%, that table state is changed. 
     if((cnt_correct / float((spot[1] * spot[0])) >= 0.20) and result_compare < 0.90):
-        return True
+        return True, 1
+    elif((cnt_correct / float((spot[1] * spot[0])) < 0.20) and result_compare > 0.90):
+        return False, 2
     else:
-        return False
+        return False, 3
     
 def detect():
     print("detection loop is start....")
@@ -154,7 +167,8 @@ def detect():
         x1, x2 = swap(x1, x2)
         y1, y2 = swap(y1, y2)
         captured = ROI(x1, x2, y1, y2, elem['pk'])
-        if(is_there_seat(x1, x2, y1, y2, elem['pk'])):
+        a, b = is_there_seat(x1, x2, y1, y2, elem['pk'])
+        if(a and b == 1):
             if(table_state[state_index] >= 2):
                 if(result[state_index]['res'] == "F"):
                     result[state_index]['res'] = "T"
@@ -164,7 +178,7 @@ def detect():
             else:
                 table_state[state_index] += 1
                 
-        else:
+        elif(a is False and b == 2):
             if(table_state[state_index] <= -2):
                 if(result[state_index]['res'] == "T"):
                     result[state_index]['res'] = "F"
@@ -176,6 +190,8 @@ def detect():
                 cv2.imwrite("images/origin_"+str(elem['pk'])+".jpg", captured)
             else:
                 table_state[state_index] -= 1
+        elif(a is False and b == 3):
+            table_state[state_index] = table_state[state_index]
         print("Table " + str(elem['pk']) +"'s state is = " + str(table_state[state_index]) +"\n")
         state_index += 1    
 
@@ -185,9 +201,6 @@ with open('pos_data.json', 'r') as json_file:
 table_state = initialize()
 with open('result.json', 'r') as json_file:
     result = json.load(json_file)
-if os.path.isfile("images/origin.jpg"):
-    for file in os.listdir("images"):
-        os.remove("images/"+file)
 
 cap = cv2.VideoCapture(0)
 #frame_width = int(cap.get(3))
@@ -207,6 +220,8 @@ while True:
         cv2.imwrite("images/origin.jpg", frame)
         isInit = False
         isInitFlag = True
+    if os.path.isfile("images/origin.jpg") is not True and isInitFlag == True:
+        cv2.imwrite("images/origin.jpg", frame)
 
     if ret :
         cv2.imshow('cam', frame)
