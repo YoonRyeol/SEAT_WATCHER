@@ -4,7 +4,7 @@
   + MYSQL
   + DJANGO
 ## 개요
-  + 동영상
+  + [![CANIGO?-시연동영상](http://img.youtube.com/vi/9pMxyc3VleE/0.jpg)](https://youtu.be/9pMxyc3VleE?t=0s) 
 ## 시스템 구성
 ![watcher_시스템구성도 002](https://user-images.githubusercontent.com/38625842/98774087-9a8d1e80-242d-11eb-91f1-61a2ec1dea95.jpeg)  
   + DB
