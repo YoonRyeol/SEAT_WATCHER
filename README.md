@@ -20,10 +20,17 @@
 ## 실행방법
   + DB
     - MYSQL
-      >sudo systemctl start mysql
+```
+      $sudo systemctl start mysql
+```
   + SERVER
-    - DJANGO 
-      > python3 manage.py runserver 0:8000
+    - DJANGO
+    
+```
+
+      $python3 manage.py runserver 0:8000
+      
+```
   + CAMERA
     - 
     
@@ -37,5 +44,13 @@
   + Floor
     - 가게의 층에 관한 정보이다. 층에 대한 정보와 몇 층인지, 어느 가게에 포함되는 층인지에 대한 정보를 담을 수 있다.
  ## 기능
+  #### 관리자
+   + 가게 추가
+   + 카메라 추가
+   + 층 추가 
+  #### 사용자
+   + 매장 방문
+   ![KakaoTalk_Photo_2020-11-11-16-34-37](https://user-images.githubusercontent.com/38625842/98782776-eba40f00-243b-11eb-9833-d72500322597.png)
+  #### 카메라
 
   
