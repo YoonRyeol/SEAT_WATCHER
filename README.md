@@ -4,6 +4,7 @@
   + MYSQL
   + DJANGO
 ## 개요
+  + 매장 내 카메라를 통한 사물인식 후 정보를 웹 어플리케이션을 통해 사용자에게 제공한다. 또한 관리자가 테이블에 콘센트 유무를 표시하는 등 사용자에게 정보 제공을 할 수 있다.
   + [![CANIGO?-시연동영상](http://img.youtube.com/vi/9pMxyc3VleE/0.jpg)](https://youtu.be/9pMxyc3VleE?t=0s) 
 ## 시스템 구성
 ![watcher_시스템구성도 002](https://user-images.githubusercontent.com/38625842/98774087-9a8d1e80-242d-11eb-91f1-61a2ec1dea95.jpeg)  
@@ -27,7 +28,6 @@
     - DJANGO
     
 ```
-
       $python3 manage.py runserver 0:8000
       
 ```
@@ -46,11 +46,24 @@
  ## 기능
   #### 관리자
    + 가게 추가
+    - 가게이름, 위치, 대표사진을 올려 정보를 저장할 수 있습니다.
+     <img width="1198" alt="스크린샷 2020-10-02 오후 4 24 43" src="https://user-images.githubusercontent.com/38625842/98784105-f364b300-243d-11eb-94ec-5d4976bb41e7.png">
    + 카메라 추가
+    - 가게에 설치되어있는 카메라를 추가 할 수 있습니다. MAC주소만 입력하면 자동으로 연결이 됩니다.
+    <img width="1174" alt="스크린샷 2020-10-04 오후 3 39 07" src="https://user-images.githubusercontent.com/38625842/98784239-2c048c80-243e-11eb-9217-8bd160d47089.png">
    + 층 추가 
+    - 매장이 있는 또는 관리하고 있는 층의 정보를 입력합니다(ex 1층,2층,3층). 이때 해당 층에 설치되어있는 카메라를 등록 할 수 있습니다. 
+    <img width="959" alt="스크린샷 2020-10-04 오후 6 21 46" src="https://user-images.githubusercontent.com/38625842/98784305-4474a700-243e-11eb-8453-c8ba3736e91d.png">
+   + 테이블 등록
+   <img width="1178" alt="스크린샷 2020-10-12 오후 5 38 04 3" src="https://user-images.githubusercontent.com/38625842/98784814-05932100-243f-11eb-9a6a-450dffda121a.png">
+
+   + 배치도 편집
+   <img width="1186" alt="스크린샷 2020-10-12 오후 5 53 20" src="https://user-images.githubusercontent.com/38625842/98784712-ded4ea80-243e-11eb-900e-cff135ac19db.png">
+  
   #### 사용자
    + 매장 방문
    ![KakaoTalk_Photo_2020-11-11-16-34-37](https://user-images.githubusercontent.com/38625842/98782776-eba40f00-243b-11eb-9833-d72500322597.png)
+   + 검색 및 찜
   #### 카메라
 
   
