@@ -5,6 +5,7 @@ from .serializers import *
 import requests
 import json
 from django.db.models import Q
+from django.shortcuts import redirect,render
 
 def get_client_store_list(request) :
 	pages = request.GET.get('page',0)
@@ -73,6 +74,38 @@ def client_liked_list(request) :
 		return HttpResponse("None")
 
 
+def client_signin(request) :
+	user_id=request.POST.get('user_id')
+	password=request.POST.get('password')
+
+	user=User.objects.filter(Q(user_id=user_id) & Q(password=password))
+
+	if user.exists() :
+		request.session['user_id']=user_id
+		return HttpResponse("good")
+	else :
+		return HttpResponse("loginfail")
+
+	
+
+def client_signup(request) :
+	user_id=request.POST.get('user_id')
+	password=request.POST.get('password')
+	password_check=request.POST.get('password_check')
+
+	user=User.objects.filter(user_id=user_id)
+
+	if user.exists() :
+		return HttpResponse("sameid")
+	request.session['user_id']=user_id
+
+	user=User(user_id=user_id,password=password)
+	user.save()
+	return HttpResponse("signup")
+
+def client_logout(requset) :
+	requset.session.clear()
+	return HttpResponse("good")
 
 
 

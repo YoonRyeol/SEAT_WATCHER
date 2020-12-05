@@ -79,7 +79,6 @@
 				
 				<tbody id="tbody_camera" name="{{store.pk}}"> <!--store_id 저장-->
 					{% for list in camera_list%}
-
 					<tr id="tr_list_{{list.pk}}">
 						<input type="hidden" data-pk="{{list.pk}}" data-cur_pic="{{list.cur_pic}}" data-mac_addr="{{list.mac_addr}}" data-cur_host="{{list.cur_host}}" data-description="{{list.description}}" data-store_id="{{list.store_id}}" data-floor_id="{{list.floor_id}}">
 						<td class="clickable" onclick='move_page(this)' link="camera/{{list.pk}}">
@@ -1010,7 +1009,7 @@
 					else if(data == 'update_success'){
 						$('.td_camera_'+camera_pk).html('<i style="margin:4px" class="fa fa-eye"></i>');
 					}
-				}
+				},
 			});
 		}
 

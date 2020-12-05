@@ -1,7 +1,6 @@
 from django.db import models
 
 # Create your models here.
-
 class Store(models.Model):
     store_name = models.CharField(max_length=256, blank=True, null=True)
     store_location = models.CharField(max_length=256, blank=True, null=True)
@@ -37,3 +36,7 @@ class Floor(models.Model):
     name = models.CharField(max_length=256, blank=True, null=True)
     floor_num = models.IntegerField(default=-1)
     description = models.CharField(max_length=1024, blank=True, null=True)
+
+class User(models.Model) :
+    user_id = models.CharField(primary_key=True,max_length=128)
+    password = models.CharField(max_length=128, blank=True, null=True)

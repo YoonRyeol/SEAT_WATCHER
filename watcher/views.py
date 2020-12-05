@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
 from watcher.models import *
 from django.views.decorators.csrf import csrf_exempt
@@ -89,9 +89,13 @@ def store_list(request) :
 
 def client_store_list(request) :
 	store_list = Store.objects.all()
-	return render(request, 'watcher/client_store_list.html',{"store_list" : store_list})
+	user_id=request.session.get('user_id')
+
+	return render(request, 'watcher/client_store_list.html',{"store_list" : store_list,'user_id':user_id})
 
 def client_page(request, store_pk=None):
+	user_id=request.session.get('user_id')
+
 	store = None
 	if store_pk != None:
 		store = Store.objects.get(pk=int(store_pk))
@@ -123,11 +127,27 @@ def client_page(request, store_pk=None):
 														'floor_list' : floor_list,
 														'elec_all':elec_all,
 														'elec_occupied':elec_occupied,
-														'layout_coord_list' : json.dumps(layout_coord_list),
+														'layout_coord_list' : json.dumps(layout_coord_list),'user_id':user_id,
 																									})
 
 @csrf_exempt
 def image_test(request):
 
 	handle_uploaded_file(request.FILES['file'])
+
+
+def client_signup(request) :
+	user_id = request.session.get('user_id')
+	if user_id is not None :
+		return redirect('watcher:client_store_list')
+	return render(request, 'watcher/client_signup.html')
+
+def client_signin(request) :
+	user_id = request.session.get('user_id')
+
+	if user_id is not None :
+		return redirect('watcher:client_store_list')
+		
+	return render(request, 'watcher/client_signin.html')
+
 

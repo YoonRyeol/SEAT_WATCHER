@@ -50,6 +50,11 @@ urlpatterns = [
 	path('client/search',apis_client.search_client_store_list, name='ajax_search_client_store_list'),
 	path('client/liked',apis_client.client_liked_list,name='ajax_client_liked_list'),
 	path('api/update_cam_addr', apis.update_cam_addr, name='update_cam_addr'),
+	path('client/signup',views.client_signup,name='client_signup'),
+	path('api/client_signup', apis_client.client_signup, name='ajax_client_signup'),
+	path('api/client_logout', apis_client.client_logout, name='ajax_client_logout'),
+	path('client/signin', views.client_signin, name='client_signin'),
+	path('api/client_signin', apis_client.client_signin, name='ajax_client_signin'),
  ]
 
 
