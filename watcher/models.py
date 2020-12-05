@@ -5,6 +5,7 @@ class Store(models.Model):
     store_name = models.CharField(max_length=256, blank=True, null=True)
     store_location = models.CharField(max_length=256, blank=True, null=True)
     picture_name = models.CharField(max_length=256, blank=True, null=True)
+    review_score = models.DecimalField(max_digits=3, decimal_places=2)
 
 class Camera(models.Model):
     store = models.ForeignKey('Store', on_delete=models.SET_NULL, blank=True, null=True)
@@ -40,3 +41,10 @@ class Floor(models.Model):
 class User(models.Model) :
     user_id = models.CharField(primary_key=True,max_length=128)
     password = models.CharField(max_length=128, blank=True, null=True)
+
+class Review(models.Model) :
+    store = models.ForeignKey('Store', on_delete=models.SET_NULL,blank=True,null=True)
+    user = models.ForeignKey('User', on_delete=models.CASCADE,blank=True)
+    score = models.FloatField(blank=True, default=0)
+    date = models.CharField(max_length=128, blank=True, null=True)
+    comment = models.TextField(max_length=500, blank=True, null= True)

@@ -119,6 +119,8 @@ def client_page(request, store_pk=None):
 		layout_coord_list.append(tmp_data)
 
 
+	reviews=Review.objects.filter(store_id=store.pk).order_by('-date')
+	reviews_count=reviews.count()
 
 	return render(request, 'watcher/client_page.html', {
 														'store' : store,
@@ -127,7 +129,7 @@ def client_page(request, store_pk=None):
 														'floor_list' : floor_list,
 														'elec_all':elec_all,
 														'elec_occupied':elec_occupied,
-														'layout_coord_list' : json.dumps(layout_coord_list),'user_id':user_id,
+														'layout_coord_list' : json.dumps(layout_coord_list),'user_id':user_id,'reviews':reviews,
 																									})
 
 @csrf_exempt

@@ -1,3 +1,17 @@
 #navbar_top a {
 	font-size:3.6rem;
 }
+
+
+#modal_review_socre_star a{
+	font-size : 3rem;
+        text-decoration: none;
+        color: gray;
+    }
+
+
+#modal_review_socre_star a.on{
+	font-size : 3rem;
+        text-decoration: none;
+        color: red;
+    }

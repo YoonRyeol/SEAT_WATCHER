@@ -55,6 +55,7 @@ urlpatterns = [
 	path('api/client_logout', apis_client.client_logout, name='ajax_client_logout'),
 	path('client/signin', views.client_signin, name='client_signin'),
 	path('api/client_signin', apis_client.client_signin, name='ajax_client_signin'),
+	path('api/save_review', apis_client.save_review, name='ajax_save_review'),
  ]
 
 
