@@ -192,6 +192,13 @@
       var height = Math.abs((cur_data.layout_s_y - cur_data.layout_f_y) * IMAGE_HEIGHT)
       Add(_left = left, _top = top, _width = width, _height = height, _scaleX = 1, _scaleY = 1, _pk = cur_data.id, _is_elec=cur_data.is_elec)
     }
+
+    fabric.Image.fromURL('/static/img/layout_image.png', imgObj=>{
+      canvas.setBackgroundImage(imgObj, canvas.renderAll.bind(canvas),{
+        opacity:1,
+      });
+    });
+
     console.log(get_objects())
   });
 
