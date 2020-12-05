@@ -5,6 +5,10 @@ html, body {
   padding: 0;
 }
 
+
+#navbar_top a {
+	font-size:6rem;
+}
 .wrap {
 	margin : 0 auto;
 }

@@ -10,5 +10,5 @@ class CameraSerializer(serializers.ModelSerializer) :
 class StoreSerializer(serializers.ModelSerializer) :
 	class Meta :
 		model = Models.Store
-		fields = ('pk','store_name','store_location','picture_name')
+		fields = ('pk','store_name','store_location','picture_name','review_score')
 

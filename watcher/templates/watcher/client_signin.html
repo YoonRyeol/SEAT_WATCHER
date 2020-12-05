@@ -26,41 +26,48 @@
 
 		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-dark bg-dark" style="position:sticky; top:0; margin-bottom:3%;">
 			<a class="navbar-brand" href="{% url 'watcher:client_store_list' %}">CAN I GO?</a>
-			<div class="input-group mb-3" style="height:80%; min-width:18%; width:35%; right:-15%; padding:2%;">
-				<input type="text" id="client_search_keyword" class="form-control" placeholder="검색 내용" aria-label="검색 내용" aria-describedby="button-addon2" style="font-size: 2.6rem; height:100%;">
-			
-				<div class="input-group-append" style="width:15%; height:100%">
-					 	<button class="btn btn-dark btn-outline-secondary" type="button" id="button-addon2" style="padding:1%; width:100%; color:white; max-height:100%; font-size:1.3vh;" >&#8981;</button>
-				</div>
-			</div>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 	    		<span class="navbar-toggler-icon"></span>
 	  		</button>
 	 	 	<div class="collapse navbar-collapse" id="navbarNav">
 			    <ul class="navbar-nav">
-			    	{% if user_id is None %}
 			       <li class="nav-item">
-			        <a class="nav-link" id="signin_btn" href="{% url 'watcher:client_signin' %}">로그인</a>
+			        <a class="nav-link" id="signin_btn" herf="{% url 'watcher:client_signin' %}">로그인</a>
 			      </li>
 			      <li class="nav-item">
-			        <a class="nav-link" id="signup_btn" href="{% url 'watcher:client_signup' %}">회원가입</a>
+			        <a class="nav-link" id="signin_btn" href="{% url 'watcher:client_signup' %}">회원가입</a>
 			      </li>
-			      {% else %}
-			      <li class="nav-item">
-			        <a class="nav-link" id="mypage_btn" ">마이페이지</a>
-			    </li>
-			      <li class="nav-item">
-			        <a class="nav-link" id="logout_btn" ">로그아웃</a>
-			    </li>
-			      {% endif %}
 			  	</ul>
 			 </div>
 		</nav>
 
 		<div id="container_store_list" class="container-fluid" style="overflow:scroll; min-height: 100vh;">
+			<div class="container">
+				<div class="container-fluid" style="padding-top:10%;">
+					<h3 class="display-4">로그인</h3>
+					<h5>로그인 정보를 입력해 주세요</h5>
+				</div>
+
+				<div class="container-fluid" style="padding-top:5%;">
+					<form>
+						<div class="form-group">
+							<label for="form_user_id">회원 아이디</label>
+							<div class="input-group mb-3">
+							    <input type="text" class="form-control" id="form_user_id">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="password">비밀번호</label>
+						    <input type="password" class="form-control" id="form_password">
+						</div>
+					</form>
+					<button id="form_signin_btn" class="btn btn-secondary bg-dark">로그인</button>
+				</div>
+			</div>
 		</div>
 
-	</div>
+
+	</div><!--container fluid end-->
 
 
 	<nav class="navbar fixed-bottom navbar-light bg-dark" style="position:sticky; bottom:0; height:11%; margin-top:1rem;">
@@ -320,26 +327,7 @@
 		else {
 			path = "/static/img/store/"+list.pk+"/"+list.picture_name;
 		}
-		$('#container_store_list').append('\
-			<div class="row" id="store_row_'+list.pk+'" name="store" data-pk="'+list.pk+'" style="border: solid black 1px; margin-left:4%; margin-right:4%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em; margin-bottom:3.5rem;">\
-				<div class="col-12" style="height:36vh; padding:0; ">\
-					<div class="card" style="height:100%; width:100%; border: 2px solid black; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;">\
-						<img src="'+path+'" alt="" class="card-img-top" style="height:60%; border:2px solid black; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;">\
-						<div class="card-body" style="height:90%;">\
-						<div>\
-						<h1 class="card-title" style="font-size:7rem; display: inline-block;">'+list.store_name+'</h1><button class="btn" style="float:right; background-color:white; display:inline-block;">\
-						<i id="store_heart_'+list.pk+'" name="heart_empty_btn" class="far fa-heart fa-6x" data-pk="'+list.pk+'" style="color:red; padding:2%;"></i>\
-						</button>\
-						</div>\
-						<h1 style="display:block; color:gray;" >위치 : '+list.store_location+'</h1>\
-						<h1>평점 : '+list.review_score+'</h1>\
-						<div class="container-fluid" name="card-footer" style="position:absolute; right:0px; bottom:0px; padding-bottom: 2%;">\
-							<a href="#" class="btn btn-dark btn-lg" id="next_page_button" data-pk="'+list.pk+'" style="font-size:4rem; float:right; border-top-right-radius: 0.5em; border-top-left-radius: 0.5em; border-bottom-right-radius: 0.5em; border-bottom-left-radius: 0.5em; padding:1.5%;">방문하기</a>\
-						</div>\
-						</div>\
-					</div>\
-				</div>\
-			</div>')
+		$('#container_store_list').append('<div class="row" id="store_row_'+list.pk+'" name="store" data-pk="'+list.pk+'" style="border: solid black 1px; margin-left:4%; margin-right:4%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em; margin-bottom:3.5rem;"><div class="col-12" style="height:36vh; padding:0; "><div class="card" style="height:100%; width:100%; border: 2px solid black; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><img src="'+path+'" alt="" class="card-img-top" style="height:60%; border:2px solid black; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><div class="card-body" style="height:90%;"><div><h1 class="card-title" style="font-size:7rem; display: inline-block;">'+list.store_name+'</h1><button class="btn" style="float:right; background-color:white; display:inline-block;"><i id="store_heart_'+list.pk+'" name="heart_empty_btn" class="far fa-heart fa-6x" data-pk="'+list.pk+'" style="color:red; padding:2%;"></i></button></div><h1 style="display:block; color:gray;" >위치 : '+list.store_location+'</h1><div class="container-fluid" name="card-footer" style="position:absolute; right:0px; bottom:0px; padding-bottom: 2%;"><a href="#" class="btn btn-dark btn-lg" id="next_page_button" data-pk="'+list.pk+'" style="font-size:4rem; float:right; border-top-right-radius: 0.5em; border-top-left-radius: 0.5em; border-bottom-right-radius: 0.5em; border-bottom-left-radius: 0.5em; padding:1.5%;">방문하기</a></div></div></div></div></div>')
 		
 	}
 
@@ -393,34 +381,6 @@
 	}
 
 
-	$(document).ready(function(){
-		if(page==1){
-			console.log("first page : "+page);
-			if(mutex_liked) return;
-			store_pagination();
-		}
-	});
-
-	//이후 스크롤이 일정범위 벗어나면 5개씩 추가로 가져옴
-	window.onscroll = function(e) {
-		var keyword = $('#client_search_keyword').val();
-
-		//console.log("scoll start page :"+page);
-
-    //window height + window scrollY 값이 document height보다 클 경우,
-	    $(document).ready(function(){
-	    	var element = document.getElementById('container_store_list');
-	    	
-	    	//console.log("innerHeight : " + window.innerHeight);
-	    	//console.log("scrollY : " + window.scrollY);
-	    	//console.log(element.offsetHeight);
-
-	    	if((window.innerHeight + window.scrollY) >= element.offsetHeight && page>1) {
-	    		store_pagination();
-	    	}//if end
-	    });
-    };
-
     //매장 방문버튼 클릭시 페이지 이동
 	$(document).on('click', '#next_page_button', function(e){
 		let target_pk = $(e.target).data('pk')
@@ -428,19 +388,35 @@
 		location.href="/client_page/" + target_pk
 	});
 
-	//로그아웃 시
-	$(document).on('click','#logout_btn', function(e) {
+
+	$(document).on('click', '#form_signin_btn', function(e) {
+		var user_id = $('#form_user_id').val();
+		var password = $('#form_password').val();
+
+		if(user_id == '') return alert("아이디를 입력해주세요");
+		else if(password== '') return alert("비밀번호를 입력해주세요");
+	
+
 		$.ajax({
-			url : "{% url 'watcher:ajax_client_logout' %}",
-			type:'GET',
-			success: function(data) {
-				location.reload();
+			url : "{% url 'watcher:ajax_client_signin' %}",
+			type: 'POST',
+			data : {
+				'csrfmiddlewaretoken' : "{{csrf_token}}",
+				'user_id' : user_id,
+				'password' : password,
+			},
+			success :function(data) {
+				if(data=="loginfail") return alert("회원정보가 일치하지 않습니다.");
+				else 
+					location.reload();
 			},
 			error : function(error) {
 
 			},
+
 		})
-	});
+	})
+
 	
 </script>
 </html>
