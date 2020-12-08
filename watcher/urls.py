@@ -56,6 +56,16 @@ urlpatterns = [
 	path('client/signin', views.client_signin, name='client_signin'),
 	path('api/client_signin', apis_client.client_signin, name='ajax_client_signin'),
 	path('api/save_review', apis_client.save_review, name='ajax_save_review'),
+	path('client/map/', views.client_map, name='client_map'),
+	path('store_info/<int:store_pk>/menu', views.store_menu, name='store_menu'),
+	path('store_info/<int:store_pk>/menu/add', views.store_menu_add, name='store_menu_add'),
+	path('api/add_category_info', apis.add_category_info, name='ajax_add_category_info'),
+	path('api/add_store_menu_info', apis.add_store_menu_info, name='ajax_add_store_menu_info'),
+	path('api/edit_store_menu_info', apis.edit_store_menu_info, name='ajax_edit_store_menu_info'),
+	path('api/delete_store_menu_info', apis.delete_store_menu_info, name='ajax_delete_store_menu_info'),
+
+	
+
  ]
 
 

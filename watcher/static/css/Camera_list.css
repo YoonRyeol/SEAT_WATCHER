@@ -72,6 +72,12 @@ tr[visible='true']{
 	width: 100%;
 }
 
+::-webkit-scrollbar {
+    display: none;
+}
+
+
+
 
 
 
