@@ -23,7 +23,7 @@
 <body>
 	<div class="container-fluid" style="padding:0;">
 
-		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-dark bg-dark" style="position:sticky; top:0; margin-bottom:3%;">
+		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-dark bg-dark" style="z-index:2; position:sticky; top:0; margin-bottom:3%;">
 			<a class="navbar-brand" href="{% url 'watcher:client_store_list' %}">CAN I GO?</a>
 			<div class="input-group mb-3" style="height:80%; min-width:18%; width:35%; right:-15%; padding:2%;">
 				<input type="text" id="client_search_keyword" class="form-control" placeholder="검색 내용" aria-label="검색 내용" aria-describedby="button-addon2" style="font-size: 2.6rem; height:100%;">
@@ -56,7 +56,7 @@
 			 </div>
 		</nav>
 
-		<div id="container_store_list" class="container-fluid" style="overflow:scroll; min-height: 100vh;">
+		<div id="container_store_list" class="container-fluid" style="z-index:1; overflow:scroll; min-height: 100vh;">
 		</div>
 
 	</div>
