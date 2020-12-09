@@ -3,11 +3,11 @@
     <meta name="viewprot" content="width=device-width, inital-scale=1, shrinkt-to-fit=no">
 
     
-
+    
     <link rel="stylesheet" type="text/css" href="/static/css/client_page.css?2">
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
     <link rel="stylesheet" type="img" href="/static/img/bolt-solid.svg">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css?1">
 <style>
         .cafe_entire_status{
             animation-name: fade-in;
@@ -55,7 +55,7 @@
 
 <body>
     <!--navbar-->
-      <nav id="navbar_top" class="navbar navbar-expand-lg navbar-dark bg-dark" style="position:sticky; top:0; margin-bottom:3%;">
+      <nav id="navbar_top" class="navbar navbar-expand-lg navbar-dark bg-dark" style="position:sticky; top:0; margin-bottom:3%; z-index:2;">
             <a class="navbar-brand" href="{% url 'watcher:client_store_list' %}">CAN I GO?</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -82,7 +82,7 @@
         </nav><!--navbar end-->
 
     <!--미들 컨테이너-->
-    <div id="store_info_container" class="container-fluid" style="overflow:scroll; padding:0px; min-height:100vh;">
+    <div id="store_info_container" class="container-fluid" style="z-index:1; overflow:scroll; padding:0px; min-height:100vh;">
         <div id="store_info_container" class="container-fluid" style="overflow:scroll;">
             <div class='mt-3' style="margin: 5%;"></div>
             <br/>
@@ -141,6 +141,40 @@
                 </div>
             </div>
         </div>
+         <!--메뉴-->
+         {% if menu  %}
+         <div class="container-fluid">
+            <div class="container-fluid">
+                <div class="container-fluid" style="display:inline-block; width:100%; margin-bottom:5%; float:left;"><h1>메뉴</h1></div>
+                  {% for category in categories %}
+                <div class="container-fluid" style="margin-top:5%;">
+                    <div class="container-fluid">
+                        <div class="container-fluid" style="display:inline-block; width:50%; float:left;"><h3>{{category.name}}</h3></div>
+                    </div>
+                    
+                    <div class="container-fluid" style="overflow:scroll; height:10vh;">
+                        <table class="table table-borderless ">
+
+                      
+                          <tbody style="padding-top:1%;">
+                             {% for list in menu %}
+                             {% if list.category_id == category.pk %}
+                            <tr>
+                                <td style="width:40%; text-align: left">{{list.name}}</td>
+                                <td style="width:60%; text-align: left">{{list.price}} ₩</td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                            
+                          </tbody>
+                      </table>
+                    </div>
+                </div><!--리뷰 end-->
+                 {% endfor %}
+             </div>
+        </div>
+        {% endif %}
+
         <!--리뷰-->
         <div class="container-fluid" style="margin-top:5%;">
             <div class="container-fluid">
@@ -181,7 +215,7 @@
 
 
     <!--하단 탭바-->
-    <nav class="navbar fixed-bottom navbar-light bg-dark" style="position:sticky; bottom:0; max-height:20vh; margin-top:1rem;">
+    <nav class="navbar fixed-bottom navbar-light bg-dark" style="position:sticky; bottom:0;  max-height:20vh; margin-top:1rem;">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-6" id="bottom_home" style="display:block; text-align: center;"><a style="color: white; text-decoration:none" href="{% url 'watcher:client_store_list' %}" >

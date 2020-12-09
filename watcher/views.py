@@ -11,6 +11,7 @@ def Camera_list(request,store_id) :
 	camera_list = Camera.objects.filter(store_id = store_id)
 	store = Store.objects.get(pk = store_id)
 	floor_list = Floor.objects.filter(store_id = store_id)
+
 	return render(request, 'watcher/Camera_list.html',{"camera_list": camera_list, "store" : store ,"floor_list" : floor_list,} )
 
 def table_set(request, store_pk=None, camera_pk=None):
@@ -122,6 +123,9 @@ def client_page(request, store_pk=None):
 	reviews=Review.objects.filter(store_id=store.pk).order_by('-date')
 	reviews_count=reviews.count()
 
+	categories=Category.objects.filter(store_id=store_pk).order_by('-name')
+	menu=Menu.objects.filter(store_id=store_pk)
+
 	return render(request, 'watcher/client_page.html', {
 														'store' : store,
 														'all_table_count':all_table_count,
@@ -130,6 +134,7 @@ def client_page(request, store_pk=None):
 														'elec_all':elec_all,
 														'elec_occupied':elec_occupied,
 														'layout_coord_list' : json.dumps(layout_coord_list),'user_id':user_id,'reviews':reviews,
+														'categories':categories,'menu':menu,
 																									})
 
 @csrf_exempt
@@ -152,4 +157,21 @@ def client_signin(request) :
 		
 	return render(request, 'watcher/client_signin.html')
 
+def client_map(request) :
+	user_id = request.session.get('user_id')
+
+	return render(request,'watcher/client_map.html',{'user_id':user_id})
+
+def store_menu(request,store_pk) :
+	store=Store.objects.get(pk=store_pk)
+	menu=Menu.objects.filter(store_id=store_pk).order_by('name')
+	categories=Category.objects.all()
+
+	return render(request, 'watcher/store_menu.html',{'store':store ,'menu':menu,'categories':categories})
+
+
+def store_menu_add(request,store_pk) :
+	store=Store.objects.get(pk=store_pk)
+	categories=Category.objects.filter(store_id=store.pk)
+	return render(request, 'watcher/store_menu_add.html',{'store':store , 'categories':categories})
 

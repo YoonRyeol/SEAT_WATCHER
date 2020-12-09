@@ -48,3 +48,15 @@ class Review(models.Model) :
     score = models.FloatField(blank=True, default=0)
     date = models.CharField(max_length=128, blank=True, null=True)
     comment = models.TextField(max_length=500, blank=True, null= True)
+
+class Category(models.Model):
+    store = models.ForeignKey('Store', on_delete=models.SET_NULL,blank=True,null=True)
+    name = models.CharField(max_length=128, blank=True, null= True)
+
+
+class Menu(models.Model):
+    store = models.ForeignKey('Store', on_delete=models.SET_NULL,blank=True,null=True)
+    name = models.CharField(max_length=128, blank=True, null= True)
+    price = models.CharField(max_length=128, blank=True, null= True)
+    category = models.ForeignKey('Category', on_delete=models.SET_NULL,blank=True,null=True)
+    category_name =models.CharField(max_length=128, blank=True, null= True)
