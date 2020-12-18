@@ -6,12 +6,12 @@ import multiprocessing
 import subprocess
 
 def cam():
-    os.system('python main.py')
+    os.system('python cam_module.py')
     
 
 def main():
-    mp = multiprocessing.Process(target=cam, args=())
-    mp.start()
+    #mp = multiprocessing.Process(target=cam, args=())
+    #mp.start()
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'seat_watcher_cam.settings')
     try:
