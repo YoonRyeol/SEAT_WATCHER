@@ -67,7 +67,9 @@ pip install django==3.1
 
 
 ## 개요
-  + 매장 내 카메라를 통한 사물인식 후 정보를 웹 어플리케이션을 통해 사용자에게 제공한다. 또한 관리자가 테이블에 콘센트 유무를 표시하는 등 사용자에게 정보 제공을 할 수 있다.
+
+ Can I Go는 카페의 빈 테이블을 실시간으로 탐지하여 현재 카페의 빈 테이블이 몇 개가 있는지 알려주는 웹 서비스입니다. 빈 테이블을 관리하기 위해 카페의 관리자는 카메라 모듈을 설치하고 Can I Go를 통해 테이블 정보를 등록해야 합니다. 고객은 관리자가 등록한 테이블 정보를 통하여 현재 빈 자리가 몇 개인지를 웹 브라우저를 통하여 실시간으로 확인할 수 있습니다.
+
   + [![CANIGO?-시연동영상](http://img.youtube.com/watch?v=9pMxyc3VleE/0.jpg)](https://www.youtube.com/watch?v=9pMxyc3VleE) 
 ## 시스템 구성
 ![watcher_시스템구성도 002](https://user-images.githubusercontent.com/38625842/98774087-9a8d1e80-242d-11eb-91f1-61a2ec1dea95.jpeg)  
