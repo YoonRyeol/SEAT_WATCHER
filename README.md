@@ -8,6 +8,13 @@
 
 #### Front-end
 
+- Bootstrap4
+
+https://getbootstrap.com/
+
+- fabric.js
+
+http://fabricjs.com/
 
 
 #### Back-end
