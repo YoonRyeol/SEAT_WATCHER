@@ -187,7 +187,6 @@ pip install django==3.1
  
  ```
  python manage.py runserver localhost:${port}
- 
  ```
  
  ### 3. 메인서버와 카메라 모듈 연동
