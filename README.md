@@ -4,7 +4,7 @@
 
 ### [1. dependency](https://github.com/YoonRyeol/SEAT_WATCHER/blob/develop/README.md#1-dependency-1)
 
-### [2. 개요](#2.-개요)
+### [2. 개요](https://github.com/YoonRyeol/SEAT_WATCHER/blob/develop/README.md#2-%EA%B0%9C%EC%9A%94-1)
 
 ### [3. 시스템 구성](3.-시스템-구성)
 
