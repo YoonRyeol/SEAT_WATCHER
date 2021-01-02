@@ -2,7 +2,7 @@
 
 ## 목차
 
-### [1. dependency](#1.-dependency)
+### [1. dependency](https://github.com/YoonRyeol/SEAT_WATCHER/blob/develop/README.md#1-dependency-1)
 
 ### [2. 개요](#2.-개요)
 
