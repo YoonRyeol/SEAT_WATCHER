@@ -10,7 +10,7 @@
 
 ### [4. 메인 서버 설명](https://github.com/YoonRyeol/SEAT_WATCHER/blob/develop/README.md#4-%EB%A9%94%EC%9D%B8-%EC%84%9C%EB%B2%84-%EC%84%A4%EB%AA%85-1)
 
-### [5. Can I Go 운용 방법](5.-Can-I-Go-운용-방법)
+### [5. Can I Go 운용 방법](https://github.com/YoonRyeol/SEAT_WATCHER/blob/develop/README.md#5-can-i-go-%EC%9A%B4%EC%9A%A9-%EB%B0%A9%EB%B2%95-1)
 
 
 ## 1. dependency
