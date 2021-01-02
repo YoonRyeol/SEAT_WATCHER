@@ -6,6 +6,11 @@
 
 ### Server
 
+#### Front-end
+
+
+
+#### Back-end
   + Ubuntu 18.04
   + MySQL 8.0.21
   
