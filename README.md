@@ -3,6 +3,9 @@
 ## 목차
 
 ## dependency
+
+### Server
+
   + Ubuntu 18.04
   + MySQL 8.0.21
   
@@ -12,8 +15,26 @@
   
   + Django 3.1
   ```
-  pip install django==3.1.0
+  pip install django==3.1
   ```
+  +  mysqlclient
+  ```
+  pip install mysqlclient==2.0.1
+  ```
+  + djangorestframework
+  ```
+  pip install djangorestframework==3.11.1
+  ```
+  + google-cloud-vision
+  ```
+  pip install google-cloud-vision==1.0.0
+  ```
+  + requests
+  ```
+  pip install requests=2.24.0
+  ```
+  
+  
 ## 개요
   + 매장 내 카메라를 통한 사물인식 후 정보를 웹 어플리케이션을 통해 사용자에게 제공한다. 또한 관리자가 테이블에 콘센트 유무를 표시하는 등 사용자에게 정보 제공을 할 수 있다.
   + [![CANIGO?-시연동영상](http://img.https://www.youtube.com/watch?v=9pMxyc3VleE/0.jpg)](https://www.youtube.com/watch?v=9pMxyc3VleE) 
