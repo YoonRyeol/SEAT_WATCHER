@@ -8,7 +8,7 @@
 
 ### [3. 시스템 구성](https://github.com/YoonRyeol/SEAT_WATCHER/blob/develop/README.md#3-%EC%8B%9C%EC%8A%A4%ED%85%9C-%EA%B5%AC%EC%84%B1-1)
 
-### [4. 메인 서버 설명](4.-메인-서버-설명)
+### [4. 메인 서버 설명](https://github.com/YoonRyeol/SEAT_WATCHER/blob/develop/README.md#4-%EB%A9%94%EC%9D%B8-%EC%84%9C%EB%B2%84-%EC%84%A4%EB%AA%85-1)
 
 ### [5. Can I Go 운용 방법](5.-Can-I-Go-운용-방법)
 
