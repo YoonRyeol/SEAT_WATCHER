@@ -90,13 +90,13 @@ pip install django==3.1
   
 ## 시스템 구성
 ![watcher_시스템구성도 002](https://user-images.githubusercontent.com/38625842/98774087-9a8d1e80-242d-11eb-91f1-61a2ec1dea95.jpeg)  
-  + DB
-    - MYSQL
-  + Server
-    - DJANGO
-  + Camera
-    - RASBERRYPI
-    - REMOTE IT
+
+ Can I Go의 시스템은 위와 같습니다. DB, 메인서버로 이루어진 웹 시스템과 카메라 모듈로 이루어져 있으며 카메라 모듈과 메인서버는 서로 통신을 하게 되는데 내부망이 아닌 인터넷을 통해 서로 통신을 하게 된다면 가상 VPN 서비스인 remot3.it을 통해 통신하도록 시스템이 구성되어 있습니다. 
+ 
+ 웹 시스템의 구성은 DB와 메인서버로 구성되어 있습니다. DB는 MySQL을 사용하고 있고 메인서버는 Django를 사용하고 있습니다. 웹 시스템은 현재 aws의 클라우드 서버 위에서 운영되고 있습니다. 
+ 
+ 카메라 모듈은 메인서버와의 통신을 위한 서브서버와 감지를 위해 구현된 감지 모듈로 구성이 되어 있습니다. 
+
 ## 설치 방법
   + REMOTEIT
     - https://docs.remote.it/getting-started?utm_source=website&utm_content=features_header
