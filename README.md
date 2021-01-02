@@ -182,6 +182,13 @@ pip install django==3.1
   sudo apt-get install python-opencv
   ```
   
+  remote.it 서비스도 아래와 같은 명령어로 설치해줍니다.
+  
+```
+sudo apt-get install remoteit
+```
+
+  
   
  카메라 모듈을 운용할 하드웨어에 카메라를 연결해 준뒤, cam_new 브렌치에서 카메라 모듈 소스코드를 다운 받고, 소스코드 최상단 폴더에서 다음과 같은 명령어로 서버를 실행합니다.
  
@@ -192,4 +199,18 @@ pip install django==3.1
  ### 3. 메인서버와 카메라 모듈 연동
  
   이 항목은 remote.it을 사용하여 메인서버와 카메라 모듈을 연동하는 법을 소개합니다.
+  
+  먼저 remote.it 서비스에 가입을 합니다. (https://remote.it/)
+  
+  가입을 하고 로그인을 한 뒤, add devices에 들어가 select an OS를 선택하여 add to existing pi를 선택하여 계정에 라즈베리파이를 등록해 줍니다.
+  
+  등록이 끝나면 deveices에서 방금 추가한 라즈베리파이를 connect를 눌러 remoteit admin pannel을 클릭합니다.
+  
+  새로 뜨는 창을 로그인 하고 다음과 같은 형식으로 서비스를 추가해줍니다.
+  
+  ![90393116-172c8d00-e0cb-11ea-9a73-4ac3b9fbefa8](https://user-images.githubusercontent.com/40683361/103454796-bffe2080-4d2a-11eb-9b4e-0fecaefa5d6d.png)
+
+ 이 때, port번호는 현재 카메라 모듈을 실행시킬 때 입력한 포트번호와 같아야 합니다.
+ 
+ 
   
