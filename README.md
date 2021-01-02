@@ -23,7 +23,8 @@
   ``
   pip install mysqlclient==2.0.1
   ``
-  + djangorestframework
+  + django-rest-framework
+  
   ``
   pip install djangorestframework==3.11.1
   ``
