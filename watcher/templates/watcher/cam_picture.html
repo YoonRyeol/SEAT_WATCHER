@@ -1,0 +1,99 @@
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+</head>
+<body>
+    <canvas id="c" width="1200" height="900" style="border:1px solid #ccc"></canvas>
+</body>
+<script src="/static/js/jquery-3.5.1.min.js"></script>
+<script src="/static/js/bootstrap.js"></script>
+<script src="/static/js/bootstrap.bundle.js"></script>
+<script src="/static/js/fabric.js"></script>
+<script>
+    var IMAGE_WIDTH = 1200
+    var IMAGE_HEIGHT = 900
+    var table_list = {{table_list|safe}}
+    var canvas = this.__canvas = new fabric.Canvas('c');
+    canvas.selection  = false
+
+    var picture_addr = '/static/img/'+'{{picture_name}}'
+    fabric.Image.fromURL(picture_addr, imgObj => {
+            canvas.setBackgroundImage(imgObj, canvas.renderAll.bind(canvas), {
+                opacity: 1,
+                strech: true,
+                width:IMAGE_WIDTH,
+                height:IMAGE_HEIGHT
+        });
+    });
+
+    $(document).ready(function(e){
+        canvas.renderAll();
+        console.log(canvas.backgroundImage)
+        console.log(table_list)
+        for(var i=0; i<table_list.length; i++){
+            var cur_data = table_list[i]
+            console.log('cur_data.id ' + cur_data.id)
+            var left = cur_data.pic_f_x*IMAGE_WIDTH
+            var top = cur_data.pic_f_y*IMAGE_HEIGHT
+            var width = Math.abs((cur_data.pic_s_x-cur_data.pic_f_x)*IMAGE_WIDTH)
+            var height = Math.abs((cur_data.pic_s_y-cur_data.pic_f_y)*IMAGE_HEIGHT)
+            console.log('(' + width + ', ' + height + ')')
+            Add(_left=left, _top=top, _width=width, _height=height, _scaleX=1, _scaleY=1, _pk=cur_data.id)
+
+        }
+        canvas.off()
+        var obj_list = canvas.getObjects()
+        for(var i=0; i<obj_list.length; i++){
+            var obj = obj_list[i]
+            obj.off()
+        }
+
+
+    });
+
+
+    function Add(_left = 100, _top = 50, _width=100, _height=100, _scaleX=1, _scaleY=1, _pk=null) {
+        console.log('_pk : ' + _pk)
+        var rect = new fabric.Rect({
+
+            fill: 'yellow',
+            width: _width,
+            height: _height,
+            objectCaching: false,
+            stroke: 'lightgreen',
+            strokeWidth: 4,
+            opacity: 0.4,
+            originX: 'center',
+            originY: 'center'
+        });
+
+        var id_text = _pk+''
+
+        var text = new fabric.Text(id_text, {
+            fontSize: 30,
+            originX: 'center',
+            originY: 'center'
+        });
+        text.scaleX = 1/_scaleX
+        text.scaleY = 1/_scaleY
+
+        var group = new fabric.Group([ rect, text ], {
+            left: _left,
+            top: _top,
+            width: _width,
+            height: _height,
+            hasRotatingPoint: false,
+            selectable: false,
+            hoverCursor: "default"
+        });
+
+        group.scaleX = _scaleX
+        console.log(_scaleX)
+        group.scaleY = _scaleY
+        
+        if(_pk != null)
+            group.pk = _pk
+
+        canvas.add(group);
+    }
+
+</script>

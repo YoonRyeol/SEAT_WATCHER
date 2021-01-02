@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "robotic-algebra-290807",
+  "private_key_id": "d05a8a5c9bcdb0ab593b0f8b301384092a1cc00e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDMe5J8hFBeN6VC\nyI12Scoi4owcJS2xYNUXYM6NtTckn0TOcsd3c7TrKkRGmXglhGb28uqy8uTYRUQN\n4q21aowsZGRbXM2fdq8tNG0j8JnEkFQEKUHKVZ6kYEp828BtuAnQGEsF2HsVNwz0\nGMsxCTGTPRulQeZEX6iVqRkmkhAPK/vZPp+AYwq7VshDVioY2JUGrr0nX0OEE1E2\nrHdNgas0fAih0b9zjgpR1XKb2h85mkphV8IhCgkj59/FJLiAwRhRoFlS2FNs6kII\neUz5iyAorsfp6qpQG9PvtZO+ADqDMFyV39vSDY7fHIZqs54bKvVSMapct9Rywpc/\nTEk6XYn3AgMBAAECggEARmPDaVmi0MwW94ZSLAX6r0eNM6MYt5a9w+5vLBjVgqXQ\n6cBZKaWLAejq1+K8mS2axCea4z75x/kQFDeT1H95AU8NvOWVYu9YHheN+nE4fZGx\nWj1ZiG0wzyTWf2SmOR7BQgEa0khTFlp8+woN6DNh/W1rtteYjLDhN6OeJMji/lVo\nNzkOkehl8AxSiu/S3E7xell9A4wpAjg1Xt7hbkBtLacAhNVesws7R9rqb6lkojNx\nIv1sJdu+W5KSM7P1wLedbqx7rg/dfNe5p2qlVUZy00YGWPGPowU+7pEh9mEWhf7A\nGDk0MUMl+aQCTrVV8NRv1U8M7f5mG0DVMdKupdHnAQKBgQDlma4cA9rPGtJptBle\nUGpa0V0caUf45KIivZarwmMuW2HTXWeWQLqKcf2rhe452tbUEqpNH2opHeZOxGqV\nbgzS5dpQ+d2UTtUjZdGyV3cerz50RFyXr1ddzHuFg4l6fthq7GD++aiVxqZAn3ZL\nms63fCmAzwHLrrwz1eFg5nVVYwKBgQDj/o0uB1jBtEgP3I4o952jxVpw2CGt9GYF\nLbB7JQ+mz26nhBNVxFMnyFnuLsB0TuBK12inzlXAKtoxblHQaPml8JAsW8DhG0zI\n8tsFwSw+L85yhg4oLoK26U7t002SLvNKXa3tbhkuJci/OhYNcEPnqnhXVx1LpuWF\nVVtJuqn3XQKBgDqdaDiYt1SmGU+I/ez5BJ3Y0zd8nTYqUEYkNoH051MfWzMVpmtS\nbQ0JGuSeFXpJpwyPE1ELExQaIQC83iT16mow6fJAR9Qj5//Yb5djAvMfdAdEqIrE\n5b35hRNJyGAwX9m0LPMLE4HhK/JVg2K7y8hF92Z98oxoOH3XPWl6jDvXAoGACvOT\nPH7F2KgcPgbOHVGnlNJKAdmf5Ic0z1Leg0vIcK7OFeXWN+xyQhrxlutP+0Y+p9mp\nAUZ7//sO+AjgjS49r6bahgbyQN3a1lw0ARbCVUpelEm0LGHvjXGvhOT9eOQgc5YE\nYL9FHl5aQjU8EfEukdYyaZ+ZnKSrqbfr5qK8v1ECgYBHyB72XtDMGdvDKr6IpgFn\n40Vu41bNI8oRJHLsAiW8RRn9VCpytXGyzEcdJ8mAQFvW86loQ644zjyBcy+ts4Gn\nj9N4zIVkSax3y09t5k4pEkEwL8wTX3EAJVqYNbULqM72urlqEhG7y9/pYB6QoCvQ\nNHj/0aPFLQL0kLa5XuqgWg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "seat-watcher-vision-api@robotic-algebra-290807.iam.gserviceaccount.com",
+  "client_id": "111789578553997549321",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/seat-watcher-vision-api%40robotic-algebra-290807.iam.gserviceaccount.com"
+}

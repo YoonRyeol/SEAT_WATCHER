@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html style="font-size:10px">
+<head>
+	<meta charset="uft-8">
+	<meta name="viewprot" content="width=device-width, inital-scale=1, shrinkt-to-fit=no">
+
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+	
+	<link rel="stylesheet" type="text/css" href="/static/css/footer.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/Camera_list.css?2">
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.1/js/bootstrap.min.js" integrity="sha384-XEerZL0cuoUbHE4nZReLT7nx9gQrQreJekYhJD9WNWhH8nEW+0c5qq7aIo2Wl30J" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+	<link rel="stylesheet" type="text/css" href="/static/css/client_store_list.css">
+
+	<title>WATCHER</title>
+</head>
+<body>
+	<div class="container-fluid" style="padding:0;">
+
+		<nav id="navbar_top" class="navbar navbar-expand-lg navbar-dark bg-dark" style="position:sticky; top:0; margin-bottom:3%;">
+			<a class="navbar-brand" href="{% url 'watcher:client_store_list' %}">CAN I GO?</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+	    		<span class="navbar-toggler-icon"></span>
+	  		</button>
+	 	 	<div class="collapse navbar-collapse" id="navbarNav">
+			    <ul class="navbar-nav">
+			       <li class="nav-item">
+			        <a class="nav-link" id="signin_btn" data-toggle="modal" data-target="#login">로그인</a>
+			      </li>
+			      <li class="nav-item">
+			        <a class="nav-link" id="signin_btn" href="{% url 'watcher:client_signup' %}">회원가입</a>
+			      </li>
+			  	</ul>
+			 </div>
+		</nav>
+
+		<div id="container_store_list" class="container-fluid" style="overflow:scroll; min-height: 100vh;">
+			<div class="container">
+				<div class="container-fluid" style="padding-top:10%;">
+					<h3 class="display-4">회원 가입</h3>
+					<h5>회원 정보를 입력해 주세요</h5>
+				</div>
+
+				<div class="container-fluid" style="padding-top:5%;">
+					<form>
+						<div class="form-group">
+							<label for="form_user_id">회원 아이디</label>
+							<div class="input-group mb-3">
+							    <input type="text" class="form-control" id="form_user_id">
+							    <div class="input-group-append">
+							    	<button class="btn btn-outline-secondary" type="button" id="form_check_id_btn">중복확인</button>
+							    </div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="password">비밀번호</label>
+						    <input type="password" class="form-control" id="form_password">
+						</div>
+						<div class="form-group">
+							<label for="password_check">비밀번호 확인</label>
+						    <input type="password" class="form-control" id="form_password_check">
+						</div>
+					</form>
+					<button id="form_signup_btn" class="btn btn-secondary bg-dark">가입하기</button>
+				</div>
+			</div>
+		</div>
+
+
+	</div><!--container fluid end-->
+
+
+	<nav class="navbar fixed-bottom navbar-light bg-dark" style="position:sticky; bottom:0; height:11%; margin-top:1rem;">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-6" id="bottom_home" style="display:block; text-align: center;"><a style="color: white; text-decoration:none" href="#" >
+					<button class="btn" ><i class="fa fa-home fa-6x" id="bottom_home_btn" name="bottom_home_btn_active" style="color:white;"></i></button><h1>홈</h1></a></div>
+				<div class="col-6" id="bottom_liked" style="display:block; text-align: center;"><a style="color: white; text-decoration:none" href="#" ><button class="btn"><i class="fa fa-heart fa-4x" id="bottom_liked_btn" style="color:white;" ></i></button><h1>찜</h1></a></div>
+			
+			</div>
+		</div>
+	</nav>
+
+	
+</body>
+<script>
+
+	var page = 1;
+
+	//좋아요 눌린 상점 목록
+	var store_list = $('div.container_store_list').find('.row');
+	var mutex_liked = 0; //좋아요한 가게리스트 페이지 이동시 페이지 네이션 중지
+
+	//검색기능
+	var search_keyword;
+
+	//로컬 스토리지 
+	var myStorage = window.localStorage;
+	var output = myStorage.getItem("pk");		
+	var myStorage_arry = JSON.parse(output);
+	var pk_list = new Array();
+
+	//스크롤 위치
+	var scroll_loc_home = 0;
+	var scroll_loc_liked  = 0;
+
+	$(document).ready(function(e){
+		if(!(myStorage_arry)) return;
+		for(var i=0; i<myStorage_arry.length;i++){
+			pk_list.push(myStorage_arry[i]);
+			console.log("pk_list first :"+pk_list[i]);
+		}
+		console.log("pk list length : "+pk_list.length);
+	})
+
+	$(document).ready(function(e) {
+		$('#client_search_keyword').keydown(function(e){
+			if(e.keyCode==13 && mutex_liked == 0) {
+				search_keyword = $(this).val();
+				console.log("enter: search");
+				page = 1;
+				//console.log("enter : " + $(this).val());
+				$.ajax({
+					url: "{% url 'watcher:ajax_search_client_store_list' %}",
+					dataType:'json',
+					type :'GET',
+					data : {
+						'page' : page,
+						'search_keyword' : search_keyword,
+					},
+					success : function(data) {
+						$('#container_store_list').empty();
+						for(var i=0; i<data.length; i++) {
+							create_store_info(data[i]);
+							if(findNumber(data[i].pk)) {
+								console.log("find_number")
+								empty_heart_click(data[i].pk);
+							}
+						}
+						page = page+1;
+					},
+
+				})
+			}
+		});
+	});
+
+
+	/* 좋아요한 가게리스트 검색시 */
+		$(document).on("keyup", "#client_liked_keyword", function(e){
+			var value = $(this).val().toLowerCase();
+			if(e.keyCode==13) {
+				$('#container_store_list .row').filter(function() {
+					$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+				});
+			}
+		});
+
+	//가게 하트 클릭시
+
+	function empty_heart_click(pk){
+		$('#store_heart_'+pk).attr('class','fas fa-heart fa-6x');
+		$('#store_heart_'+pk).attr('name', 'heart_btn');
+		$('#store_row_'+pk).attr('name','store_row_liked');
+
+		if(findNumber(pk)) {
+			console.log("pk "+pk+" includes");
+		
+		}
+		else {
+			console.log("pk "+pk+" not includes");
+			
+			pk_list.push(pk);
+			pk_list.sort();
+		}
+
+		for(var i = 0; i<pk_list.length; i++) {
+			console.log("pk["+i+"] :"+pk_list[i]);
+		}
+		console.log("list length:"+pk_list.length);
+		make_local_storage_list(pk_list);
+	}
+
+	function heart_click(pk) {
+		$('#store_heart_'+pk).attr('class','far fa-heart fa-6x');
+		$('#store_heart_'+pk).attr('name', 'heart_empty_btn');
+		$('#store_row_'+pk).attr('name','store_row');
+
+		loc = pk_list.indexOf(pk);
+		console.log("loc: "+loc);
+		pk_list.splice(loc,1);
+		console.log("list:"+pk_list.length);
+		make_local_storage_list(pk_list);
+	}
+
+	function make_local_storage_list(pk_list) {
+		myStorage_arry=[];
+		for(var i = 0; i<pk_list.length; i++){
+			myStorage_arry.push(pk_list[i]);
+			console.log("myStorage_arry :"+myStorage_arry[i]);
+		}
+		myStorage.setItem("pk", JSON.stringify(myStorage_arry));
+		//myStorage.clear();
+	}
+
+	$(document).on('click','i[name=heart_empty_btn]',function(e){
+		pk = $(this).attr('data-pk');
+		empty_heart_click(pk);
+
+	});
+
+	$(document).on('click','i[name=heart_btn]',function(e){
+		pk = $(this).attr('data-pk');
+		heart_click(pk);
+	});
+
+	//하단 메뉴 선택시 활성화 표시
+	$(document).on('click', '#bottom_home', function(e) {
+		console.log("click home");
+		$('#client_liked_keyword').attr('id','client_search_keyword');
+
+		$('#bottom_home_btn').attr('class','fa fa-home fa-6x')
+		$('#bottom_liked_btn').attr('class','fa fa-heart fa-4x');
+
+		$('#bottom_home_btn').attr('name','bottom_home_btn_active');
+		$('#bottom_liked_btn').attr('name','bottom_like_btn'); 
+		
+		
+		$('#container_store_list').empty();
+
+		for(var i =1; i < page; i++) {
+			$.ajax({
+				url : "{% url 'watcher:ajax_get_client_store_list' %}",
+				dataType: 'json',
+				type :'GET',
+				async :false,
+				data : {
+					'page' : i,
+					'search_keyword' : search_keyword,
+				},
+				success : function(data) {
+					if(data.msg == "end") {
+						return;
+					}
+
+					for(var i = 0; i < data.st.length; i++) {
+						console.log("data length : "+ data.st.length);
+						create_store_info(data.st[i]);
+
+						if(findNumber(data.st[i].pk)){
+							empty_heart_click(data.st[i].pk);
+						}
+						else {
+							console.log("false : "+data.st[i].pk);
+						}
+					}
+					console.log("page plus : "+page);
+					page = data.page;
+					
+				},
+
+			});
+		}
+		console.log("store_list: "+ store_list.length);
+		/*$('#container_store_list').empty();
+		for(var i=0; i<store_list.length; i++){
+			$('#container_store_list').append(store_list[i]);
+		}*/
+		
+		store_list=[];
+		mutex_liked = 0;
+	});
+	
+	$(document).on('click', '#bottom_liked', function(e) {
+	
+		$('#client_search_keyword').attr('id','client_liked_keyword');
+		
+		$('#bottom_liked_btn').attr('class','fa fa-heart fa-6x')
+		$('#bottom_home_btn').attr('class','fa fa-home fa-4x');
+
+		$('#bottom_home_btn').attr('name','bottom_home_btn');
+		$('#bottom_home_btn').attr('name','bottom_like_btn_active'); 
+
+		store_list=$('#container_store_list').find('.row');
+		
+		
+		$('#container_store_list').empty();
+
+		$.ajax({
+			url : "{% url 'watcher:ajax_client_liked_list' %}",
+			dataType:'json',
+			type: 'GET',
+			data :{
+				'pk_list[]' : myStorage_arry,
+			},
+			success : function(data){
+				if(data === "end") {
+					console.log(data);
+					return;
+				}
+
+				for(var i=0; i<data.length;i++){
+					create_store_info(data[i]);
+					empty_heart_click(data[i].pk);
+				}
+				
+			},
+
+
+		})
+		mutex_liked = 1;
+
+	});
+
+
+
+	//가게 목록 생성 함수
+
+	function create_store_info(list){
+		var path;
+		if(list.picture_name == "modal_cafe_img.jpg" ){
+			path = "/static/img/store/modal_cafe_img.jpg";
+		}
+		else if(list.picture_name == "undefined" || list.picture_name == "null" ){
+			path = "/static/img/store/modal_cafe_img.jpg";
+		}
+		else {
+			path = "/static/img/store/"+list.pk+"/"+list.picture_name;
+		}
+		$('#container_store_list').append('<div class="row" id="store_row_'+list.pk+'" name="store" data-pk="'+list.pk+'" style="border: solid black 1px; margin-left:4%; margin-right:4%; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em; margin-bottom:3.5rem;"><div class="col-12" style="height:36vh; padding:0; "><div class="card" style="height:100%; width:100%; border: 2px solid black; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><img src="'+path+'" alt="" class="card-img-top" style="height:60%; border:2px solid black; border-top-right-radius: 3.8em; border-top-left-radius: 3.8em; border-bottom-right-radius: 3.8em; border-bottom-left-radius: 3.8em;"><div class="card-body" style="height:90%;"><div><h1 class="card-title" style="font-size:7rem; display: inline-block;">'+list.store_name+'</h1><button class="btn" style="float:right; background-color:white; display:inline-block;"><i id="store_heart_'+list.pk+'" name="heart_empty_btn" class="far fa-heart fa-6x" data-pk="'+list.pk+'" style="color:red; padding:2%;"></i></button></div><h1 style="display:block; color:gray;" >위치 : '+list.store_location+'</h1><div class="container-fluid" name="card-footer" style="position:absolute; right:0px; bottom:0px; padding-bottom: 2%;"><a href="#" class="btn btn-dark btn-lg" id="next_page_button" data-pk="'+list.pk+'" style="font-size:4rem; float:right; border-top-right-radius: 0.5em; border-top-left-radius: 0.5em; border-bottom-right-radius: 0.5em; border-bottom-left-radius: 0.5em; padding:1.5%;">방문하기</a></div></div></div></div></div>')
+		
+	}
+
+
+
+
+	function findNumber(pk){
+		for(var i=0; i < pk_list.length; i++ ) {
+			if(pk_list[i] == pk) {
+				return true;
+			}		
+		}
+		return false;
+	}
+
+	//페이지 네이션 구현 부분
+
+	function store_pagination() {
+		if(mutex_liked)return;
+
+		$.ajax({
+			url : "{% url 'watcher:ajax_get_client_store_list' %}",
+			dataType: 'json',
+			type :'GET',
+			async :false,
+			data : {
+				'page' : page,
+				'search_keyword' : search_keyword,
+			},
+			success : function(data) {
+				if(data.msg == "end") {
+					return;
+				}
+
+				for(var i = 0; i < data.st.length; i++) {
+					console.log("data length : "+ data.st.length);
+					create_store_info(data.st[i]);
+
+					if(findNumber(data.st[i].pk)){
+						empty_heart_click(data.st[i].pk);
+					}
+					else {
+						console.log("false : "+data.st[i].pk);
+					}
+				}
+				console.log("page plus : "+page);
+				page = data.page;
+			},
+
+		});
+	}
+
+
+    //매장 방문버튼 클릭시 페이지 이동
+	$(document).on('click', '#next_page_button', function(e){
+		let target_pk = $(e.target).data('pk')
+		console.log($(e.target).data('pk'))
+		location.href="/client_page/" + target_pk
+	});
+
+	$(document).on('click', '#form_signup_btn', function(e) {
+		var user_id = $('#form_user_id').val();
+		var password = $('#form_password').val();
+		var password_check = $('#form_password_check').val();
+
+		if(user_id == '') return alert("아이디를 입력해주세요");
+		else if(password== '' || password_check=='') return alert("비밀번호를 입력해주세요");
+		else if(password != password_check) return alert("비밀번호가 일치하지 않습니다.");
+
+		$.ajax({
+			url : "{% url 'watcher:ajax_client_signup' %}",
+			type: 'POST',
+			data : {
+				'csrfmiddlewaretoken' : "{{csrf_token}}",
+				'user_id' : user_id,
+				'password' : password,
+				'password_check' : password_check,
+			},
+			success :function(data) {
+				if(data=="sameid") return alert("중복된 아이디");
+				else if(data=="passworderror") return alert("비밀번호 불일치");
+				location.reload();
+			},
+			error : function(error) {
+
+			},
+
+		})
+	})
+
+	
+</script>
+</html>

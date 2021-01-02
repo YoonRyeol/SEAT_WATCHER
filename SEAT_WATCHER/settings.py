@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import mimetypes
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,8 +26,7 @@ SECRET_KEY = 'sfjmt8-2#(jgl5uql8ki+$6^%@!y3($k0m3oe471zwz=g*a6(4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'watcher', #minho 2020.08.05
-
 ]
 
 MIDDLEWARE = [
@@ -75,18 +74,17 @@ WSGI_APPLICATION = 'SEAT_WATCHER.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
 
+DATABASES = {
     'default':{
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'project_alpha_db',
         'USER': 'root',
         'PASSWORD': 'tellme',
-        'HOST': '18.224.139.84',
+        'HOST': os.environ['MYSQL_HOST'],
         'PORT': '3306',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -126,3 +124,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIR = [os.path.join(BASE_DIR, 'static')]
+mimetypes.add_type("images/svg+xml", ".svg", True)
+
+REMOTE_IT_DEVELOPER_KEY = "QTlCQ0YxNDItNDc3Qy00REE0LTkxNTAtMjhFNUJDODlENkU5"
+
+REMOTE_IT_PASSWORD = "ryeol9119!"
+
+REMOTE_IT_USERNAME = "yunyul3@gmail.com"
