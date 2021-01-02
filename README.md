@@ -2,7 +2,7 @@
 
 ## 목차
 
-### [1. dependency] (#1. dependency)
+### 1. dependency
 
 ### 2. 개요
 
