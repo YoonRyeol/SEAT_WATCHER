@@ -123,14 +123,24 @@ pip install django==3.1
   
   가게의 층에 관한 정보이다. 층에 대한 정보와 몇 층인지, 어느 가게에 포함되는 층인지에 대한 정보를 담을 수 있습니다
 
- 각 스키마 간의 관계는 다음과 같습니다. Table이 Camera에, Camera가 Floor에, Floor가 Store에 종속된 관계입니다. Store는 여러 개의 Floor 데이터를 가질 수 있으며 각 Floor는 여러 Camera를 가질 수 있고, Camera는 Camera가 관리하는 Table들에 관한 정보를 가질 수 있습니다.
+ 각 스키마 간의 관계는 다음과 같습니다. Table이 Camera에, Camera가 Floor에, Floor가 Store에 종속된 관계입니다. Store는 여러 개의 Floor 데이터를 가질 수 있으며 각 Floor는 여러 Camera를 가질 수 있고, Camera는 Camera가 관리하는 Table들에 관한 정보를 가질 수 있습니다. 
+ 
+ 
+ ### 2. 페이지 흐름 및 페이지별 기능 설명
+ 
+ 아래 항목들은 Can I Go의 메인서버가 서비스하는 페이지와 페이지별 기능, 페이지 흐름을 설명하는 항목입니다.
 
+ - 관리자 페이지 
+ 
+ ![image](https://user-images.githubusercontent.com/40683361/103452878-6d673900-4d17-11eb-94be-98523ed4fd8f.png)
 
- ### 2. 구현 파일 구조 설명
+ 
+ - 고객 페이지
+
+![image](https://user-images.githubusercontent.com/40683361/103452883-748e4700-4d17-11eb-80ff-470633cc2855.png)
+
  
  
- 
- ### 3. 페이지 흐름 및 페이지별 기능 설명
 
 ## 설치 방법
   + REMOTEIT
