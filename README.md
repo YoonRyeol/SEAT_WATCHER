@@ -9,37 +9,42 @@
   + Ubuntu 18.04
   + MySQL 8.0.21
   
-  ```
+  ``
   sudo apt-get install mysql-server
-  ```
+  ``
   
   + Django 3.1
-  ```
+  
+  ``
   pip install django==3.1
-  ```
+  ``
   +  mysqlclient
-  ```
+  
+  ``
   pip install mysqlclient==2.0.1
-  ```
+  ``
   + djangorestframework
-  ```
+  ``
   pip install djangorestframework==3.11.1
-  ```
+  ``
   + google-cloud-vision
-  ```
+  
+  ``
   pip install google-cloud-vision==1.0.0
-  ```
+  ``
   + requests
-  ```
+  
+  ``
   pip install requests=2.24.0
-  ```
+  ``
 
 ### Camera
 
 + python-opencv
-```
+
+``
 sudo apt-get install python-opencv
-```
+``
 
 + remot3.it
 
@@ -49,15 +54,15 @@ sudo apt-get install remoteit
 
 + Django 3.1
 
-```
+``
 pip install django==3.1
-```
+``
 
   + requests
   
-  ```
+  ``
   pip install requests=2.24.0
-  ```
+  ``
 
 
 ## 개요
