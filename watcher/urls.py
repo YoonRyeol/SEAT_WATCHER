@@ -11,6 +11,8 @@ from django.conf import settings
 app_name ='watcher'
 
 urlpatterns = [
+ 	path('',views.Get_Camera_list, name='Camera_list'),
+ 	path('guest_page/',views.Guest_page, name ='Guest_page'),
  	path('', views.store_list, name='store_info'),
 	path('table_set/', views.table_set, name='table_set'),
 	path('store_info/<int:store_pk>/camera/<int:camera_pk>', views.table_set, name='table_set'),
