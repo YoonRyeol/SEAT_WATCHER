@@ -212,5 +212,9 @@ sudo apt-get install remoteit
 
  이 때, port번호는 현재 카메라 모듈을 실행시킬 때 입력한 포트번호와 같아야 합니다.
  
+ 서비스를 등록한뒤 다시 devices 페이지로 이동합니다. 이동하여 device name에서 현재 등록한 장비를 이름을 클릭합니다.
  
-  
+ ![tempsnip](https://user-images.githubusercontent.com/40683361/103455017-b970a880-4d2c-11eb-9b55-d241592fe530.png)
+
+ 
+ deveice service 모달에서 방금 등록한 서비스의 service ID를 복사하여 카메라 정보 생성시 mac address에 붙여넣어주면 카메라 모듈과 메인서버의 연동이 완료됩니다.
