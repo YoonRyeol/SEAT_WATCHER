@@ -134,7 +134,22 @@ pip install django==3.1
   
   가게의 층에 관한 정보이다. 층에 대한 정보와 몇 층인지, 어느 가게에 포함되는 층인지에 대한 정보를 담을 수 있습니다
 
+  - User
+  사용자의 관한 정보이다. 아이디와 비밀번호를 저장하고 있습니다.
+  
+  - Menu
+  관리자의 매장에 메뉴에 대한 정보이다. 메뉴이름, 가격 , 카테고리 정보를 담을 수 있습니다.
+  
+  - Category
+  메뉴의 카테고리의 관한 정보입니다. 가게의 메뉴에 관한 카테고리 정보를 담을 수 있습니다.
+  
+  - Review
+  가게에 대한 사용자 평가관한 정보입니다. 가게에대한 평점과 평가를 담고 있습니다. 
+
  각 스키마 간의 관계는 다음과 같습니다. Table이 Camera에, Camera가 Floor에, Floor가 Store에 종속된 관계입니다. Store는 여러 개의 Floor 데이터를 가질 수 있으며 각 Floor는 여러 Camera를 가질 수 있고, Camera는 Camera가 관리하는 Table들에 관한 정보를 가질 수 있습니다. 
+ 
+ Category,Menu는 Store에 종속된 관계이며 Review는 User와 Store에 종속된 관계입니다. 
+ Store는 여러개의 Review,Category,Menu 데이터를 가질 수 있습니다.
  
  
  ### 2. 페이지 흐름 및 페이지별 기능 설명
