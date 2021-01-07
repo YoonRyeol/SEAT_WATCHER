@@ -4,7 +4,8 @@ from watcher.models import *
 from .serializers import *
 import requests
 import json
-from django.db.models import Q
+from django.db.models import Q,Avg
+from django.shortcuts import redirect,render
 
 def get_client_store_list(request) :
 	pages = request.GET.get('page',0)
@@ -73,6 +74,55 @@ def client_liked_list(request) :
 		return HttpResponse("None")
 
 
+def client_signin(request) :
+	user_id=request.POST.get('user_id')
+	password=request.POST.get('password')
+
+	user=User.objects.filter(Q(user_id=user_id) & Q(password=password))
+
+	if user.exists() :
+		request.session['user_id']=user_id
+		return HttpResponse("good")
+	else :
+		return HttpResponse("loginfail")
+
+	
+
+def client_signup(request) :
+	user_id=request.POST.get('user_id')
+	password=request.POST.get('password')
+	password_check=request.POST.get('password_check')
+
+	user=User.objects.filter(user_id=user_id)
+
+	if user.exists() :
+		return HttpResponse("sameid")
+	request.session['user_id']=user_id
+
+	user=User(user_id=user_id,password=password)
+	user.save()
+	return HttpResponse("signup")
+
+def client_logout(requset) :
+	requset.session.clear()
+	return HttpResponse("good")
+
+def save_review(request) :
+	user_id=request.session.get('user_id')
+	comment=request.GET.get('coment')
+	score=float(request.GET.get('score'))
+	date=request.GET.get('date')
+	store_pk=request.GET.get('store_pk')
+
+	review=Review(user_id=user_id,store_id=store_pk,score=score,date=date,comment=comment)
+	review.save();
+
+	reviews=Review.objects.filter(store_id=store_pk).values('store_id').annotate(avg=Avg('score'))
+	store=Store.objects.get(pk=store_pk)
+	store.review_score=reviews.values('avg')
+	store.save()
+
+	return redirect('watcher:client_store_list')
 
 
 

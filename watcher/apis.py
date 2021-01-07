@@ -13,6 +13,7 @@ from django.core.files.storage import default_storage #파일 저장 경로
 from google.cloud import vision
 from django.conf import settings
 import traceback
+from django.db.models import Q
 
 def send_seat_data(request):
 	"""
@@ -522,3 +523,49 @@ def update_cam_addr(request):
 	camera.save()
 
 	return HttpResponse('update_success')
+
+def add_category_info(request) :
+	store_id=request.GET.get('store_id')
+	name=request.GET.get('category_name')
+
+	category=Category(store_id=store_id,name=name)
+	category.save();
+
+	return HttpResponse("good")
+
+def add_store_menu_info(request) :
+	price=request.GET.get('price')
+	name=request.GET.get('name')
+	category_id=request.GET.get('category_id')
+	category_name=request.GET.get('category_name')
+	store_id=request.GET.get('store_id')
+
+	menu=Menu(name=name,store_id=store_id,price=price,category_id=category_id,category_name=category_name)
+	menu.save()
+
+	return HttpResponse("good")
+
+def edit_store_menu_info(request) :
+	pk=request.GET.get('pk')
+	price=request.GET.get('price')
+	name=request.GET.get('name')
+	category_id=request.GET.get('category_id')
+	category=Category.objects.get(pk=category_id)
+
+	print(name)
+	print(category_id)
+	menu=Menu.objects.get(pk=pk)
+	menu.price=price
+	menu.name=name
+	menu.category_id=category_id
+	menu.category_name=category.name
+	menu.save()
+	return HttpResponse("good")
+
+def delete_store_menu_info(request) :
+	pk=int(request.GET.get('pk'))
+	menu=Menu.objects.get(pk=pk)
+	menu.delete()
+
+	return HttpResponse("good")
+

@@ -161,7 +161,7 @@
 						<div id="footer_copyright" class="col-sm-4" ><h5>Copyright &copy; 2020</h5>
 							<ul>
 							<li><h5>김민호(KIM MINHO)</h5></li>
-							<li><h5>박지범(PARK JIBEOM)</h5></li>
+							<li><h5>김하연(KIM HAYEON)</h5></li>
 							<li><h5>윤 렬(YOON RYEOL)</h5></li>
 							</ul>
 						</div>
@@ -192,6 +192,13 @@
       var height = Math.abs((cur_data.layout_s_y - cur_data.layout_f_y) * IMAGE_HEIGHT)
       Add(_left = left, _top = top, _width = width, _height = height, _scaleX = 1, _scaleY = 1, _pk = cur_data.id, _is_elec=cur_data.is_elec)
     }
+
+    fabric.Image.fromURL('/static/img/layout_image.png', imgObj=>{
+      canvas.setBackgroundImage(imgObj, canvas.renderAll.bind(canvas),{
+        opacity:1,
+      });
+    });
+
     console.log(get_objects())
   });
 

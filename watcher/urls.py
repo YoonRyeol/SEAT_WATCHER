@@ -11,6 +11,8 @@ from django.conf import settings
 app_name ='watcher'
 
 urlpatterns = [
+ 	path('',views.Get_Camera_list, name='Camera_list'),
+ 	path('guest_page/',views.Guest_page, name ='Guest_page'),
  	path('', views.store_list, name='store_info'),
 	path('table_set/', views.table_set, name='table_set'),
 	path('store_info/<int:store_pk>/camera/<int:camera_pk>', views.table_set, name='table_set'),
@@ -50,6 +52,22 @@ urlpatterns = [
 	path('client/search',apis_client.search_client_store_list, name='ajax_search_client_store_list'),
 	path('client/liked',apis_client.client_liked_list,name='ajax_client_liked_list'),
 	path('api/update_cam_addr', apis.update_cam_addr, name='update_cam_addr'),
+	path('client/signup',views.client_signup,name='client_signup'),
+	path('api/client_signup', apis_client.client_signup, name='ajax_client_signup'),
+	path('api/client_logout', apis_client.client_logout, name='ajax_client_logout'),
+	path('client/signin', views.client_signin, name='client_signin'),
+	path('api/client_signin', apis_client.client_signin, name='ajax_client_signin'),
+	path('api/save_review', apis_client.save_review, name='ajax_save_review'),
+	path('client/map/', views.client_map, name='client_map'),
+	path('store_info/<int:store_pk>/menu', views.store_menu, name='store_menu'),
+	path('store_info/<int:store_pk>/menu/add', views.store_menu_add, name='store_menu_add'),
+	path('api/add_category_info', apis.add_category_info, name='ajax_add_category_info'),
+	path('api/add_store_menu_info', apis.add_store_menu_info, name='ajax_add_store_menu_info'),
+	path('api/edit_store_menu_info', apis.edit_store_menu_info, name='ajax_edit_store_menu_info'),
+	path('api/delete_store_menu_info', apis.delete_store_menu_info, name='ajax_delete_store_menu_info'),
+
+	
+
  ]
 
 
