@@ -95,7 +95,7 @@ pip install django==3.1
  
  본 문서에서는 Can I Go 시스템의 운영 및 유지보수를 위한 내용을 다루며 자세한 사용법은 아래 시연동영상을 통해 확인할 수 있습니다.
 
-- 홍보 및 시연 영상
+- 홍보 및 시연 영상 (클릭하여 영상시청이 가능합니다.)
 
   [![CANIGO?-시연동영상](http://img.youtube.com/vi/9pMxyc3VleE/0.jpg)](https://www.youtube.com/watch?v=9pMxyc3VleE)
   
